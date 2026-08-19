@@ -12,12 +12,12 @@ const sampleVehicles = [
     frame: 'MH1J891158K260',
     color: 'BLACK',
     year: '2024',
-    purchaseDate``: '03-05-2024',
-  dealer: 'MPM Motor Jombang',
-  lastKm: '1000',
-  customer: 'Achmad Munib',
-  currentKm: '233',
-  reason: 'Inisiatif Sendiri'
+    purchaseDate: '03-05-2024',
+    dealer: 'MPM Motor Jombang',
+    lastKm: '1000',
+    customer: 'Achmad Munib',
+    currentKm: '233',
+    reason: 'Inisiatif Sendiri'
   },
 {
   plate: 'B 4592 KLR',
@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCollapsibleCard();
   initFuelIndicator();
   initVehicleScanner();
+  initCarrierStep();
   initModal();
   initSidebar();
   initLangSwitcher();
@@ -291,6 +292,95 @@ function initVehicleScanner() {
 
   // Export helper for modal
   window.loadCustomVehicle = loadVehicleData;
+}
+
+// Carrier Step Interactive Handlers
+function initCarrierStep() {
+  const tabCarrier = document.getElementById('tabCarrierInfo');
+  const tabStnk = document.getElementById('tabStnkInfo');
+  const contentCarrier = document.getElementById('tabContentCarrier');
+  const contentStnk = document.getElementById('tabContentStnk');
+
+  // Tab Switching
+  if (tabCarrier && tabStnk && contentCarrier && contentStnk) {
+    tabCarrier.addEventListener('click', () => {
+      tabCarrier.classList.add('active');
+      tabStnk.classList.remove('active');
+      contentCarrier.style.display = 'block';
+      contentStnk.style.display = 'none';
+    });
+
+    tabStnk.addEventListener('click', () => {
+      tabStnk.classList.add('active');
+      tabCarrier.classList.remove('active');
+      contentStnk.style.display = 'block';
+      contentCarrier.style.display = 'none';
+    });
+  }
+
+  // Carrier Phone Search
+  const searchInput = document.getElementById('carrierSearchPhone');
+  const btnSearch = document.getElementById('btnSearchCarrier');
+  const btnClearSearch = document.getElementById('btnClearCarrierSearch');
+  const btnAddCarrier = document.getElementById('btnAddCarrier');
+  const carrierPhone = document.getElementById('carrierInputPhone');
+  const carrierFirst = document.getElementById('carrierFirstName');
+  const carrierLast = document.getElementById('carrierLastName');
+  const btnViewDetail = document.getElementById('btnViewDetailCarrier');
+
+  if (btnSearch && searchInput) {
+    const doSearch = () => {
+      const query = searchInput.value.trim();
+      if (!query) {
+        showToast('Please enter a phone number to search.');
+        return;
+      }
+      if (carrierPhone) carrierPhone.value = query;
+      if (carrierFirst) carrierFirst.value = 'Achmad';
+      if (carrierLast) carrierLast.value = 'Munib';
+      showToast(`Carrier found for phone: ${query}`);
+    };
+
+    btnSearch.addEventListener('click', doSearch);
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        doSearch();
+      }
+    });
+  }
+
+  if (btnClearSearch && searchInput) {
+    btnClearSearch.addEventListener('click', () => {
+      searchInput.value = '';
+      if (carrierPhone) carrierPhone.value = '';
+      if (carrierFirst) carrierFirst.value = '';
+      if (carrierLast) carrierLast.value = '';
+      showToast('Carrier search input cleared');
+    });
+  }
+
+  if (btnAddCarrier) {
+    btnAddCarrier.addEventListener('click', () => {
+      if (carrierPhone && searchInput) {
+        carrierPhone.value = searchInput.value;
+      }
+      if (carrierFirst) {
+        carrierFirst.value = '';
+        carrierFirst.focus();
+      }
+      if (carrierLast) carrierLast.value = '';
+      showToast('Ready to input new carrier data');
+    });
+  }
+
+  if (btnViewDetail) {
+    btnViewDetail.addEventListener('click', () => {
+      const name = `${carrierFirst?.value || 'Achmad'} ${carrierLast?.value || 'Munib'}`.trim();
+      const phone = carrierPhone?.value || '085732255998';
+      showToast(`Viewing details for: ${name} (${phone})`);
+    });
+  }
 }
 
 // History Show More Action
