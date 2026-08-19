@@ -369,6 +369,10 @@ body {
   box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.12);
 }
 
+.step-node.active .step-dot {
+  background: var(--primary);
+}
+
 .step-node.active .step-title {
   color: var(--primary);
   font-weight: 700;
@@ -378,6 +382,10 @@ body {
   background: var(--primary);
   border-color: var(--primary);
   color: #ffffff;
+}
+
+.step-node.completed .step-dot {
+  background: #ffffff;
 }
 
 .step-node.completed .step-title {
