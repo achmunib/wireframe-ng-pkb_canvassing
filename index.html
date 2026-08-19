@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reception - List PKB | MPM AHASS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <span class="brand-text">MPM</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item" title="Dashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+        </button>
+        <button class="nav-item" title="Garage / Vehicle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.5 2 12v4c0 .6.4 1 1 1h2" />
+            <circle cx="7" cy="17" r="2" />
+            <circle cx="17" cy="17" r="2" />
+          </svg>
+        </button>
+        <button class="nav-item" title="Forms">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <line x1="3" y1="9" x2="21" y2="9" />
+            <line x1="9" y1="21" x2="9" y2="9" />
+          </svg>
+        </button>
+        <button class="nav-item active" title="PKB List">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6" />
+            <line x1="8" y1="12" x2="21" y2="12" />
+            <line x1="8" y1="18" x2="21" y2="18" />
+            <line x1="3" y1="6" x2="3.01" y2="6" />
+            <line x1="3" y1="12" x2="3.01" y2="12" />
+            <line x1="3" y1="18" x2="3.01" y2="18" />
+          </svg>
+        </button>
+        <button class="nav-item" title="Task List">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4" />
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+          </svg>
+        </button>
+        <button class="nav-item" title="Spare Parts">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </button>
+        <button class="nav-item" title="Documents">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+          </svg>
+        </button>
+        <button class="nav-item" title="History / Warranty">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+        </button>
+        <button class="nav-item" title="Settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4" />
+            <path d="M12 8h.01" />
+          </svg>
+        </button>
+        <button class="nav-item" title="Support">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="nav-item" title="Help">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Container -->
+    <div class="main-wrapper">
+      <!-- Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+            </svg>
+          </button>
+          <div class="breadcrumbs">
+            <span class="crumb-parent">Reception</span>
+            <span class="crumb-separator">/</span>
+            <span class="crumb-active">List PKB</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Language Switcher -->
+          <div class="lang-switch">
+            <button class="lang-btn" id="langId">ID</button>
+            <button class="lang-btn active" id="langEn">EN</button>
+          </div>
+
+          <!-- User Profile -->
+          <div class="user-profile" id="userMenuBtn">
+            <div class="user-avatar">PK</div>
+            <div class="user-info">
+              <span class="user-name">Pak Kabeng</span>
+              <span class="user-role">150 - Chiro</span>
+            </div>
+            <svg class="chevron-down" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Body -->
+      <main class="page-content">
+        <!-- Stepper Wizard -->
+        <section class="stepper-section">
+          <div class="stepper-container">
+            <!-- Step 1 (Active) -->
+            <div class="step-node active" data-step="1">
+              <div class="step-circle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.5 2 12v4c0 .6.4 1 1 1h2" />
+                  <circle cx="7" cy="17" r="2" />
+                  <circle cx="17" cy="17" r="2" />
+                </svg>
+              </div>
+              <div class="step-label-group">
+                <span class="step-title">Vehicle</span>
+                <span class="step-desc">Vehicle information and details</span>
+              </div>
+            </div>
+
+            <div class="step-line"></div>
+
+            <!-- Step 2 -->
+            <div class="step-node" data-step="2">
+              <div class="step-circle">
+                <span class="step-dot"></span>
+              </div>
+              <div class="step-label-group">
+                <span class="step-title">Carrier Data</span>
+                <span class="step-desc">Data of the person bringing the vehicle</span>
+              </div>
+            </div>
+
+            <div class="step-line"></div>
+
+            <!-- Step 3 -->
+            <div class="step-node" data-step="3">
+              <div class="step-circle">
+                <span class="step-dot"></span>
+              </div>
+              <div class="step-label-group">
+                <span class="step-title">Cek Aja Dulu</span>
+                <span class="step-desc">Cek Aja Dulu</span>
+              </div>
+            </div>
+
+            <div class="step-line"></div>
+
+            <!-- Step 4 -->
+            <div class="step-node" data-step="4">
+              <div class="step-circle">
+                <span class="step-dot"></span>
+              </div>
+              <div class="step-label-group">
+                <span class="step-title">Service &amp; Parts</span>
+                <span class="step-desc">Select services and spare parts</span>
+              </div>
+            </div>
+
+            <div class="step-line"></div>
+
+            <!-- Step 5 -->
+            <div class="step-node" data-step="5">
+              <div class="step-circle">
+                <span class="step-dot"></span>
+              </div>
+              <div class="step-label-group">
+                <span class="step-title">Summary</span>
+                <span class="step-desc">Review transaction summary before saving</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Form Cards Container -->
+        <div class="form-container">
+          <!-- Step 1 Content: Vehicle & Initial Data -->
+          <div class="step-pane active" id="stepPane1">
+
+            <!-- Card 1: Vehicle Information -->
+            <div class="content-card">
+              <div class="card-header">
+                <div class="card-icon-title">
+                  <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="18.5" cy="17.5" r="3.5" />
+                    <circle cx="5.5" cy="17.5" r="3.5" />
+                    <circle cx="15" cy="5" r="1" />
+                    <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
+                  </svg>
+                  <h2 class="card-title">Vehicle Information</h2>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <!-- Scan Vehicle Input Row -->
+                <div class="scan-section-wrapper">
+                  <div class="scan-label-group">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                      <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                      <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                      <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                      <line x1="7" y1="8" x2="7" y2="16" />
+                      <line x1="10" y1="8" x2="10" y2="16" />
+                      <line x1="14" y1="8" x2="14" y2="16" />
+                      <line x1="17" y1="8" x2="17" y2="16" />
+                    </svg>
+                    <span class="scan-label-text">Scan Vehicle</span>
+                  </div>
+
+                  <div class="search-input-wrapper">
+                    <input type="text" id="scanVehicleInput" class="form-input scan-input" value="JB91E1260677"
+                      placeholder="Enter machine or frame number">
+                    <button class="btn-scan-outline" id="btnScanVehicle" type="button">Scan Vehicle</button>
+                    <button class="btn-trash-outline" id="btnClearScan" type="button" title="Clear / Delete input">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Collapsible Vehicle Detail Box -->
+                <div class="vehicle-info-box" id="vehicleInfoCard">
+                  <!-- Header with Plate Number and Chevron -->
+                  <div class="vehicle-box-header" id="vehicleHeaderToggle">
+                    <span class="vehicle-plate-title" id="dispPlate">AG 1000 ELM</span>
+                    <button class="btn-collapse-toggle" id="btnVehicleCollapse" type="button"
+                      aria-label="Toggle details">
+                      <svg id="chevronIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <!-- 3-Column Vehicle Details -->
+                  <div class="vehicle-box-content" id="vehicleBoxContent">
+                    <div class="vehicle-info-grid">
+                      <!-- Column 1 -->
+                      <div class="info-field-group">
+                        <div class="info-field">
+                          <div class="field-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <circle cx="12" cy="12" r="3" />
+                              <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                            </svg>
+                            <span>Machine Number</span>
+                          </div>
+                          <div class="field-value" id="dispEngine">JB91E1260677</div>
+                        </div>
+
+                        <div class="info-field">
+                          <div class="field-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                            </svg>
+                            <span>Color</span>
+                          </div>
+                          <div class="field-value" id="dispColor">BLACK</div>
+                        </div>
+
+                        <div class="info-field">
+                          <div class="field-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                              <polyline points="9 22 9 12 15 12 15 22" />
+                            </svg>
+                            <span>Purchase Dealer</span>
+                          </div>
+                          <div class="field-value" id="dispDealer">MPM Motor Jombang</div>
+                        </div>
+                      </div>
+
+                      <!-- Column 2 -->
+                      <div class="info-field-group">
+                        <div class="info-field">
+                          <div class="field-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <rect x="3" y="4" width="18" height="16" rx="2" />
+                              <line x1="7" y1="8" x2="17" y2="8" />
+                              <line x1="7" y1="12" x2="17" y2="12" />
+                              <line x1="7" y1="16" x2="12" y2="16" />
+                            </svg>
+                            <span>Frame Number</span>
+                          </div>
+                          <div class="field-value" id="dispFrame">MH1J891158K260</div>
+                        </div>
+
+                        <div class="info-field">
+                          <div class="field-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                              <line x1="16" y1="2" x2="16" y2="6" />
+                              <line x1="8" y1="2" x2="8" y2="6" />
+                              <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            <span>Year of Manufacture</span>
+                          </div>
+                          <div class="field-value" id="dispYear">2024</div>
+                        </div>
+
+                        <div class="info-field">
+                          <div class="field-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M12 2v4" />
+                              <path d="M4.93 4.93l2.83 2.83" />
+                              <path d="M2 12h4" />
+                              <path d="M20 12h2" />
+                              <path d="M16.24 7.76l2.83-2.83" />
+                              <path d="M12 18v4" />
+                              <path d="M7.76 16.24l-2.83 2.83" />
+                              <path d="M16.24 16.24l2.83 2.83" />
+                              <circle cx="12" cy="12" r="6" />
+                              <path d="M12 12l2-2" />
+                            </svg>
+                            <span>Last Kilometer</span>
+                          </div>
+                          <div class="field-value" id="dispLastKm">1000</div>
+                        </div>
+                      </div>
+
+                      <!-- Column 3 -->
+                      <div class="info-field-group">
+                        <div class="info-field">
+                          <div class="field-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path
+                                d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.5 2 12v4c0 .6.4 1 1 1h2" />
+                              <circle cx="7" cy="17" r="2" />
+                              <circle cx="17" cy="17" r="2" />
+                            </svg>
+                            <span>Vehicle Type</span>
+                          </div>
+                          <div class="field-value" id="dispModel">VG - VARIO 125 CBS ISS</div>
+                        </div>
+
+                        <div class="info-field">
+                          <div class="field-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                              <line x1="16" y1="2" x2="16" y2="6" />
+                              <line x1="8" y1="2" x2="8" y2="6" />
+                              <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            <span>Purchase Date</span>
+                          </div>
+                          <div class="field-value" id="dispPurchaseDate">03-05-2024</div>
+                        </div>
+
+                        <div class="info-field-actions">
+                          <button class="btn-card-edit" id="btnEditVehicle" type="button">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            <span>Edit</span>
+                          </button>
+                          <button class="btn-card-trash" id="btnDeleteVehicle" type="button" title="Delete vehicle">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <polyline points="3 6 5 6 21 6"></polyline>
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                              </path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Empty State (hidden by default) -->
+                <div class="empty-state-section" id="vehicleEmptyState" style="display: none;">
+                  <p class="empty-text">No Vehicle Data yet</p>
+                  <button class="btn-outline-primary" id="btnInputNewData" type="button">
+                    <span class="plus-icon">+</span> Input New Data
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Card 2: History Service -->
+            <div class="content-card">
+              <div class="card-header">
+                <div class="card-icon-title">
+                  <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                    <path d="M4.93 4.93l4.24 4.24"></path>
+                  </svg>
+                  <h2 class="card-title">History Service</h2>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <!-- History Container Card -->
+                <div class="history-list-container" id="historyFilledState">
+                  <!-- History Item 1 -->
+                  <div class="history-service-item">
+                    <div class="history-item-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                      </svg>
+                    </div>
+                    <div class="history-item-details">
+                      <h4 class="history-service-title">BJ113 - GANTI OLI - MATIC - MID</h4>
+                      <div class="history-parts-list">
+                        <div class="parts-row">
+                          <span class="part-name">90454500000 - WADHER OIL BOLT</span>
+                          <span class="part-qty">1x</span>
+                        </div>
+                        <div class="parts-row">
+                          <span class="part-name">94001100005 - NUT,HET 10MM</span>
+                          <span class="part-qty">1x</span>
+                        </div>
+                      </div>
+                      <div class="history-meta-row">
+                        <div class="meta-badge">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v4" />
+                            <path d="M4.93 4.93l2.83 2.83" />
+                            <path d="M2 12h4" />
+                            <path d="M20 12h2" />
+                            <circle cx="12" cy="12" r="6" />
+                            <path d="M12 12l2-2" />
+                          </svg>
+                          <span>1000</span>
+                        </div>
+                        <div class="meta-badge">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                          </svg>
+                          <span>03-05-2025</span>
+                        </div>
+                        <div class="meta-badge">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                          </svg>
+                          <span>MPM Motor Jombang</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="history-divider"></div>
+
+                  <!-- History Item 2 -->
+                  <div class="history-service-item">
+                    <div class="history-item-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                      </svg>
+                    </div>
+                    <div class="history-item-details">
+                      <h4 class="history-service-title">BJ113 - GANTI OLI - MATIC - MID</h4>
+                      <div class="history-parts-list">
+                        <div class="parts-row">
+                          <span class="part-name">90454500000 - WADHER OIL BOLT</span>
+                          <span class="part-qty">1x</span>
+                        </div>
+                        <div class="parts-row">
+                          <span class="part-name">94001100005 - NUT,HET 10MM</span>
+                          <span class="part-qty">1x</span>
+                        </div>
+                      </div>
+                      <div class="history-meta-row">
+                        <div class="meta-badge">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v4" />
+                            <path d="M4.93 4.93l2.83 2.83" />
+                            <path d="M2 12h4" />
+                            <path d="M20 12h2" />
+                            <circle cx="12" cy="12" r="6" />
+                            <path d="M12 12l2-2" />
+                          </svg>
+                          <span>1000</span>
+                        </div>
+                        <div class="meta-badge">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                          </svg>
+                          <span>03-05-2025</span>
+                        </div>
+                        <div class="meta-badge">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                          </svg>
+                          <span>MPM Motor Jombang</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Show More Action Button -->
+                <div class="history-show-more-wrapper">
+                  <button class="btn-show-more" id="btnShowMoreHistory" type="button">
+                    <span>Show More</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Pre-Inspection Data -->
+            <div class="content-card">
+              <div class="card-header">
+                <div class="card-icon-title">
+                  <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                  <h2 class="card-title">Pre-Inspection Data</h2>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="pre-inspection-grid">
+                  <!-- Left column: Kilometer & Service Reason -->
+                  <div class="pre-inspection-left">
+                    <div class="form-group mb-4">
+                      <label class="form-label" for="kilometerInput">Kilometer</label>
+                      <input type="text" id="kilometerInput" class="form-input-pill" value="233">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="reasonSelect">Service Reason</label>
+                      <div class="select-pill-wrapper">
+                        <select id="reasonSelect" class="form-select-pill">
+                          <option value="Inisiatif Sendiri" selected>Inisiatif Sendiri</option>
+                          <option value="Servis Berkala">Servis Berkala / Rutin</option>
+                          <option value="Keluhan Mesin">Keluhan Mesin</option>
+                          <option value="Ganti Oli">Ganti Oli Saja</option>
+                          <option value="Klaim Garansi">Klaim Garansi</option>
+                        </select>
+                        <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Right column: Fuel Indicator Gauge -->
+                  <div class="pre-inspection-right">
+                    <div class="form-group">
+                      <label class="form-label">Fuel Indicator</label>
+                      <div class="fuel-gauge-wrapper">
+                        <div class="fuel-gauge-bar">
+                          <div class="gauge-segment seg-red" data-level="1" title="0 - 1/4"></div>
+                          <div class="gauge-segment seg-yellow" data-level="2" title="1/4 - 1/2"></div>
+                          <div class="gauge-segment seg-lime" data-level="3" title="1/2 - 3/4"></div>
+                          <div class="gauge-segment seg-green" data-level="4" title="3/4 - Full"></div>
+                        </div>
+                        <div class="fuel-gauge-labels">
+                          <span class="gauge-lbl" data-level="0">0</span>
+                          <span class="gauge-lbl" data-level="1">¼</span>
+                          <span class="gauge-lbl" data-level="2">½</span>
+                          <span class="gauge-lbl" data-level="3">¾</span>
+                          <span class="gauge-lbl" data-level="4">Full</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Step 2 Pane (Carrier Data) -->
+          <div class="step-pane" id="stepPane2" style="display: none;">
+            <div class="content-card">
+              <div class="card-header">
+                <div class="card-icon-title">
+                  <svg class="header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  <h2 class="card-title">Carrier Data (Data Pembawa Kendaraan)</h2>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="exam-grid">
+                  <div class="form-group">
+                    <label class="form-label">Carrier Name <span class="required-star">*</span></label>
+                    <input type="text" class="form-input" placeholder="Enter carrier name" value="Budi Santoso">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Phone Number <span class="required-star">*</span></label>
+                    <input type="tel" class="form-input" placeholder="0812xxxxxxx" value="081298765432">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Relation with Owner</label>
+                    <div class="select-wrapper">
+                      <select class="form-select">
+                        <option value="owner" selected>Pemilik Sendiri</option>
+                        <option value="family">Keluarga (Istri/Suami/Anak)</option>
+                        <option value="driver">Driver / Sopir</option>
+                        <option value="other">Teman / Lainnya</option>
+                      </select>
+                      <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 Pane (Cek Aja Dulu) -->
+          <div class="step-pane" id="stepPane3" style="display: none;">
+            <div class="content-card">
+              <div class="card-header">
+                <div class="card-icon-title">
+                  <svg class="header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <polyline points="9 11 12 14 22 4" />
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                  </svg>
+                  <h2 class="card-title">Cek Aja Dulu (Pit Express Check)</h2>
+                </div>
+              </div>
+              <div class="card-body">
+                <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">Checklist pemeriksaan kondisi fisik
+                  awal kendaraan sebelum servis.</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px;">
+                  <label class="checkbox-card"><input type="checkbox" checked> <span>Lampu Depan &amp;
+                      Belakang</span></label>
+                  <label class="checkbox-card"><input type="checkbox" checked> <span>Klakson &amp; Sein</span></label>
+                  <label class="checkbox-card"><input type="checkbox" checked> <span>Kondisi Ban
+                      (Tebal/Aus)</span></label>
+                  <label class="checkbox-card"><input type="checkbox"> <span>Kondisi Kampas Rem</span></label>
+                  <label class="checkbox-card"><input type="checkbox" checked> <span>Kondisi Spion</span></label>
+                  <label class="checkbox-card"><input type="checkbox"> <span>Baret / Goresan Body</span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 Pane (Service & Parts) -->
+          <div class="step-pane" id="stepPane4" style="display: none;">
+            <div class="content-card">
+              <div class="card-header">
+                <div class="card-icon-title">
+                  <svg class="header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                      d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                  </svg>
+                  <h2 class="card-title">Select Services &amp; Spare Parts</h2>
+                </div>
+              </div>
+              <div class="card-body">
+                <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                  <button class="btn-scan" style="background: #ea580c; color: #fff; border: none;">+ Add Service
+                    Item</button>
+                  <button class="btn-scan">+ Add Spare Part</button>
+                </div>
+                <div
+                  style="padding: 24px; border: 1px dashed #cbd5e1; border-radius: 12px; text-align: center; color: #64748b;">
+                  Selected Services: Servis Berkala Vario 160 (Rp 95.000), Oli MPX-2 0.8L (Rp 58.000)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5 Pane (Summary) -->
+          <div class="step-pane" id="stepPane5" style="display: none;">
+            <div class="content-card">
+              <div class="card-header">
+                <div class="card-icon-title">
+                  <svg class="header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                  </svg>
+                  <h2 class="card-title">Transaction Summary</h2>
+                </div>
+              </div>
+              <div class="card-body">
+                <div style="background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0;">
+                  <h4 style="margin: 0 0 12px 0; color: #0f172a;">Order PKB #PKB-2026-00892</h4>
+                  <p style="margin: 4px 0; color: #475569; font-size: 14px;"><strong>Customer:</strong> Budi Santoso
+                    (081298765432)</p>
+                  <p style="margin: 4px 0; color: #475569; font-size: 14px;"><strong>Vehicle:</strong> Honda Vario 160
+                    ABS (B 4592 KLR)</p>
+                  <p style="margin: 4px 0; color: #475569; font-size: 14px;"><strong>Total Estimation:</strong> Rp
+                    153.000</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="bottom-actions">
+            <button class="btn-kembali" id="btnKembali" type="button">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+              <span>Kembali</span>
+            </button>
+            <button class="btn-next" id="btnNext" type="button">
+              <span id="nextBtnText">Next</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal: Input New Vehicle Data -->
+  <div class="modal-overlay" id="inputDataModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Input New Vehicle Data</h3>
+        <button class="modal-close" id="btnModalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="vehicleForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Police Number (Plat No) *</label>
+              <input type="text" id="modalPlate" class="form-input" placeholder="e.g. B 1234 ABC" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Vehicle Model / Type *</label>
+              <input type="text" id="modalModel" class="form-input" placeholder="e.g. Honda Beat 2023" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Engine Number *</label>
+              <input type="text" id="modalEngine" class="form-input" placeholder="e.g. JM31E123456" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Frame / Serial Number *</label>
+              <input type="text" id="modalFrame" class="form-input" placeholder="e.g. MH1JM3119PK123456" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Customer / Owner Name *</label>
+              <input type="text" id="modalOwner" class="form-input" placeholder="e.g. Ahmad Fauzi" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Year of Production</label>
+              <input type="number" id="modalYear" class="form-input" placeholder="2023" value="2023">
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" id="btnModalCancel">Batal</button>
+            <button type="submit" class="btn-primary-modal">Simpan &amp; Pilih</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toastNotification"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
