@@ -1905,30 +1905,238 @@
 
           <!-- Step 5 Pane (Summary) -->
           <div class="step-pane" id="stepPane5" style="display: none;">
-            <div class="content-card">
-              <div class="card-header">
-                <div class="card-icon-title">
-                  <svg class="header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                    <line x1="16" y1="13" x2="8" y2="13" />
-                    <line x1="16" y1="17" x2="8" y2="17" />
+            <div class="content-card summary-card-container">
+              <div class="summary-header">
+                <h2 class="summary-main-title">Summary</h2>
+                <h3 class="summary-sub-title">Detail PKB</h3>
+              </div>
+
+              <!-- Vehicle & Carrier Info Grid -->
+              <div class="summary-info-grid">
+                <div class="summary-info-row">
+                  <div class="summary-info-col">
+                    <div class="summary-info-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="6" width="18" height="12" rx="2"></rect>
+                        <line x1="7" y1="12" x2="17" y2="12"></line>
+                      </svg>
+                    </div>
+                    <div class="summary-info-content">
+                      <span class="summary-info-label">Police Number</span>
+                      <span class="summary-info-value" id="summaryPlateVal">AG 3633 GI</span>
+                    </div>
+                  </div>
+
+                  <div class="summary-info-col">
+                    <div class="summary-info-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="17" r="3.5"></circle>
+                        <path d="M9 3h6"></path>
+                        <path d="M12 3v10.5"></path>
+                        <path d="M6 7l6 3 6-3"></path>
+                      </svg>
+                    </div>
+                    <div class="summary-info-content">
+                      <span class="summary-info-label">Vehicle Type</span>
+                      <span class="summary-info-value" id="summaryVehicleVal">AC - NEW ADV 160 2025</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="summary-info-divider"></div>
+
+                <div class="summary-info-row">
+                  <div class="summary-info-col">
+                    <div class="summary-info-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                    </div>
+                    <div class="summary-info-content">
+                      <span class="summary-info-label">Carrier Name</span>
+                      <span class="summary-info-value" id="summaryCarrierVal">Budi</span>
+                    </div>
+                  </div>
+
+                  <div class="summary-info-col">
+                    <div class="summary-info-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                      </svg>
+                    </div>
+                    <div class="summary-info-content">
+                      <span class="summary-info-label">Phone Number</span>
+                      <span class="summary-info-value" id="summaryPhoneVal">083232873232</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dropdowns: Queue Type & Activity Promotion -->
+              <div class="summary-dropdowns-row">
+                <div class="summary-dropdown-group">
+                  <label class="summary-dropdown-label" for="summaryQueueType">Queue Type</label>
+                  <div class="summary-select-wrapper">
+                    <select id="summaryQueueType" class="summary-select-pill">
+                      <option value="Regular" selected>Regular</option>
+                      <option value="Booking">Booking</option>
+                      <option value="Fast Track">Fast Track</option>
+                      <option value="Pit Express">Pit Express</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="summary-dropdown-group">
+                  <label class="summary-dropdown-label" for="summaryActivityPromo">Activity Promotion</label>
+                  <div class="summary-select-wrapper">
+                    <select id="summaryActivityPromo" class="summary-select-pill">
+                      <option value="Reminder (WA Reminder)" selected>Reminder (WA Reminder)</option>
+                      <option value="Promo Merdeka">Promo Merdeka</option>
+                      <option value="Service Berkala">Service Berkala</option>
+                      <option value="Direct Mail">Direct Mail</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Service & Part Table -->
+              <div class="summary-table-wrapper">
+                <table class="summary-table">
+                  <thead>
+                    <tr>
+                      <th class="th-service-part">Service &amp; Part</th>
+                      <th class="th-qty">Qty</th>
+                      <th class="th-price">Price</th>
+                      <th class="th-discount">Discount</th>
+                      <th class="th-subtotal">Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="td-service-part">
+                        <div class="table-item-name">
+                          <svg class="table-item-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                          </svg>
+                          <span>Paket Lengkap - 06435SM082 - Paket Lengkap - MATIC - MID</span>
+                        </div>
+                      </td>
+                      <td class="td-qty"></td>
+                      <td class="td-price">Rp. 30,000.00</td>
+                      <td class="td-discount">10% &nbsp; (Rp. 3,000.00)</td>
+                      <td class="td-subtotal">Rp. 27,000.00</td>
+                    </tr>
+                    <tr>
+                      <td class="td-service-part">
+                        <div class="table-item-name">
+                          <svg class="table-item-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                          </svg>
+                          <span>44620400000 - COLLAR FR AXLE DISTANCE</span>
+                        </div>
+                      </td>
+                      <td class="td-qty">1x</td>
+                      <td class="td-price">Rp. 30,000.00</td>
+                      <td class="td-discount">10% &nbsp; (Rp. 3,000.00)</td>
+                      <td class="td-subtotal">Rp. 27,000.00</td>
+                    </tr>
+                    <tr class="summary-table-total-row">
+                      <td class="td-service-part">
+                        <div class="table-item-name total-bold">
+                          <svg class="table-item-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <path d="M6 12h.01M18 12h.01"></path>
+                          </svg>
+                          <span>Total</span>
+                        </div>
+                      </td>
+                      <td class="td-qty"></td>
+                      <td class="td-price total-bold">Rp. 60,000.00</td>
+                      <td class="td-discount total-bold">Rp. 6.000.00</td>
+                      <td class="td-subtotal total-bold">Rp. 54,000.00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Ditunggu / Ditinggal Segmented Buttons -->
+              <div class="summary-toggle-section">
+                <span class="summary-toggle-title">Ditunggu / Ditinggal</span>
+                <div class="summary-toggle-group">
+                  <button type="button" class="btn-wait-toggle active" id="btnDitunggu">Ditunggu</button>
+                  <button type="button" class="btn-wait-toggle" id="btnDitinggal">Ditinggal</button>
+                </div>
+              </div>
+
+              <!-- Estimated Timing Details -->
+              <div class="summary-timing-grid">
+                <div class="summary-timing-item">
+                  <div class="summary-timing-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </div>
+                  <div class="summary-timing-content">
+                    <span class="summary-timing-label">Estimated Duration</span>
+                    <span class="summary-timing-value">60 minutes</span>
+                  </div>
+                </div>
+
+                <div class="summary-timing-item">
+                  <div class="summary-timing-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </div>
+                  <div class="summary-timing-content">
+                    <span class="summary-timing-label">Registration Time</span>
+                    <span class="summary-timing-value">10:41</span>
+                  </div>
+                </div>
+
+                <div class="summary-timing-item">
+                  <div class="summary-timing-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </div>
+                  <div class="summary-timing-content">
+                    <span class="summary-timing-label">Estimated Start Time</span>
+                    <span class="summary-timing-value">10:41</span>
+                  </div>
+                </div>
+
+                <div class="summary-timing-item">
+                  <div class="summary-timing-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="9 12 11 14 15 10"></polyline>
+                    </svg>
+                  </div>
+                  <div class="summary-timing-content">
+                    <span class="summary-timing-label">Estimated End Time</span>
+                    <span class="summary-timing-value">11:41</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom Action in Card (Save and Print PKB) -->
+              <div class="summary-action-footer">
+                <button type="button" class="btn-summary-save-print" id="btnSummarySavePrint">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
                   </svg>
-                  <h2 class="card-title">Transaction Summary</h2>
-                </div>
+                  <span>Save and Print PKB</span>
+                </button>
               </div>
-              <div class="card-body">
-                <div style="background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0;">
-                  <h4 style="margin: 0 0 12px 0; color: #0f172a;">Order PKB #PKB-2026-00892</h4>
-                  <p style="margin: 4px 0; color: #475569; font-size: 14px;"><strong>Customer:</strong> Budi Santoso
-                    (081298765432)</p>
-                  <p style="margin: 4px 0; color: #475569; font-size: 14px;"><strong>Vehicle:</strong> Honda Vario 160
-                    ABS (B 4592 KLR)</p>
-                  <p style="margin: 4px 0; color: #475569; font-size: 14px;"><strong>Total Estimation:</strong> Rp
-                    153.000</p>
-                </div>
-              </div>
+
             </div>
           </div>
 

@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCarrierStep();
   initCekAjaDuluStep();
   initServiceAndPartsStep();
+  initSummaryStep();
   initModal();
   initSidebar();
   initLangSwitcher();
@@ -140,7 +141,12 @@ function initStepper() {
       }
     }
 
-    // Update Button Labels
+    // Update Button Labels & Bottom Actions
+    const bottomActions = document.querySelector('.bottom-actions');
+    if (bottomActions) {
+      bottomActions.style.display = currentStep === totalSteps ? 'none' : 'flex';
+    }
+
     if (currentStep === totalSteps) {
       nextBtnText.textContent = 'Save PKB';
     } else {
@@ -697,6 +703,50 @@ function initServiceAndPartsStep() {
   }
 }
 
+// Summary (Step 5) Handlers
+function initSummaryStep() {
+  const btnDitunggu = document.getElementById('btnDitunggu');
+  const btnDitinggal = document.getElementById('btnDitinggal');
+  const btnSummarySavePrint = document.getElementById('btnSummarySavePrint');
+  const queueSelect = document.getElementById('summaryQueueType');
+  const promoSelect = document.getElementById('summaryActivityPromo');
+
+  if (btnDitunggu && btnDitinggal) {
+    btnDitunggu.addEventListener('click', () => {
+      btnDitunggu.classList.add('active');
+      btnDitinggal.classList.remove('active');
+      showToast('Status penanganan PKB: Ditunggu');
+    });
+
+    btnDitinggal.addEventListener('click', () => {
+      btnDitinggal.classList.add('active');
+      btnDitunggu.classList.remove('active');
+      showToast('Status penanganan PKB: Ditinggal');
+    });
+  }
+
+  if (btnSummarySavePrint) {
+    btnSummarySavePrint.addEventListener('click', () => {
+      showToast('Menyimpan data dan mencetak PKB...');
+      setTimeout(() => {
+        showToast('PKB #PKB-2026-00892 berhasil disimpan & diteruskan ke mekanik!');
+      }, 1000);
+    });
+  }
+
+  if (queueSelect) {
+    queueSelect.addEventListener('change', (e) => {
+      showToast(`Queue Type dipilih: ${e.target.value}`);
+    });
+  }
+
+  if (promoSelect) {
+    promoSelect.addEventListener('change', (e) => {
+      showToast(`Activity Promotion dipilih: ${e.target.value}`);
+    });
+  }
+}
+
 // Toast Helper
 function showToast(msg) {
   const toast = document.getElementById('toastNotification');
@@ -706,3 +756,4 @@ function showToast(msg) {
     toast.classList.remove('show');
   }, 3000);
 }
+
