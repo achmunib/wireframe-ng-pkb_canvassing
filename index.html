@@ -1066,29 +1066,263 @@
 
           <!-- Step 3 Pane (Cek Aja Dulu) -->
           <div class="step-pane" id="stepPane3" style="display: none;">
-            <div class="content-card">
+            <div class="content-card cek-card">
               <div class="card-header">
                 <div class="card-icon-title">
-                  <svg class="header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <polyline points="9 11 12 14 22 4" />
-                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                  <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
                   </svg>
-                  <h2 class="card-title">Cek Aja Dulu (Pit Express Check)</h2>
+                  <h2 class="card-title">Carrier Information</h2>
                 </div>
               </div>
-              <div class="card-body">
-                <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">Checklist pemeriksaan kondisi fisik
-                  awal kendaraan sebelum servis.</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px;">
-                  <label class="checkbox-card"><input type="checkbox" checked> <span>Lampu Depan &amp;
-                      Belakang</span></label>
-                  <label class="checkbox-card"><input type="checkbox" checked> <span>Klakson &amp; Sein</span></label>
-                  <label class="checkbox-card"><input type="checkbox" checked> <span>Kondisi Ban
-                      (Tebal/Aus)</span></label>
-                  <label class="checkbox-card"><input type="checkbox"> <span>Kondisi Kampas Rem</span></label>
-                  <label class="checkbox-card"><input type="checkbox" checked> <span>Kondisi Spion</span></label>
-                  <label class="checkbox-card"><input type="checkbox"> <span>Baret / Goresan Body</span></label>
+              <div class="card-body p-0">
+                <div class="cek-table-wrapper">
+                  <table class="cek-table">
+                    <thead>
+                      <tr>
+                        <th class="th-pict">Product Pict</th>
+                        <th class="th-group">Part Group Name</th>
+                        <th class="th-condition">Condition</th>
+                        <th class="th-replacement">Replacement (jika diperlukan)</th>
+                        <th class="th-reason">Reason</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Row 1: Oli Mesin -->
+                      <tr>
+                        <td class="td-pict">
+                          <img src="assets/oil_mpx2.jpg" alt="Oli Mesin" class="cek-product-img">
+                        </td>
+                        <td class="td-group">
+                          <span class="cek-group-name">Oli Mesin</span>
+                        </td>
+                        <td class="td-condition">
+                          <div class="cek-radio-group-vertical">
+                            <label class="cek-radio-label">
+                              <input type="radio" name="cond_1" value="Ok" class="cek-radio">
+                              <span>Ok</span>
+                            </label>
+                            <label class="cek-radio-label">
+                              <input type="radio" name="cond_1" value="Not Ok" class="cek-radio" checked>
+                              <span>Not Ok</span>
+                            </label>
+                          </div>
+                        </td>
+                        <td class="td-replacement">
+                          <div class="cek-replacement-box">
+                            <div class="cek-radio-group-horizontal">
+                              <label class="cek-radio-label">
+                                <input type="radio" name="rep_1" value="Yes" class="cek-radio">
+                                <span>Yes</span>
+                              </label>
+                              <label class="cek-radio-label">
+                                <input type="radio" name="rep_1" value="No" class="cek-radio" checked>
+                                <span>No</span>
+                              </label>
+                            </div>
+                            <div class="cek-part-code-group">
+                              <label class="cek-field-sublabel">Part Code</label>
+                              <div class="cek-select-pill-wrapper">
+                                <select class="cek-select-pill" id="partCode1">
+                                  <option value="" selected>Select Part Code</option>
+                                  <option value="082322MBK0LN1">082322MBK0LN1 - AHM OIL MPX2 0.8L</option>
+                                  <option value="082322MBK0LN2">082322MBK0LN2 - AHM OIL MPX2 0.65L</option>
+                                  <option value="082342MBK0LN1">082342MBK0LN1 - AHM OIL SPX2 0.8L</option>
+                                </select>
+                                <svg class="cek-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="td-reason">
+                          <div class="cek-reason-box">
+                            <textarea class="cek-reason-textarea" placeholder="Reason for not replacing the part..."
+                              maxlength="500" data-counter="counter1"></textarea>
+                            <span class="cek-char-counter" id="counter1">0/500</span>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- Row 2: Kampas Rem Depan -->
+                      <tr>
+                        <td class="td-pict">
+                          <img src="assets/brake_pad_front.jpg" alt="Kampas Rem Depan" class="cek-product-img">
+                        </td>
+                        <td class="td-group">
+                          <span class="cek-group-name">Kampas Rem Depan</span>
+                        </td>
+                        <td class="td-condition">
+                          <div class="cek-radio-group-vertical">
+                            <label class="cek-radio-label">
+                              <input type="radio" name="cond_2" value="Ok" class="cek-radio">
+                              <span>Ok</span>
+                            </label>
+                            <label class="cek-radio-label">
+                              <input type="radio" name="cond_2" value="Not Ok" class="cek-radio" checked>
+                              <span>Not Ok</span>
+                            </label>
+                          </div>
+                        </td>
+                        <td class="td-replacement">
+                          <div class="cek-replacement-box">
+                            <div class="cek-radio-group-horizontal">
+                              <label class="cek-radio-label">
+                                <input type="radio" name="rep_2" value="Yes" class="cek-radio">
+                                <span>Yes</span>
+                              </label>
+                              <label class="cek-radio-label">
+                                <input type="radio" name="rep_2" value="No" class="cek-radio" checked>
+                                <span>No</span>
+                              </label>
+                            </div>
+                            <div class="cek-part-code-group">
+                              <label class="cek-field-sublabel">Part Code</label>
+                              <div class="cek-select-pill-wrapper">
+                                <select class="cek-select-pill" id="partCode2">
+                                  <option value="" selected>Select Part Code</option>
+                                  <option value="06455KVB911">06455KVB911 - PAD SET, FR. BRAKE</option>
+                                  <option value="06455KREK01">06455KREK01 - PAD SET, FR. BRAKE</option>
+                                  <option value="06455K59A71">06455K59A71 - PAD SET, FR. BRAKE</option>
+                                </select>
+                                <svg class="cek-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="td-reason">
+                          <div class="cek-reason-box">
+                            <textarea class="cek-reason-textarea" placeholder="Reason for not replacing the part..."
+                              maxlength="500" data-counter="counter2"></textarea>
+                            <span class="cek-char-counter" id="counter2">0/500</span>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- Row 3: Kampas Rem Depan (Rear Brake Shoes) -->
+                      <tr>
+                        <td class="td-pict">
+                          <img src="assets/brake_shoe.jpg" alt="Kampas Rem Depan" class="cek-product-img">
+                        </td>
+                        <td class="td-group">
+                          <span class="cek-group-name">Kampas Rem Depan</span>
+                        </td>
+                        <td class="td-condition">
+                          <div class="cek-radio-group-vertical">
+                            <label class="cek-radio-label">
+                              <input type="radio" name="cond_3" value="Ok" class="cek-radio">
+                              <span>Ok</span>
+                            </label>
+                            <label class="cek-radio-label">
+                              <input type="radio" name="cond_3" value="Not Ok" class="cek-radio" checked>
+                              <span>Not Ok</span>
+                            </label>
+                          </div>
+                        </td>
+                        <td class="td-replacement">
+                          <div class="cek-replacement-box">
+                            <div class="cek-radio-group-horizontal">
+                              <label class="cek-radio-label">
+                                <input type="radio" name="rep_3" value="Yes" class="cek-radio">
+                                <span>Yes</span>
+                              </label>
+                              <label class="cek-radio-label">
+                                <input type="radio" name="rep_3" value="No" class="cek-radio" checked>
+                                <span>No</span>
+                              </label>
+                            </div>
+                            <div class="cek-part-code-group">
+                              <label class="cek-field-sublabel">Part Code</label>
+                              <div class="cek-select-pill-wrapper">
+                                <select class="cek-select-pill" id="partCode3">
+                                  <option value="" selected>Select Part Code</option>
+                                  <option value="43120KZL930">43120KZL930 - SHOE SET, BRAKE</option>
+                                  <option value="43120KPP900">43120KPP900 - SHOE SET, REAR BRAKE</option>
+                                  <option value="06430KZL930">06430KZL930 - SHOE SET, RR BRAKE</option>
+                                </select>
+                                <svg class="cek-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="td-reason">
+                          <div class="cek-reason-box">
+                            <textarea class="cek-reason-textarea" placeholder="Reason for not replacing the part..."
+                              maxlength="500" data-counter="counter3"></textarea>
+                            <span class="cek-char-counter" id="counter3">0/500</span>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- Row 4: Spark Plugs -->
+                      <tr>
+                        <td class="td-pict">
+                          <img src="assets/spark_plugs.jpg" alt="Busi" class="cek-product-img">
+                        </td>
+                        <td class="td-group">
+                          <span class="cek-group-name"></span>
+                        </td>
+                        <td class="td-condition">
+                          <div class="cek-radio-group-vertical">
+                            <label class="cek-radio-label">
+                              <input type="radio" name="cond_4" value="Ok" class="cek-radio">
+                              <span>Ok</span>
+                            </label>
+                            <label class="cek-radio-label">
+                              <input type="radio" name="cond_4" value="Not Ok" class="cek-radio" checked>
+                              <span>Not Ok</span>
+                            </label>
+                          </div>
+                        </td>
+                        <td class="td-replacement">
+                          <div class="cek-replacement-box">
+                            <div class="cek-radio-group-horizontal">
+                              <label class="cek-radio-label">
+                                <input type="radio" name="rep_4" value="Yes" class="cek-radio">
+                                <span>Yes</span>
+                              </label>
+                              <label class="cek-radio-label">
+                                <input type="radio" name="rep_4" value="No" class="cek-radio" checked>
+                                <span>No</span>
+                              </label>
+                            </div>
+                            <div class="cek-part-code-group">
+                              <label class="cek-field-sublabel">Part Code</label>
+                              <div class="cek-select-pill-wrapper">
+                                <select class="cek-select-pill" id="partCode4">
+                                  <option value="" selected>Select Part Code</option>
+                                  <option value="31916K97T01">31916K97T01 - PLUG, SPARK (CPR9EA-9)</option>
+                                  <option value="31917K97T01">31917K97T01 - PLUG, SPARK (CPR8EA-9)</option>
+                                  <option value="9807956846">98079-56846 - SPARK PLUG NGK CR8E</option>
+                                </select>
+                                <svg class="cek-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="td-reason">
+                          <div class="cek-reason-box">
+                            <textarea class="cek-reason-textarea" placeholder="Reason for not replacing the part..."
+                              maxlength="500" data-counter="counter4"></textarea>
+                            <span class="cek-char-counter" id="counter4">0/500</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -1096,30 +1330,577 @@
 
           <!-- Step 4 Pane (Service & Parts) -->
           <div class="step-pane" id="stepPane4" style="display: none;">
-            <div class="content-card">
+            
+            <!-- Top Grid: Service Recommendation & Promo -->
+            <div class="sp-top-grid">
+              
+              <!-- Card: Service Recomendation -->
+              <div class="content-card sp-rec-card">
+                <div class="sp-card-header">
+                  <h3 class="sp-card-title">Service Recomendation</h3>
+                </div>
+                <div class="sp-rec-list">
+                  <!-- Item 1 -->
+                  <div class="sp-rec-item">
+                    <div class="sp-rec-accent-bar"></div>
+                    <div class="sp-rec-body">
+                      <h4 class="sp-rec-item-title">Ganti Oli Plus</h4>
+                      <div class="sp-rec-meta-row">
+                        <span class="sp-meta-chip">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          <span>10 Minutes</span>
+                        </span>
+                        <span class="sp-meta-chip">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <path d="M6 12h.01M18 12h.01"></path>
+                          </svg>
+                          <span>Rp. 54.000</span>
+                        </span>
+                      </div>
+                    </div>
+                    <button type="button" class="sp-btn-pill-outline sp-btn-add-rec" data-name="Ganti Oli Plus" data-price="54000">Add</button>
+                  </div>
+
+                  <!-- Item 2 -->
+                  <div class="sp-rec-item">
+                    <div class="sp-rec-accent-bar"></div>
+                    <div class="sp-rec-body">
+                      <h4 class="sp-rec-item-title">Paket Lengkap Matic</h4>
+                      <div class="sp-rec-meta-row">
+                        <span class="sp-meta-chip">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          <span>30 Minutes</span>
+                        </span>
+                        <span class="sp-meta-chip">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <path d="M6 12h.01M18 12h.01"></path>
+                          </svg>
+                          <span>Rp. 120.000</span>
+                        </span>
+                      </div>
+                    </div>
+                    <button type="button" class="sp-btn-pill-outline sp-btn-add-rec" data-name="Paket Lengkap Matic" data-price="120000">Add</button>
+                  </div>
+                </div>
+                <div class="sp-card-footer">
+                  <button type="button" class="sp-see-more-btn" id="btnSeeMoreRec">
+                    <span>See More</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Card: Promo -->
+              <div class="content-card sp-promo-card">
+                <div class="sp-card-header">
+                  <h3 class="sp-card-title">Promo</h3>
+                </div>
+                <div class="sp-rec-list">
+                  <!-- Promo Item 1 -->
+                  <div class="sp-rec-item">
+                    <div class="sp-rec-accent-bar"></div>
+                    <div class="sp-rec-body">
+                      <h4 class="sp-rec-item-title">PROMO 505</h4>
+                      <p class="sp-promo-subtext">Minimum purchase Rp. 50.000,-</p>
+                      <p class="sp-promo-highlight">Free Shipping + 5% Discount</p>
+                    </div>
+                    <button type="button" class="sp-btn-pill-outline sp-btn-use-promo" data-promo="PROMO 505">Use</button>
+                  </div>
+
+                  <!-- Promo Item 2 -->
+                  <div class="sp-rec-item">
+                    <div class="sp-rec-accent-bar"></div>
+                    <div class="sp-rec-body">
+                      <h4 class="sp-rec-item-title">RAMADHAN SPECIAL PROMO</h4>
+                      <p class="sp-promo-subtext">Stay Tuned for Ramadan</p>
+                      <p class="sp-promo-highlight">Flash Sale <strong>Up to 80% Off</strong></p>
+                    </div>
+                    <button type="button" class="sp-btn-pill-outline sp-btn-use-promo" data-promo="RAMADHAN SPECIAL PROMO">Use</button>
+                  </div>
+                </div>
+                <div class="sp-card-footer">
+                  <button type="button" class="sp-see-more-btn" id="btnSeeMorePromo">
+                    <span>See More</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Banner: Voucher KPB -->
+            <div class="sp-kpb-banner">
+              <div class="sp-kpb-left">
+                <div class="sp-kpb-title-row">
+                  <span class="sp-kpb-title-label">Voucher KPB</span>
+                  <span class="sp-kpb-divider">|</span>
+                  <span class="sp-kpb-title-highlight">KPB 2</span>
+                </div>
+                <div class="sp-kpb-meta-row">
+                  <div class="sp-kpb-meta-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>10 Menit</span>
+                  </div>
+                  <div class="sp-kpb-meta-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M12 6v6l4 2"></path>
+                      <path d="M16 18a8 8 0 1 0-8 0"></path>
+                    </svg>
+                    <span>4000 km</span>
+                  </div>
+                  <div class="sp-kpb-meta-item sp-kpb-date">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>30 Mei 2025</span>
+                  </div>
+                </div>
+              </div>
+              <div class="sp-kpb-right">
+                <button type="button" class="btn-sp-solid-orange" id="btnAddKpb">Add</button>
+              </div>
+            </div>
+
+            <!-- Main Content Card: Service & Part Lists -->
+            <div class="content-card sp-main-card">
+              
+              <!-- Section: Service Header & Action Buttons -->
+              <div class="sp-service-header-row">
+                <div class="sp-section-heading">
+                  <svg class="sp-heading-icon-red" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                  </svg>
+                  <h2 class="sp-heading-title">Service</h2>
+                </div>
+                <div class="sp-header-actions">
+                  <button type="button" class="sp-action-pill-btn" id="btnAddOppl">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                    <span>Add OPPL</span>
+                  </button>
+                  <button type="button" class="sp-action-pill-btn" id="btnAddService">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                    <span>Add Service</span>
+                  </button>
+                  <button type="button" class="sp-action-pill-btn" id="btnPartAll">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <circle cx="12" cy="12" r="8"></circle>
+                      <line x1="12" y1="2" x2="12" y2="4"></line>
+                      <line x1="12" y1="20" x2="12" y2="22"></line>
+                      <line x1="2" y1="12" x2="4" y2="12"></line>
+                      <line x1="20" y1="12" x2="22" y2="12"></line>
+                    </svg>
+                    <span>Part All</span>
+                  </button>
+                  <button type="button" class="sp-action-pill-btn" id="btnPart">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span>Part</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Service Sub-Box (Bordered rounded card) -->
+              <div class="sp-list-subbox">
+                <!-- Service Item 1 -->
+                <div class="sp-service-item">
+                  <div class="sp-item-info">
+                    <h4 class="sp-item-title">PAKET RINGAN - 07U03102 - PAKET RINGAN - MATIC - MID</h4>
+                    <div class="sp-item-details-row">
+                      <div class="sp-detail-pill">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                          <circle cx="12" cy="12" r="2"></circle>
+                          <path d="M6 12h.01M18 12h.01"></path>
+                        </svg>
+                        <span>Rp. 55,000.00</span>
+                      </div>
+                      <div class="sp-detail-pill">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                          <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                        </svg>
+                        <span>Discount: Rp. 10,000.00</span>
+                      </div>
+                      <div class="sp-detail-pill">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>20 Menit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="sp-item-actions">
+                    <div class="sp-dashed-separator"></div>
+                    <button type="button" class="sp-btn-trash" title="Delete Service">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="sp-subbox-divider"></div>
+
+                <!-- Service Item 2 -->
+                <div class="sp-service-item">
+                  <div class="sp-item-info">
+                    <h4 class="sp-item-title">GANTI OLI PLUS - 11U03101 - GANTI OLI PLUS - MATIC - MID</h4>
+                    <div class="sp-item-details-row">
+                      <div class="sp-detail-pill">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                          <circle cx="12" cy="12" r="2"></circle>
+                          <path d="M6 12h.01M18 12h.01"></path>
+                        </svg>
+                        <span>Rp. 20,000.00</span>
+                      </div>
+                      <div class="sp-detail-pill">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                          <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                        </svg>
+                        <span>Discount: Rp. 5,000.00</span>
+                      </div>
+                      <div class="sp-detail-pill">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>20 Menit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="sp-item-actions">
+                    <div class="sp-dashed-separator"></div>
+                    <button type="button" class="sp-btn-trash" title="Delete Service">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section: Part Header -->
+              <div class="sp-part-heading-row">
+                <div class="sp-section-heading">
+                  <svg class="sp-heading-icon-orange" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                  </svg>
+                  <h2 class="sp-heading-title">Part</h2>
+                </div>
+              </div>
+
+              <!-- Part Sub-Box (Bordered rounded card) -->
+              <div class="sp-list-subbox">
+                
+                <!-- Part Item 1 -->
+                <div class="sp-part-item">
+                  <div class="sp-part-top-row">
+                    <h4 class="sp-item-title">90545300000 - WASHER OIL BOLT</h4>
+                    <div class="sp-item-actions">
+                      <span class="sp-badge-hotline" id="badgePart1">Hotline</span>
+                      <div class="sp-qty-pill">
+                        <button type="button" class="sp-qty-btn sp-qty-minus" data-target="qtyVal1" aria-label="Decrease quantity">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                          </svg>
+                        </button>
+                        <span class="sp-qty-val" id="qtyVal1">4</span>
+                        <button type="button" class="sp-qty-btn sp-qty-plus" data-target="qtyVal1" aria-label="Increase quantity">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                          </svg>
+                        </button>
+                      </div>
+                      <div class="sp-dashed-separator"></div>
+                      <button type="button" class="sp-btn-trash" title="Delete Part">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="sp-item-details-row">
+                    <div class="sp-detail-pill">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                        <circle cx="12" cy="12" r="2"></circle>
+                        <path d="M6 12h.01M18 12h.01"></path>
+                      </svg>
+                      <span>Rp. 16,000.00</span>
+                    </div>
+                  </div>
+
+                  <!-- Stock Warning Alert -->
+                  <div class="sp-stock-alert" id="stockAlert1">
+                    <svg class="sp-stock-alert-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                      <line x1="12" y1="9" x2="12" y2="13"></line>
+                      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span class="sp-stock-alert-text">Request qty <strong id="alertQty1">(4)</strong> is greater than available stock <strong>(2)</strong></span>
+                  </div>
+
+                  <!-- Source Request Dropdown -->
+                  <div class="sp-source-request-group">
+                    <label class="sp-source-label">Source Request</label>
+                    <div class="sp-custom-select-container">
+                      <div class="sp-custom-select-trigger" id="sourceReqTrigger">
+                        <span id="sourceReqSelectedText">Choose method</span>
+                        <svg class="sp-custom-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </div>
+                      <div class="sp-custom-dropdown-menu" id="sourceReqMenu">
+                        <div class="sp-dropdown-option" data-value="Transfer Part">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                          </svg>
+                          <span>Transfer Part</span>
+                        </div>
+                        <div class="sp-dropdown-option selected" data-value="Hotline">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                            <line x1="9" y1="22" x2="9" y2="22.01"></line>
+                            <line x1="15" y1="22" x2="15" y2="22.01"></line>
+                            <line x1="9" y1="6" x2="9" y2="6.01"></line>
+                            <line x1="15" y1="6" x2="15" y2="6.01"></line>
+                            <line x1="9" y1="10" x2="9" y2="10.01"></line>
+                            <line x1="15" y1="10" x2="15" y2="10.01"></line>
+                            <line x1="9" y1="14" x2="9" y2="14.01"></line>
+                            <line x1="15" y1="14" x2="15" y2="14.01"></line>
+                            <line x1="9" y1="18" x2="9" y2="18.01"></line>
+                            <line x1="15" y1="18" x2="15" y2="18.01"></line>
+                          </svg>
+                          <span>Hotline</span>
+                        </div>
+                        <div class="sp-dropdown-option" data-value="OPPL">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                          </svg>
+                          <span>OPPL</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="sp-subbox-divider"></div>
+
+                <!-- Part Item 2 -->
+                <div class="sp-part-item">
+                  <div class="sp-part-top-row">
+                    <h4 class="sp-item-title">94001100005 - NUT,HEX 10MM</h4>
+                    <div class="sp-item-actions">
+                      <div class="sp-qty-pill">
+                        <button type="button" class="sp-qty-btn sp-qty-minus" data-target="qtyVal2" aria-label="Decrease quantity">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                          </svg>
+                        </button>
+                        <span class="sp-qty-val" id="qtyVal2">1</span>
+                        <button type="button" class="sp-qty-btn sp-qty-plus" data-target="qtyVal2" aria-label="Increase quantity">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                          </svg>
+                        </button>
+                      </div>
+                      <div class="sp-dashed-separator"></div>
+                      <button type="button" class="sp-btn-trash" title="Delete Part">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="sp-item-details-row">
+                    <div class="sp-detail-pill">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                      </svg>
+                      <span>Discount: Rp. 5,000.00</span>
+                    </div>
+                    <div class="sp-detail-pill">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                        <circle cx="12" cy="12" r="2"></circle>
+                        <path d="M6 12h.01M18 12h.01"></path>
+                      </svg>
+                      <span>Rp. 11,000.00</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Show More in Part Box -->
+                <div class="sp-subbox-footer">
+                  <button type="button" class="sp-see-more-btn" id="btnShowMorePart">
+                    <span>Show More</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Card 1: Voucher dan Diskon -->
+            <div class="content-card sp-voucher-diskon-card">
               <div class="card-header">
                 <div class="card-icon-title">
-                  <svg class="header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <circle cx="12" cy="12" r="3" />
-                    <path
-                      d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                  <svg class="sp-icon-green" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76z"></path>
+                    <line x1="9" y1="15" x2="15" y2="9"></line>
+                    <circle cx="9.5" cy="9.5" r=".5" fill="currentColor"></circle>
+                    <circle cx="14.5" cy="14.5" r=".5" fill="currentColor"></circle>
                   </svg>
-                  <h2 class="card-title">Select Services &amp; Spare Parts</h2>
+                  <h2 class="card-title">Voucher dan Diskon</h2>
                 </div>
               </div>
               <div class="card-body">
-                <div style="display: flex; gap: 12px; margin-bottom: 16px;">
-                  <button class="btn-scan" style="background: #ea580c; color: #fff; border: none;">+ Add Service
-                    Item</button>
-                  <button class="btn-scan">+ Add Spare Part</button>
+                <div class="sp-pill-bar-container mb-4">
+                  <div class="sp-pill-bar-left">
+                    <span class="sp-voucher-badge sp-vb-orange">Pekerjaan <strong>10rb</strong></span>
+                    <span class="sp-voucher-badge sp-vb-green">Part <strong>30rb</strong></span>
+                  </div>
+                  <div class="sp-pill-bar-right">
+                    <button type="button" class="sp-btn-choose-voucher" id="btnChooseVoucher">Choose Voucher</button>
+                  </div>
                 </div>
-                <div
-                  style="padding: 24px; border: 1px dashed #cbd5e1; border-radius: 12px; text-align: center; color: #64748b;">
-                  Selected Services: Servis Berkala Vario 160 (Rp 95.000), Oli MPX-2 0.8L (Rp 58.000)
+                <div class="form-group">
+                  <label class="form-label sp-input-icon-label">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                      <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                    <span>Discount (Rp)</span>
+                  </label>
+                  <input type="text" class="carrier-pill-input" id="discountInput" value="Rp. 2,500.00">
                 </div>
               </div>
             </div>
+
+            <!-- Card 2: Down Payment -->
+            <div class="content-card sp-dp-card">
+              <div class="card-header">
+                <div class="card-icon-title">
+                  <svg class="sp-icon-gold" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                    <circle cx="12" cy="12" r="2"></circle>
+                    <path d="M6 12h.01M18 12h.01"></path>
+                  </svg>
+                  <h2 class="card-title">Down Payment</h2>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="sp-pill-bar-container mb-4">
+                  <div class="sp-pill-bar-left">
+                    <span class="sp-voucher-badge sp-vb-green"><strong>30rb</strong></span>
+                  </div>
+                  <div class="sp-pill-bar-right">
+                    <button type="button" class="btn-sp-solid-orange sp-btn-ambil-dp" id="btnAmbilDeposit">Ambil Deposit</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label sp-input-icon-label">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                      <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                    <span>DP Tambahan (Rp)</span>
+                  </label>
+                  <input type="text" class="carrier-pill-input" id="dpTambahanInput" value="Rp. 0">
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Ringkasan Transaksi -->
+            <div class="content-card sp-summary-card">
+              <div class="card-header">
+                <div class="card-icon-title">
+                  <svg class="sp-icon-blue" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                  </svg>
+                  <h2 class="card-title">Ringkasan Transaksi</h2>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="sp-summary-list">
+                  <div class="sp-summary-row">
+                    <span class="sp-summary-label">Total Pekerjaan</span>
+                    <span class="sp-summary-value" id="summaryTotalPekerjaan">Rp. 22.500</span>
+                  </div>
+                  <div class="sp-summary-row">
+                    <span class="sp-summary-label">Total Part</span>
+                    <span class="sp-summary-value" id="summaryTotalPart">Rp. 50.500</span>
+                  </div>
+                  <div class="sp-summary-row">
+                    <span class="sp-summary-label">Total Diskon</span>
+                    <span class="sp-summary-value" id="summaryTotalDiskon">Rp. 5.000</span>
+                  </div>
+                  <div class="sp-summary-divider"></div>
+                  <div class="sp-summary-row">
+                    <span class="sp-summary-label">Total DP</span>
+                    <span class="sp-summary-value" id="summaryTotalDP">Rp. 6.000</span>
+                  </div>
+                  <div class="sp-summary-divider"></div>
+                  <div class="sp-summary-row sp-summary-grand-total">
+                    <span class="sp-total-label">Total Pekerjaan</span>
+                    <span class="sp-total-val" id="summaryGrandTotal">Rp. 22.500</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
           <!-- Step 5 Pane (Summary) -->
@@ -1153,22 +1934,35 @@
 
           <!-- Bottom Action Buttons -->
           <div class="bottom-actions">
-            <button class="btn-kembali" id="btnKembali" type="button">
+            <button class="btn-save-print" id="btnSavePrint" type="button">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
-                <line x1="19" y1="12" x2="5" y2="12" />
-                <polyline points="12 19 5 12 12 5" />
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
               </svg>
-              <span>Kembali</span>
+              <span>Save &amp; Print PKB</span>
             </button>
-            <button class="btn-next" id="btnNext" type="button">
-              <span id="nextBtnText">Next</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </button>
+            <div class="bottom-actions-right">
+              <button class="btn-kembali" id="btnKembali" type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
+                </svg>
+                <span>Back</span>
+              </button>
+              <button class="btn-next" id="btnNext" type="button">
+                <span id="nextBtnText">Next</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </main>

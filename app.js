@@ -55,6 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initFuelIndicator();
   initVehicleScanner();
   initCarrierStep();
+  initCekAjaDuluStep();
+  initServiceAndPartsStep();
   initModal();
   initSidebar();
   initLangSwitcher();
@@ -467,6 +469,232 @@ function initLangSwitcher() {
     btnId.classList.remove('active');
     showToast('Language changed to English');
   });
+}
+
+// Cek Aja Dulu (Step 3) Handlers
+function initCekAjaDuluStep() {
+  // Character counters for reason textareas
+  const reasonTextareas = document.querySelectorAll('.cek-reason-textarea');
+  reasonTextareas.forEach(textarea => {
+    const counterId = textarea.dataset.counter;
+    const counterElem = document.getElementById(counterId);
+
+    const updateCounter = () => {
+      const len = textarea.value.length;
+      if (counterElem) {
+        counterElem.textContent = `${len}/500`;
+      }
+    };
+
+    textarea.addEventListener('input', updateCounter);
+  });
+
+  // Select dropdown color change on selection
+  const selectPills = document.querySelectorAll('.cek-select-pill');
+  selectPills.forEach(select => {
+    select.addEventListener('change', () => {
+      if (select.value) {
+        select.style.color = '#1e293b';
+        select.style.fontWeight = '600';
+      } else {
+        select.style.color = '#64748b';
+        select.style.fontWeight = 'normal';
+      }
+    });
+  });
+
+  // Save & Print PKB Button Handler
+  const btnSavePrint = document.getElementById('btnSavePrint');
+  if (btnSavePrint) {
+    btnSavePrint.addEventListener('click', () => {
+      showToast('Menyimpan data dan mencetak PKB...');
+      setTimeout(() => {
+        showToast('PKB #PKB-2026-00892 berhasil disimpan & diteruskan ke sistem!');
+      }, 1000);
+    });
+  }
+}
+
+// Service & Parts (Step 4) Handlers
+function initServiceAndPartsStep() {
+  // Recommendation Add Buttons
+  const recAddBtns = document.querySelectorAll('.sp-btn-add-rec');
+  recAddBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.dataset.name || 'Service';
+      showToast(`${name} berhasil ditambahkan ke daftar Service!`);
+    });
+  });
+
+  // Promo Use Buttons
+  const promoUseBtns = document.querySelectorAll('.sp-btn-use-promo');
+  promoUseBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const promo = btn.dataset.promo || 'Promo';
+      showToast(`${promo} berhasil digunakan!`);
+    });
+  });
+
+  // Voucher KPB Add Button
+  const btnAddKpb = document.getElementById('btnAddKpb');
+  if (btnAddKpb) {
+    btnAddKpb.addEventListener('click', () => {
+      showToast('Voucher KPB 2 berhasil ditambahkan ke transaksi!');
+    });
+  }
+
+  // See More & Show More Buttons
+  const btnSeeMoreRec = document.getElementById('btnSeeMoreRec');
+  if (btnSeeMoreRec) {
+    btnSeeMoreRec.addEventListener('click', () => {
+      showToast('Menampilkan seluruh rekomendasi servis untuk model ini.');
+    });
+  }
+
+  const btnSeeMorePromo = document.getElementById('btnSeeMorePromo');
+  if (btnSeeMorePromo) {
+    btnSeeMorePromo.addEventListener('click', () => {
+      showToast('Menampilkan seluruh promo yang tersedia.');
+    });
+  }
+
+  const btnShowMorePart = document.getElementById('btnShowMorePart');
+  if (btnShowMorePart) {
+    btnShowMorePart.addEventListener('click', () => {
+      showToast('Menampilkan seluruh suku cadang yang dipilih.');
+    });
+  }
+
+  // Header Actions (Add OPPL, Add Service, Part All, Part)
+  const btnAddOppl = document.getElementById('btnAddOppl');
+  if (btnAddOppl) {
+    btnAddOppl.addEventListener('click', () => {
+      showToast('Membuka dialog Tambah OPPL (Order Pekerjaan Luar)...');
+    });
+  }
+
+  const btnAddService = document.getElementById('btnAddService');
+  if (btnAddService) {
+    btnAddService.addEventListener('click', () => {
+      showToast('Membuka katalog Service & Jasa AHASS...');
+    });
+  }
+
+  const btnPartAll = document.getElementById('btnPartAll');
+  if (btnPartAll) {
+    btnPartAll.addEventListener('click', () => {
+      showToast('Memilih seluruh spare part rekomendasi...');
+    });
+  }
+
+  const btnPart = document.getElementById('btnPart');
+  if (btnPart) {
+    btnPart.addEventListener('click', () => {
+      showToast('Membuka katalog Spare Part Honda Genuine Parts...');
+    });
+  }
+
+  // Quantity Counters (+ / -)
+  const qtyBtns = document.querySelectorAll('.sp-qty-btn');
+  qtyBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const targetId = btn.dataset.target;
+      const targetElem = document.getElementById(targetId);
+      if (!targetElem) return;
+
+      let currentQty = parseInt(targetElem.textContent) || 1;
+      if (btn.classList.contains('sp-qty-plus')) {
+        currentQty += 1;
+      } else if (btn.classList.contains('sp-qty-minus')) {
+        if (currentQty > 1) {
+          currentQty -= 1;
+        }
+      }
+      targetElem.textContent = currentQty;
+
+      // Handle stock alert for washer oil bolt
+      if (targetId === 'qtyVal1') {
+        const alertQty = document.getElementById('alertQty1');
+        const stockAlert = document.getElementById('stockAlert1');
+        if (alertQty) alertQty.textContent = `(${currentQty})`;
+        if (stockAlert) {
+          stockAlert.style.display = currentQty > 2 ? 'inline-flex' : 'none';
+        }
+      }
+    });
+  });
+
+  // Trash Delete Buttons
+  const trashBtns = document.querySelectorAll('.sp-btn-trash');
+  trashBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      showToast('Item berhasil dihapus dari daftar.');
+    });
+  });
+
+  // Source Request Custom Dropdown Menu
+  const trigger = document.getElementById('sourceReqTrigger');
+  const menu = document.getElementById('sourceReqMenu');
+  const selectedText = document.getElementById('sourceReqSelectedText');
+  const badgePart1 = document.getElementById('badgePart1');
+
+  if (trigger && menu) {
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = menu.classList.toggle('show');
+      trigger.classList.toggle('open', isOpen);
+      trigger.classList.toggle('active', isOpen);
+    });
+
+    const options = menu.querySelectorAll('.sp-dropdown-option');
+    options.forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = opt.dataset.value;
+        if (selectedText) selectedText.textContent = val;
+        
+        options.forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+
+        if (badgePart1) {
+          badgePart1.textContent = val;
+          if (val === 'Hotline') {
+            badgePart1.style.background = '#2eaadc';
+          } else if (val === 'Transfer Part') {
+            badgePart1.style.background = '#8b5cf6';
+          } else {
+            badgePart1.style.background = '#10b981';
+          }
+        }
+
+        menu.classList.remove('show');
+        trigger.classList.remove('open', 'active');
+        showToast(`Source Request diubah ke: ${val}`);
+      });
+    });
+
+    document.addEventListener('click', () => {
+      menu.classList.remove('show');
+      trigger.classList.remove('open', 'active');
+    });
+  }
+
+  // Choose Voucher Button
+  const btnChooseVoucher = document.getElementById('btnChooseVoucher');
+  if (btnChooseVoucher) {
+    btnChooseVoucher.addEventListener('click', () => {
+      showToast('Membuka modal pemilihan Voucher & Kupon Diskon...');
+    });
+  }
+
+  // Ambil Deposit Button
+  const btnAmbilDeposit = document.getElementById('btnAmbilDeposit');
+  if (btnAmbilDeposit) {
+    btnAmbilDeposit.addEventListener('click', () => {
+      showToast('Deposit sebesar Rp 30.000 berhasil diaplikasikan ke DP!');
+    });
+  }
 }
 
 // Toast Helper
