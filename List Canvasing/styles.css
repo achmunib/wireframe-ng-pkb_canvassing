@@ -147,12 +147,32 @@ body {
 }
 
 /* In-iframe view adjustments */
+.in-iframe,
+.in-iframe body {
+  height: 100%;
+}
+
+.in-iframe .app-layout {
+  min-height: 100%;
+  height: 100%;
+}
+
+.in-iframe .main-wrapper {
+  min-height: 100%;
+  height: 100%;
+}
+
 .in-iframe .top-header {
   display: none !important;
 }
 
 .in-iframe .page-content {
-  padding-top: 24px;
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Top Header */
@@ -3130,5 +3150,463 @@ body {
     justify-content: center;
   }
 }
+
+/* ==========================================================================
+   Method Selection Screen (Booking vs Non-Booking)
+   ========================================================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.method-selection-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: clamp(16px, 3vh, 32px) 20px;
+  box-sizing: border-box;
+  background: #ffffff;
+  overflow: hidden;
+  animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.in-iframe .method-selection-section {
+  height: 100%;
+  min-height: 0;
+  padding: clamp(12px, 2.5vh, 28px) 20px;
+}
+
+.method-selection-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 680px;
+  width: 100%;
+  margin: auto;
+}
+
+/* Brand Header */
+.method-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: clamp(18px, 3.5vh, 36px);
+}
+
+.mpm-brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: clamp(8px, 1.5vh, 16px);
+  transition: transform 0.25s ease;
+}
+
+.mpm-brand-logo svg {
+  width: clamp(100px, 9vw, 135px);
+  height: auto;
+}
+
+.mpm-brand-logo:hover {
+  transform: scale(1.04);
+}
+
+.method-title {
+  font-size: clamp(14px, 1.3vw, 18px);
+  font-weight: 700;
+  color: #334155;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0;
+  font-family: inherit;
+}
+
+/* Two Big Action Cards */
+.method-cards-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 3.2vw, 36px);
+  width: 100%;
+}
+
+.method-card {
+  width: clamp(160px, 18vw, 230px);
+  height: clamp(160px, 18vw, 230px);
+  border-radius: clamp(18px, 2.2vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 1.6vw, 20px);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+/* Orange Booking Card */
+.card-booking {
+  background: #f15a24;
+  color: #ffffff;
+  box-shadow: 0 14px 30px -4px rgba(241, 90, 36, 0.38), 0 4px 12px rgba(241, 90, 36, 0.2);
+}
+
+.card-booking:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 38px -4px rgba(241, 90, 36, 0.48), 0 8px 18px rgba(241, 90, 36, 0.25);
+}
+
+.card-booking:active {
+  transform: translateY(-2px) scale(0.99);
+}
+
+/* White Non-Booking Card */
+.card-non-booking {
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 12px 30px -4px rgba(15, 23, 42, 0.07), 0 4px 12px rgba(15, 23, 42, 0.03);
+}
+
+.card-non-booking:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: #cbd5e1;
+  box-shadow: 0 20px 38px -4px rgba(15, 23, 42, 0.13), 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.card-non-booking:active {
+  transform: translateY(-2px) scale(0.99);
+}
+
+/* Card Icons */
+.method-card-icon-box {
+  width: clamp(50px, 5.5vw, 72px);
+  height: clamp(50px, 5.5vw, 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.method-card-icon {
+  width: clamp(44px, 5vw, 64px);
+  height: clamp(44px, 5vw, 64px);
+  transition: transform 0.25s ease;
+}
+
+.method-card:hover .method-card-icon {
+  transform: scale(1.06);
+}
+
+/* Card Labels */
+.method-card-label {
+  font-size: clamp(13px, 1.2vw, 16px);
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+/* Selected Method Banner (shown on top of form wizard) */
+.selected-method-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.method-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.method-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.method-chip.booking {
+  background: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #fdba74;
+}
+
+.method-chip.non-booking {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+
+.method-chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.method-chip.booking .method-chip-dot {
+  background: #ea580c;
+}
+
+.method-chip.non-booking .method-chip-dot {
+  background: #64748b;
+}
+
+.method-banner-detail {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.btn-switch-method {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #475569;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-switch-method:hover {
+  background: #f8fafc;
+  color: var(--primary);
+  border-color: var(--primary-border);
+}
+
+/* Booking Modal Dialog Styles */
+.booking-modal-card {
+  max-width: 620px;
+  width: 92%;
+}
+
+.modal-header-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.modal-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #fff7ed;
+  color: #ea580c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.modal-subtitle {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.booking-search-bar {
+  margin-bottom: 16px;
+}
+
+.booking-search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.booking-search-input-wrap svg {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.booking-search-input-wrap input {
+  padding-left: 42px;
+  width: 100%;
+}
+
+.booking-list-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.booking-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 290px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.booking-item-card {
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.booking-item-card:hover {
+  border-color: var(--primary-border);
+  background: #fffdfa;
+}
+
+.booking-item-card.active {
+  border-color: #ea580c;
+  background: #fff7ed;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.15);
+}
+
+.booking-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.booking-code-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  background: #f1f5f9;
+  color: #334155;
+  border-radius: 4px;
+}
+
+.booking-item-card.active .booking-code-pill {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.booking-time-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.booking-item-main {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.booking-plate-num {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.booking-model-name {
+  font-size: 13px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.booking-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.booking-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-manual-booking {
+  background: transparent;
+  border: 1px dashed #cbd5e1;
+  color: #475569;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-manual-booking:hover {
+  border-color: #ea580c;
+  color: #ea580c;
+  background: #fff7ed;
+}
+
+/* Responsive adjustment for small screens */
+@media (max-width: 640px) {
+  .method-cards-grid {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .method-card {
+    width: 200px;
+    height: 200px;
+  }
+
+  .booking-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-manual-booking,
+  .btn-primary-modal {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 
 

@@ -25,8 +25,27 @@ document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
   initModuleNavigation();
   initHeaderControls();
+  initIframeCommunication();
   handleInitialRoute();
 });
+
+/**
+ * Handle Communication from Module Iframes (e.g. Breadcrumbs, State)
+ */
+function initIframeCommunication() {
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'UPDATE_CRUMB') {
+      const crumbActive = document.getElementById('crumbActive');
+      if (crumbActive && currentModule === 'list') {
+        if (event.data.subCrumb) {
+          crumbActive.innerHTML = `List Canvasing <span style="color:#cbd5e1;margin:0 4px;">/</span> <span style="color:#ea580c;font-weight:700;">${event.data.subCrumb}</span>`;
+        } else {
+          crumbActive.textContent = 'List Canvasing';
+        }
+      }
+    }
+  });
+}
 
 /**
  * Initialize Sidebar Toggling & Collapsing
@@ -131,6 +150,8 @@ function switchModule(moduleKey, updateHash = true) {
   // Update iframe destination
   if (frame && frame.getAttribute('src') !== targetModule.path) {
     frame.src = targetModule.path;
+  } else if (moduleKey === 'list' && frame && frame.contentWindow) {
+    frame.contentWindow.postMessage({ type: 'RESET_VIEW' }, '*');
   }
 
   // Update Breadcrumbs

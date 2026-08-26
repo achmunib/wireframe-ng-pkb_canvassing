@@ -2,6 +2,63 @@
 let currentStep = 1;
 const totalSteps = 5;
 let currentFuelLevel = 4; // Default full/sample level
+let currentMethod = null; // 'booking' | 'non-booking'
+let activeBooking = null;
+
+// Sample Booking Appointments for simulation
+const sampleBookings = [
+  {
+    id: 'BK-20240826-001',
+    plate: 'AG 1000 ELM',
+    customer: 'Achmad Munib',
+    phone: '081234567890',
+    model: 'VG - VARIO 125 CBS ISS',
+    engine: 'JB91E1260677',
+    frame: 'MH1J891158K260',
+    color: 'BLACK',
+    year: '2024',
+    dealer: 'MPM Motor Jombang',
+    lastKm: '1000',
+    currentKm: '233',
+    reason: 'Inisiatif Sendiri',
+    time: '09:30 WIB',
+    service: 'Servis Berkala & Ganti Oli MPX2'
+  },
+  {
+    id: 'BK-20240826-002',
+    plate: 'B 4592 KLR',
+    customer: 'Budi Santoso',
+    phone: '085712345678',
+    model: 'VG - VARIO 160 ABS',
+    engine: 'KF11E1084920',
+    frame: 'MH1KF1118PK092144',
+    color: 'MATTE RED',
+    year: '2023',
+    dealer: 'MPM Motor Surabaya',
+    lastKm: '12450',
+    currentKm: '12500',
+    reason: 'Servis Berkala',
+    time: '10:45 WIB',
+    service: 'Cek CVT & Kampas Rem'
+  },
+  {
+    id: 'BK-20240826-003',
+    plate: 'L 2831 AB',
+    customer: 'Siti Rahmawati',
+    phone: '087898765432',
+    model: 'VG - SCOOPY PRESTIGE',
+    engine: 'JM31E2948102',
+    frame: 'MH1JM3116PK748291',
+    color: 'WHITE',
+    year: '2024',
+    dealer: 'MPM Motor Malang',
+    lastKm: '5400',
+    currentKm: '5450',
+    reason: 'Ganti Oli',
+    time: '13:15 WIB',
+    service: 'Ganti Busi & Oli MPX2'
+  }
+];
 
 // Sample Vehicle Database for scanning simulation
 const sampleVehicles = [
@@ -19,37 +76,38 @@ const sampleVehicles = [
     currentKm: '233',
     reason: 'Inisiatif Sendiri'
   },
-{
-  plate: 'B 4592 KLR',
+  {
+    plate: 'B 4592 KLR',
     model: 'VG - VARIO 160 ABS',
-      engine: 'KF11E1084920',
-        frame: 'MH1KF1118PK092144',
-          color: 'MATTE RED',
-            year: '2023',
-              purchaseDate: '12-08-2023',
-                dealer: 'MPM Motor Surabaya',
-                  lastKm: '12450',
-                    customer: 'Budi Santoso',
-                      currentKm: '12500',
-                        reason: 'Servis Berkala'
-},
-{
-  plate: 'L 2831 AB',
+    engine: 'KF11E1084920',
+    frame: 'MH1KF1118PK092144',
+    color: 'MATTE RED',
+    year: '2023',
+    purchaseDate: '12-08-2023',
+    dealer: 'MPM Motor Surabaya',
+    lastKm: '12450',
+    customer: 'Budi Santoso',
+    currentKm: '12500',
+    reason: 'Servis Berkala'
+  },
+  {
+    plate: 'L 2831 AB',
     model: 'VG - SCOOPY PRESTIGE',
-      engine: 'JM31E2948102',
-        frame: 'MH1JM3116PK748291',
-          color: 'WHITE',
-            year: '2024',
-              purchaseDate: '15-01-2024',
-                dealer: 'MPM Motor Malang',
-                  lastKm: '5400',
-                    customer: 'Siti Rahmawati',
-                      currentKm: '5450',
-                        reason: 'Ganti Oli'
-}
+    engine: 'JM31E2948102',
+    frame: 'MH1JM3116PK748291',
+    color: 'WHITE',
+    year: '2024',
+    purchaseDate: '15-01-2024',
+    dealer: 'MPM Motor Malang',
+    lastKm: '5400',
+    customer: 'Siti Rahmawati',
+    currentKm: '5450',
+    reason: 'Ganti Oli'
+  }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
+  initMethodSelection();
   initStepper();
   initCollapsibleCard();
   initFuelIndicator();
@@ -63,6 +121,198 @@ document.addEventListener('DOMContentLoaded', () => {
   initLangSwitcher();
   initHistoryShowMore();
 });
+
+// Method Selection (Landing Page Logic: Booking vs Non-Booking)
+function initMethodSelection() {
+  const btnBooking = document.getElementById('btnChooseBooking');
+  const btnNonBooking = document.getElementById('btnChooseNonBooking');
+  const btnSwitchMethod = document.getElementById('btnSwitchMethod');
+  const bookingModal = document.getElementById('bookingSelectModal');
+  const btnCloseModal = document.getElementById('btnBookingModalClose');
+  const btnConfirmBooking = document.getElementById('btnConfirmBookingChoice');
+  const btnManualBooking = document.getElementById('btnManualBooking');
+  const inputSearch = document.getElementById('inputSearchBooking');
+  const bookingCards = document.querySelectorAll('.booking-item-card');
+
+  // Choose Booking -> Open selection modal
+  if (btnBooking && bookingModal) {
+    btnBooking.addEventListener('click', () => {
+      bookingModal.style.display = 'flex';
+      if (inputSearch) {
+        inputSearch.value = '';
+        inputSearch.focus();
+        bookingCards.forEach(c => c.style.display = 'flex');
+      }
+    });
+  }
+
+  // Choose Non-Booking -> Proceed to form directly
+  if (btnNonBooking) {
+    btnNonBooking.addEventListener('click', () => {
+      selectBookingMethod('non-booking');
+      showToast('Masuk ke mode Non-Booking (Walk-in Canvasing)');
+    });
+  }
+
+  // Switch Method button from top banner
+  if (btnSwitchMethod) {
+    btnSwitchMethod.addEventListener('click', () => {
+      showMethodSelection();
+    });
+  }
+
+  // Modal Close Button
+  if (btnCloseModal && bookingModal) {
+    btnCloseModal.addEventListener('click', () => {
+      bookingModal.style.display = 'none';
+    });
+  }
+
+  // Close modal when clicking outside card
+  if (bookingModal) {
+    bookingModal.addEventListener('click', (e) => {
+      if (e.target === bookingModal) {
+        bookingModal.style.display = 'none';
+      }
+    });
+  }
+
+  // Search in booking modal
+  if (inputSearch) {
+    inputSearch.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      bookingCards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    });
+  }
+
+  // Select card in modal
+  let selectedBookingId = 'BK-20240826-001';
+  bookingCards.forEach(card => {
+    card.addEventListener('click', () => {
+      bookingCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      selectedBookingId = card.dataset.bookingId;
+    });
+  });
+
+  // Confirm booking selection
+  if (btnConfirmBooking) {
+    btnConfirmBooking.addEventListener('click', () => {
+      const found = sampleBookings.find(b => b.id === selectedBookingId) || sampleBookings[0];
+      if (bookingModal) bookingModal.style.display = 'none';
+      selectBookingMethod('booking', found);
+      showToast(`Data Booking ${found.id} dimuat (${found.plate})`);
+    });
+  }
+
+  // Manual booking (without pre-filled appointment)
+  if (btnManualBooking) {
+    btnManualBooking.addEventListener('click', () => {
+      if (bookingModal) bookingModal.style.display = 'none';
+      selectBookingMethod('booking', null);
+      showToast('Masuk ke mode Booking (Input Manual)');
+    });
+  }
+
+  // Check URL hash on initial load
+  const hash = window.location.hash;
+  if (hash === '#booking') {
+    selectBookingMethod('booking', sampleBookings[0]);
+  } else if (hash === '#non-booking') {
+    selectBookingMethod('non-booking');
+  } else {
+    showMethodSelection();
+  }
+
+  // Listen for reset command from parent portal
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'RESET_VIEW') {
+      showMethodSelection();
+    }
+  });
+}
+
+function showMethodSelection() {
+  const methodView = document.getElementById('methodSelectionView');
+  const wizardView = document.getElementById('wizardContentView');
+  if (methodView) methodView.style.display = 'flex';
+  if (wizardView) wizardView.style.display = 'none';
+
+  // Notify parent shell
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'UPDATE_CRUMB', subCrumb: 'Pilih Metode' }, '*');
+  }
+}
+
+function selectBookingMethod(method, bookingData = null) {
+  currentMethod = method;
+  activeBooking = bookingData;
+
+  const methodView = document.getElementById('methodSelectionView');
+  const wizardView = document.getElementById('wizardContentView');
+  const chip = document.getElementById('methodChip');
+  const chipText = document.getElementById('methodChipText');
+  const detailText = document.getElementById('methodBannerDetail');
+  const summaryQueueType = document.getElementById('summaryQueueType');
+
+  if (methodView) methodView.style.display = 'none';
+  if (wizardView) {
+    wizardView.style.display = 'block';
+    wizardView.style.animation = 'fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+  }
+
+  if (method === 'booking') {
+    if (chip) chip.className = 'method-chip booking';
+    if (chipText) chipText.textContent = 'Metode: Booking';
+    if (detailText) {
+      detailText.textContent = bookingData
+        ? `Jadwal: ${bookingData.id} • ${bookingData.plate} (${bookingData.customer}) • ${bookingData.time}`
+        : 'Pendaftaran PKB Mode Booking Service (Manual)';
+    }
+    if (summaryQueueType) summaryQueueType.value = 'Booking';
+
+    if (bookingData) {
+      // Auto fill vehicle
+      const scanInput = document.getElementById('scanVehicleInput');
+      if (scanInput) scanInput.value = bookingData.engine;
+      if (window.loadCustomVehicle) {
+        window.loadCustomVehicle(bookingData);
+      }
+      // Auto fill carrier
+      const carrierPhone = document.getElementById('carrierInputPhone');
+      const carrierFirst = document.getElementById('carrierFirstName');
+      const carrierLast = document.getElementById('carrierLastName');
+      const searchPhone = document.getElementById('carrierSearchPhone');
+      if (carrierPhone) carrierPhone.value = bookingData.phone;
+      if (searchPhone) searchPhone.value = bookingData.phone;
+      const names = bookingData.customer.split(' ');
+      if (carrierFirst) carrierFirst.value = names[0] || '';
+      if (carrierLast) carrierLast.value = names.slice(1).join(' ') || '';
+    }
+
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'UPDATE_CRUMB', subCrumb: 'Booking' }, '*');
+    }
+  } else {
+    // Non-Booking
+    if (chip) chip.className = 'method-chip non-booking';
+    if (chipText) chipText.textContent = 'Metode: Non-Booking';
+    if (detailText) detailText.textContent = 'Pendaftaran PKB Reguler / Walk-In Canvasing';
+    if (summaryQueueType) summaryQueueType.value = 'Regular';
+
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'UPDATE_CRUMB', subCrumb: 'Non-Booking' }, '*');
+    }
+  }
+
+  // Reset to Step 1
+  if (window.goToStep) {
+    window.goToStep(1);
+  }
+}
 
 // Collapsible Vehicle Info Box
 function initCollapsibleCard() {
@@ -114,6 +364,8 @@ function initStepper() {
   btnKembali.addEventListener('click', () => {
     if (currentStep > 1) {
       goToStep(currentStep - 1);
+    } else if (currentStep === 1) {
+      showMethodSelection();
     }
   });
 
@@ -121,6 +373,7 @@ function initStepper() {
     currentStep = step;
     updateStepperUI();
   }
+  window.goToStep = goToStep;
 
   function updateStepperUI() {
     stepNodes.forEach(node => {
@@ -153,9 +406,18 @@ function initStepper() {
       nextBtnText.textContent = 'Next';
     }
 
-    // Toggle Kembali button disable state
-    btnKembali.style.opacity = currentStep === 1 ? '0.6' : '1';
-    btnKembali.style.pointerEvents = currentStep === 1 ? 'none' : 'auto';
+    // Toggle Kembali button state
+    if (currentStep === 1) {
+      btnKembali.style.opacity = '1';
+      btnKembali.style.pointerEvents = 'auto';
+      const kembaliText = btnKembali.querySelector('span');
+      if (kembaliText) kembaliText.textContent = 'Pilih Metode';
+    } else {
+      btnKembali.style.opacity = '1';
+      btnKembali.style.pointerEvents = 'auto';
+      const kembaliText = btnKembali.querySelector('span');
+      if (kembaliText) kembaliText.textContent = 'Back';
+    }
   }
 }
 
