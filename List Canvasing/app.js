@@ -449,14 +449,15 @@ function initModal() {
   });
 }
 
-// Sidebar toggle for responsiveness
+// Sidebar toggle for responsiveness (safe guard)
 function initSidebar() {
   const sidebar = document.getElementById('sidebar');
   const toggleBtn = document.getElementById('sidebarToggle');
-
-  toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('open');
-  });
+  if (sidebar && toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+  }
 }
 
 // Language Switcher
