@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reception - Master Canvasing | MPM AHASS</title>
+  <title>Reception - PKB List | MPM AHASS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
@@ -21,7 +21,7 @@
 
   <div class="app-layout">
     <div class="main-wrapper">
-      <!-- Standalone Header (hidden when inside iframe portal) -->
+      <!-- Standalone Header (hidden inside iframe portal) -->
       <header class="top-header">
         <div class="header-left">
           <div class="breadcrumbs">
@@ -47,197 +47,464 @@
         </div>
       </header>
 
-      <!-- Page Content -->
+      <!-- Page Content matching Uploaded Screenshot -->
       <main class="page-content">
-        <!-- Page Title & Actions -->
-        <div class="page-header-row">
-          <div class="page-title-group">
-            <h1 class="page-title">Master Data Canvasing</h1>
-            <p class="page-subtitle">Kelola target, wilayah operasional, jadwal, dan tim canvasing MPM AHASS</p>
-          </div>
-          <div class="page-actions">
-            <button class="btn-outline" id="btnExport">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              <span>Export Excel</span>
-            </button>
-            <button class="btn-primary" id="btnOpenModal">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-              <span>Tambah Master Canvasing</span>
+        <!-- Top Toolbar Header -->
+        <div class="pkb-toolbar-row">
+          <!-- Left: PKB List Title & + Create Button -->
+          <div class="pkb-title-group">
+            <h1 class="pkb-page-title">Master Canvasing</h1>
+            <button class="btn-create-pill" id="btnCreatePkb" title="Tambah PKB Baru">
+              <span class="plus-icon">+</span>
+              <span>Create</span>
             </button>
           </div>
-        </div>
 
-        <!-- Filter & Search Toolbar -->
-        <div class="table-toolbar-card">
-          <div class="toolbar-search">
-            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input type="text" id="searchInput" placeholder="Cari kode canvasing, nama program, lokasi, atau PIC...">
-          </div>
-
-          <div class="toolbar-filters">
-            <div class="select-group">
-              <label for="filterWilayah">Wilayah:</label>
-              <select id="filterWilayah">
-                <option value="">Semua Wilayah</option>
-                <option value="Malang Kota">Malang Kota</option>
-                <option value="Kepanjen">Kepanjen</option>
-                <option value="Batu">Batu</option>
-                <option value="Singosari">Singosari</option>
-                <option value="Dampit">Dampit</option>
-              </select>
+          <!-- Right: Filter Dropdown, Search Input, and Equalizer Button -->
+          <div class="pkb-search-group">
+            <!-- Search Type Dropdown Pill -->
+            <div class="dropdown-wrapper" id="searchFieldDropdown">
+              <button class="pill-dropdown-btn" id="btnSearchField">
+                <span id="selectedSearchField">Transaction No</span>
+                <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+              <div class="dropdown-menu" id="searchFieldMenu">
+                <button class="dropdown-item active" data-field="transNo">Transaction No</button>
+                <button class="dropdown-item" data-field="name">Name</button>
+                <button class="dropdown-item" data-field="policeNo">Police Number</button>
+                <button class="dropdown-item" data-field="motor">Motor</button>
+                <button class="dropdown-item" data-field="engineNo">Engine Number</button>
+                <button class="dropdown-item" data-field="frameNo">Frame Number</button>
+                <button class="dropdown-item" data-field="mechanic">Mechanic</button>
+              </div>
             </div>
 
-            <div class="select-group">
-              <label for="filterStatus">Status:</label>
-              <select id="filterStatus">
-                <option value="">Semua Status</option>
-                <option value="Aktif">Aktif</option>
-                <option value="Selesai">Selesai</option>
-                <option value="Draft">Draft</option>
-              </select>
+            <!-- Pill Search Input -->
+            <div class="pill-search-box">
+              <input type="text" id="topSearchInput" placeholder="Search by Transaction No" autocomplete="off">
             </div>
 
-            <button class="btn-icon-reset" id="btnResetFilter" title="Reset Filter">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            <!-- Circular Equalizer/Filter Button -->
+            <button class="btn-equalizer-circle" id="btnToggleFilters" title="Toggle Column Filters">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                <path d="M3 3v5h5" />
+                <line x1="4" y1="21" x2="4" y2="14"></line>
+                <line x1="4" y1="10" x2="4" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12" y2="3"></line>
+                <line x1="20" y1="21" x2="20" y2="16"></line>
+                <line x1="20" y1="12" x2="20" y2="3"></line>
+                <line x1="1" y1="14" x2="7" y2="14"></line>
+                <line x1="9" y1="8" x2="15" y2="8"></line>
+                <line x1="17" y1="16" x2="23" y2="16"></line>
               </svg>
             </button>
           </div>
         </div>
 
-        <!-- Master Canvasing Table Card -->
+        <!-- PKB Table Card -->
         <div class="table-card">
           <div class="table-responsive">
-            <table class="data-table" id="masterTable">
+            <table class="pkb-table" id="pkbTable">
               <thead>
-                <tr>
-                  <th style="width: 50px;">No</th>
-                  <th>Kode Canvasing</th>
-                  <th>Nama Program Canvasing</th>
-                  <th>Wilayah &amp; Lokasi</th>
-                  <th>Periode Pelaksanaan</th>
-                  <th>Tim Leader (PIC)</th>
-                  <th>Target</th>
-                  <th>Realisasi</th>
-                  <th>Status</th>
-                  <th style="text-align: center; width: 110px;">Aksi</th>
+                <!-- Row 1: Column Headers with Filter Funnel Icons -->
+                <tr class="header-titles-row">
+                  <th class="col-action" style="width: 75px;"></th>
+                  <th class="col-status" data-col="status">
+                    <div class="th-content">
+                      <span>Status</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="col-trans" data-col="transNo">
+                    <div class="th-content">
+                      <span>Transaction No</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="col-name" data-col="name">
+                    <div class="th-content">
+                      <span>Name</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="col-police" data-col="policeNo">
+                    <div class="th-content">
+                      <span>Police Number</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="col-motor" data-col="motor">
+                    <div class="th-content">
+                      <span>Motor</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="col-engine" data-col="engineNo">
+                    <div class="th-content">
+                      <span>Engine Number</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="col-frame" data-col="frameNo">
+                    <div class="th-content">
+                      <span>Frame Number</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="col-mechanic" data-col="mechanic">
+                    <div class="th-content">
+                      <span>Mechanic</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="col-starthour" data-col="startHour">
+                    <div class="th-content">
+                      <span>Start Hour</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="col-esthour" data-col="estimatedHour">
+                    <div class="th-content stacked-header">
+                      <span>Estimated</span>
+                      <span>Hour</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="col-finishhour" data-col="finishHour">
+                    <div class="th-content">
+                      <span>Finish Hour</span>
+                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                      </svg>
+                    </div>
+                  </th>
+                </tr>
+
+                <!-- Row 2: Subheader Filter / Search Row with Icons -->
+                <tr class="header-filters-row" id="filterRow">
+                  <th class="col-action"></th>
+                  <th class="col-status">
+                    <div class="filter-cell">
+                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="status" placeholder="">
+                    </div>
+                  </th>
+                  <th class="col-trans">
+                    <div class="filter-cell">
+                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="transNo" placeholder="">
+                    </div>
+                  </th>
+                  <th class="col-name">
+                    <div class="filter-cell">
+                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="name" placeholder="">
+                    </div>
+                  </th>
+                  <th class="col-police">
+                    <div class="filter-cell">
+                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="policeNo" placeholder="">
+                    </div>
+                  </th>
+                  <th class="col-motor">
+                    <div class="filter-cell">
+                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="motor" placeholder="">
+                    </div>
+                  </th>
+                  <th class="col-engine">
+                    <div class="filter-cell">
+                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="engineNo" placeholder="">
+                    </div>
+                  </th>
+                  <th class="col-frame">
+                    <div class="filter-cell">
+                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="frameNo" placeholder="">
+                    </div>
+                  </th>
+                  <th class="col-mechanic">
+                    <div class="filter-cell">
+                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="mechanic" placeholder="">
+                    </div>
+                  </th>
+                  <th class="col-starthour">
+                    <div class="filter-cell date-filter-cell">
+                      <svg class="sub-cal-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="startHour" placeholder="">
+                    </div>
+                  </th>
+                  <th class="col-esthour">
+                    <div class="filter-cell date-filter-cell">
+                      <svg class="sub-cal-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="estimatedHour" placeholder="">
+                    </div>
+                  </th>
+                  <th class="col-finishhour">
+                    <div class="filter-cell date-filter-cell">
+                      <svg class="sub-cal-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      <input type="text" class="sub-filter-input" data-filter="finishHour" placeholder="">
+                    </div>
+                  </th>
                 </tr>
               </thead>
-              <tbody id="tableBody">
-                <!-- Dynamically populated by app.js -->
+              <tbody id="pkbTableBody">
+                <!-- Dynamically Rendered by app.js -->
               </tbody>
             </table>
           </div>
 
-          <!-- Table Footer / Pagination -->
+          <!-- Table Footer Pagination -->
           <div class="table-footer">
-            <span class="table-info" id="tableInfo">Menampilkan 1 - 5 dari 5 data</span>
+            <span class="table-info" id="tableInfo">Showing 1 to 5 of 5 entries</span>
             <div class="pagination">
-              <button class="page-btn disabled" id="prevPage">&lt;</button>
+              <button class="page-btn disabled" id="prevPage" title="Previous Page">&lt;</button>
               <button class="page-btn active">1</button>
-              <button class="page-btn">2</button>
-              <button class="page-btn" id="nextPage">&gt;</button>
+              <button class="page-btn" id="nextPage" title="Next Page">&gt;</button>
             </div>
           </div>
+        </div>
+
+        <!-- Floating Draft Indicator (Bottom Left) -->
+        <div class="floating-draft-pill" id="btnDraftPkb" title="Lihat Draft PKB">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          <span>Draft PKB</span>
+          <span class="draft-badge-count">3</span>
         </div>
       </main>
     </div>
   </div>
 
-  <!-- Modal Tambah / Edit Master Canvasing -->
+  <!-- Row Kebab Action Menu Dropdown (Floating) -->
+  <div class="kebab-context-menu" id="kebabMenu">
+    <button class="kebab-item" id="kebabActionView">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+      <span>Lihat Detail</span>
+    </button>
+    <button class="kebab-item" id="kebabActionEdit">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+      </svg>
+      <span>Edit PKB</span>
+    </button>
+    <div class="kebab-divider"></div>
+    <div class="kebab-submenu-label">Ubah Status:</div>
+    <button class="kebab-item status-sub" data-set-status="Waiting Mechanic">
+      <span class="dot yellow"></span>
+      <span>Waiting Mechanic</span>
+    </button>
+    <button class="kebab-item status-sub" data-set-status="In Progress">
+      <span class="dot orange"></span>
+      <span>In Progress</span>
+    </button>
+    <button class="kebab-item status-sub" data-set-status="Pause">
+      <span class="dot red"></span>
+      <span>Pause</span>
+    </button>
+    <div class="kebab-divider"></div>
+    <button class="kebab-item" id="kebabActionPrint">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+        <rect x="6" y="14" width="12" height="8"></rect>
+      </svg>
+      <span>Cetak Dokumen PKB</span>
+    </button>
+  </div>
+
+  <!-- Modal Create / Edit PKB -->
   <div class="modal-backdrop" id="modalBackdrop">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 class="modal-title" id="modalTitle">Tambah Data Master Canvasing</h3>
+        <h3 class="modal-title" id="modalTitle">Create New PKB Canvasing</h3>
         <button class="btn-close" id="btnCloseModal">&times;</button>
       </div>
 
-      <form id="masterForm">
+      <form id="pkbForm">
         <div class="modal-body">
           <div class="form-grid">
             <div class="form-group">
-              <label for="formKode">Kode Canvasing <span class="required">*</span></label>
-              <input type="text" id="formKode" required readonly value="MC-2026-006">
+              <label for="formTransNo">Transaction No <span class="required">*</span></label>
+              <input type="text" id="formTransNo" required readonly value="027-PKB-2025-DMS0000000135">
             </div>
 
             <div class="form-group">
-              <label for="formNama">Nama Program Canvasing <span class="required">*</span></label>
-              <input type="text" id="formNama" placeholder="Contoh: Canvasing Instansi Pemkab" required>
-            </div>
-
-            <div class="form-group">
-              <label for="formWilayah">Wilayah / Rayon <span class="required">*</span></label>
-              <select id="formWilayah" required>
-                <option value="">Pilih Wilayah</option>
-                <option value="Malang Kota">Malang Kota</option>
-                <option value="Kepanjen">Kepanjen</option>
-                <option value="Batu">Batu</option>
-                <option value="Singosari">Singosari</option>
-                <option value="Dampit">Dampit</option>
+              <label for="formStatus">Status <span class="required">*</span></label>
+              <select id="formStatus" required>
+                <option value="Waiting Mechanic">Waiting Mechanic</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Pause">Pause</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="formLokasi">Lokasi Spesifik <span class="required">*</span></label>
-              <input type="text" id="formLokasi" placeholder="Contoh: Lapangan Rampal Malang" required>
+              <label for="formName">Customer Name <span class="required">*</span></label>
+              <input type="text" id="formName" placeholder="Contoh: Grego" required>
             </div>
 
             <div class="form-group">
-              <label for="formTglMulai">Tanggal Mulai <span class="required">*</span></label>
-              <input type="date" id="formTglMulai" required>
+              <label for="formPoliceNo">Police Number <span class="required">*</span></label>
+              <input type="text" id="formPoliceNo" placeholder="Contoh: AG 3323 UY" required>
             </div>
 
             <div class="form-group">
-              <label for="formTglSelesai">Tanggal Selesai <span class="required">*</span></label>
-              <input type="date" id="formTglSelesai" required>
+              <label for="formMotor">Motor Type</label>
+              <input type="text" id="formMotor" placeholder="Contoh: ALL NEW SCOOPY">
             </div>
 
             <div class="form-group">
-              <label for="formPIC">Tim Leader (PIC) <span class="required">*</span></label>
-              <input type="text" id="formPIC" placeholder="Nama koordinator teknisi canvasing" required>
+              <label for="formMechanic">Mechanic <span class="required">*</span></label>
+              <input type="text" id="formMechanic" placeholder="Contoh: Kalvin" required>
             </div>
 
             <div class="form-group">
-              <label for="formTarget">Target Unit Motor <span class="required">*</span></label>
-              <input type="number" id="formTarget" placeholder="Contoh: 150" min="1" required>
+              <label for="formEngineNo">Engine Number</label>
+              <input type="text" id="formEngineNo" placeholder="Contoh: JB91E1260677">
+            </div>
+
+            <div class="form-group">
+              <label for="formFrameNo">Frame Number</label>
+              <input type="text" id="formFrameNo" placeholder="Contoh: JB91E12606778J">
+            </div>
+
+            <div class="form-group">
+              <label for="formStartHour">Start Date / Hour</label>
+              <input type="text" id="formStartHour" value="15-05-2025">
+            </div>
+
+            <div class="form-group">
+              <label for="formEstHour">Estimated Hour</label>
+              <input type="text" id="formEstHour" value="15-05-2025">
             </div>
 
             <div class="form-group full-width">
-              <label for="formStatus">Status Program</label>
-              <select id="formStatus">
-                <option value="Aktif">Aktif</option>
-                <option value="Draft">Draft</option>
-                <option value="Selesai">Selesai</option>
-              </select>
-            </div>
-
-            <div class="form-group full-width">
-              <label for="formCatatan">Catatan / Keterangan Tambahan</label>
-              <textarea id="formCatatan" rows="3" placeholder="Informasi armada mobile, paket promo servis, atau fasilitas listrik/tenda..."></textarea>
+              <label for="formFinishHour">Finish Hour</label>
+              <input type="text" id="formFinishHour" value="15-05-2025">
             </div>
           </div>
         </div>
 
         <div class="modal-footer">
           <button type="button" class="btn-outline" id="btnCancelModal">Batal</button>
-          <button type="submit" class="btn-primary">Simpan Master Canvasing</button>
+          <button type="submit" class="btn-primary" id="btnSubmitModal">Simpan PKB</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-backdrop" id="detailModal">
+    <div class="modal-card detail-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="detailModalTitle">Detail Perintah Kerja Bengkel (PKB)</h3>
+        <button class="btn-close" id="btnCloseDetailModal">&times;</button>
+      </div>
+      <div class="modal-body" id="detailModalBody">
+        <!-- Filled dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-outline" id="btnCloseDetailBtn">Tutup</button>
+      </div>
     </div>
   </div>
 

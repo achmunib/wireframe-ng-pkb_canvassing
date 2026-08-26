@@ -1,98 +1,101 @@
 /**
- * Master Canvasing Module Application Logic
+ * Master Canvasing / PKB List Module Application Logic
  * MPM AHASS Canvasing System
  */
 
-// Initial Sample Master Canvasing Data
-let masterData = [
+// Initial Data matching exact uploaded reference image
+let pkbData = [
   {
     id: 1,
-    kode: 'MC-2026-001',
-    nama: 'Canvasing Instansi Pemkab & Dispora',
-    wilayah: 'Kepanjen',
-    lokasi: 'Kompleks Perkantoran Pemkab Kepanjen',
-    tglMulai: '2026-08-01',
-    tglSelesai: '2026-08-15',
-    periode: '01 Agu - 15 Agu 2026',
-    pic: 'Budi Santoso (Koordinator)',
-    target: 150,
-    realisasi: 128,
-    status: 'Aktif',
-    catatan: 'Armada Canvasing Mobil 1 & 2. Promo ganti oli gratis busi.'
+    status: 'Waiting Mechanic',
+    transNo: '027-PKB-2025-DMS0000000134',
+    name: 'Grego',
+    policeNo: 'AG 3323 UY',
+    motor: 'ALL NEW SCOOPY',
+    engineNo: 'JB91E1260677',
+    frameNo: 'JB91E12606778J',
+    mechanic: 'Kalvin',
+    startHour: '15-05-2025',
+    estimatedHour: '15-05-2025',
+    finishHour: '15-05-2025'
   },
   {
     id: 2,
-    kode: 'MC-2026-002',
-    nama: 'AHASS Goes to School (SMK 1 & SMK 4)',
-    wilayah: 'Malang Kota',
-    lokasi: 'SMKN 1 Malang & SMKN 4 Grafika',
-    tglMulai: '2026-08-10',
-    tglSelesai: '2026-08-20',
-    periode: '10 Agu - 20 Agu 2026',
-    pic: 'Rahmat Hidayat',
-    target: 200,
-    realisasi: 215,
-    status: 'Selesai',
-    catatan: 'Edukasi safety riding + service kunjung pelajar & guru.'
+    status: 'Waiting Mechanic',
+    transNo: '027-PKB-2025-DMS0000000130',
+    name: 'Renata',
+    policeNo: 'AE 3392 OI',
+    motor: 'ALL NEW VARIO',
+    engineNo: 'JB91E1260676',
+    frameNo: 'JB91E12606767S',
+    mechanic: 'Rizal',
+    startHour: '15-05-2025',
+    estimatedHour: '15-05-2025',
+    finishHour: '15-05-2025'
   },
   {
     id: 3,
-    kode: 'MC-2026-003',
-    nama: 'Canvasing Komunitas Sawojajar Madyopuro',
-    wilayah: 'Malang Kota',
-    lokasi: 'Balai RW 05 - 08 Sawojajar',
-    tglMulai: '2026-08-18',
-    tglSelesai: '2026-08-31',
-    periode: '18 Agu - 31 Agu 2026',
-    pic: 'Ahmad Faisal',
-    target: 180,
-    realisasi: 95,
-    status: 'Aktif',
-    catatan: 'Layanan servis berkala dan tune up hemat akhir pekan.'
+    status: 'Waiting Mechanic',
+    transNo: '027-PKB-2025-DMS0000000129',
+    name: 'Mentari',
+    policeNo: 'T 2727 HAH',
+    motor: '',
+    engineNo: 'JB91E1260675',
+    frameNo: 'JB91E1260675LK',
+    mechanic: 'Agung',
+    startHour: '15-05-2025',
+    estimatedHour: '15-05-2025',
+    finishHour: '15-05-2025'
   },
   {
     id: 4,
-    kode: 'MC-2026-004',
-    nama: 'Service Kunjung Pabrik Gula Kebonagung',
-    wilayah: 'Kepanjen',
-    lokasi: 'Area Parkir Karyawan PG Kebonagung',
-    tglMulai: '2026-09-01',
-    tglSelesai: '2026-09-10',
-    periode: '01 Sep - 10 Sep 2026',
-    pic: 'Deni Setiawan',
-    target: 250,
-    realisasi: 0,
-    status: 'Draft',
-    catatan: 'Kerjasama dengan serikat pekerja pabrik gula.'
+    status: 'In Progress',
+    transNo: '027-PKB-2025-DMS0000000128',
+    name: 'Vincent',
+    policeNo: 'AG 6524 RFA',
+    motor: 'ALL NEW VARIO',
+    engineNo: 'JB91E1260674',
+    frameNo: 'JB91E1260674JU',
+    mechanic: 'Robin',
+    startHour: '15-05-2025',
+    estimatedHour: '15-05-2025',
+    finishHour: '15-05-2025'
   },
   {
     id: 5,
-    kode: 'MC-2026-005',
-    nama: 'Canvasing Wisata Songgoriti & Payung',
-    wilayah: 'Batu',
-    lokasi: 'Pusat Oleh-oleh & Rest Area Songgoriti',
-    tglMulai: '2026-08-22',
-    tglSelesai: '2026-08-29',
-    periode: '22 Agu - 29 Agu 2026',
-    pic: 'Hendra Wijaya',
-    target: 120,
-    realisasi: 88,
-    status: 'Aktif',
-    catatan: 'Armada motor keliling dan booth pit-stop darurat.'
+    status: 'Pause',
+    transNo: '027-PKB-2025-DMS0000000127',
+    name: 'Sylkinta',
+    policeNo: 'AG 3738 BS',
+    motor: '',
+    engineNo: 'JB91E1260671',
+    frameNo: 'JB91E1260671LP',
+    mechanic: 'Ratna',
+    startHour: '15-05-2025',
+    estimatedHour: '15-05-2025',
+    finishHour: '15-05-2025'
   }
 ];
 
+let activeSearchField = 'transNo';
+let activeSelectedId = null;
+let currentSortColumn = null;
+let currentSortAsc = true;
+
 document.addEventListener('DOMContentLoaded', () => {
   renderTable();
-  initSearchAndFilter();
-  initModal();
-  initLangSwitcher();
-  initExportButton();
+  initSearchAndDropdown();
+  initColumnFilters();
+  initSorting();
+  initKebabMenu();
+  initModals();
+  initDraftPill();
+  initEqualizerToggle();
 });
 
-// Render Table Rows
-function renderTable(dataToRender = masterData) {
-  const tbody = document.getElementById('tableBody');
+// Render Table Rows matching the Reference Screenshot
+function renderTable(dataToRender = pkbData) {
+  const tbody = document.getElementById('pkbTableBody');
   const infoText = document.getElementById('tableInfo');
   if (!tbody) return;
 
@@ -101,257 +104,498 @@ function renderTable(dataToRender = masterData) {
   if (dataToRender.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="10" style="text-align: center; padding: 40px; color: var(--text-muted);">
+        <td colspan="12" style="text-align: center; padding: 48px 20px; color: #94a3b8;">
           <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #94a3b8;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #cbd5e1;">
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <span style="font-weight: 600;">Data Master Canvasing tidak ditemukan</span>
-            <span style="font-size: 13px;">Coba ubah kata kunci pencarian atau filter yang Anda gunakan.</span>
+            <span style="font-weight: 600; color: #64748b;">Data PKB tidak ditemukan</span>
+            <span style="font-size: 13px;">Sesuaikan kata kunci pencarian atau filter kolom.</span>
           </div>
         </td>
       </tr>
     `;
-    if (infoText) infoText.textContent = `Menampilkan 0 dari ${masterData.length} data`;
+    if (infoText) infoText.textContent = `Showing 0 to 0 of ${pkbData.length} entries`;
     return;
   }
 
-  dataToRender.forEach((item, index) => {
-    const percent = item.target > 0 ? Math.min(100, Math.round((item.realisasi / item.target) * 100)) : 0;
-    const statusClass = item.status.toLowerCase();
-
+  dataToRender.forEach((item) => {
+    const statusClass = getStatusClass(item.status);
     const tr = document.createElement('tr');
+
     tr.innerHTML = `
-      <td style="color: var(--text-muted); font-size: 13px;">${index + 1}</td>
-      <td class="code-cell">${item.kode}</td>
-      <td>
-        <span class="program-title">${item.nama}</span>
-        <span class="program-desc">${item.catatan || 'Program canvasing AHASS'}</span>
-      </td>
-      <td>
-        <div class="location-tag">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-            <circle cx="12" cy="10" r="3"></circle>
-          </svg>
-          <strong>${item.wilayah}</strong> - ${item.lokasi}
-        </div>
-      </td>
-      <td style="font-size: 13px; color: var(--text-main); white-space: nowrap;">${item.periode}</td>
-      <td>
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <span style="font-size: 13px; font-weight: 600; color: var(--text-main);">${item.pic}</span>
-        </div>
-      </td>
-      <td style="font-weight: 700; color: var(--text-main);">${item.target} Unit</td>
-      <td>
-        <div class="progress-container">
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: ${percent}%;"></div>
-          </div>
-          <span class="progress-text">${percent}%</span>
-        </div>
-        <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">${item.realisasi} / ${item.target} Unit</div>
-      </td>
-      <td>
-        <span class="badge-status ${statusClass}">
-          <span class="status-dot"></span>
-          ${item.status}
-        </span>
-      </td>
-      <td>
-        <div class="row-actions">
-          <button class="btn-action" title="Edit Data" onclick="editItem(${item.id})">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+      <td class="col-action">
+        <div class="col-action-cell">
+          <button class="btn-row-action btn-view" title="View PKB" onclick="viewPkbDetail(${item.id})">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
             </svg>
           </button>
-          <button class="btn-action delete" title="Hapus Data" onclick="deleteItem(${item.id})">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          <button class="btn-row-action btn-kebab" title="More Options" onclick="openKebabMenu(event, ${item.id})">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="1.5"></circle>
+              <circle cx="12" cy="5" r="1.5"></circle>
+              <circle cx="12" cy="19" r="1.5"></circle>
             </svg>
           </button>
         </div>
       </td>
+      <td class="col-status">
+        <span class="status-pill ${statusClass}">${item.status}</span>
+      </td>
+      <td class="col-trans">${item.transNo}</td>
+      <td class="col-name">${item.name}</td>
+      <td class="col-police">${item.policeNo}</td>
+      <td class="col-motor">${item.motor || ''}</td>
+      <td class="col-engine">${item.engineNo || ''}</td>
+      <td class="col-frame">${item.frameNo || ''}</td>
+      <td class="col-mechanic">${item.mechanic}</td>
+      <td class="col-starthour">${item.startHour}</td>
+      <td class="col-esthour">${item.estimatedHour}</td>
+      <td class="col-finishhour">${item.finishHour}</td>
     `;
+
     tbody.appendChild(tr);
   });
 
   if (infoText) {
-    infoText.textContent = `Menampilkan 1 - ${dataToRender.length} dari ${dataToRender.length} data`;
+    infoText.textContent = `Showing 1 to ${dataToRender.length} of ${dataToRender.length} entries`;
   }
 }
 
-// Search and Filter Handling
-function initSearchAndFilter() {
-  const searchInput = document.getElementById('searchInput');
-  const filterWilayah = document.getElementById('filterWilayah');
-  const filterStatus = document.getElementById('filterStatus');
-  const btnReset = document.getElementById('btnResetFilter');
+function getStatusClass(status) {
+  if (status === 'Waiting Mechanic') return 'waiting-mechanic';
+  if (status === 'In Progress') return 'in-progress';
+  if (status === 'Pause') return 'pause';
+  return 'completed';
+}
 
-  const applyFilters = () => {
-    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const wilayahVal = filterWilayah ? filterWilayah.value : '';
-    const statusVal = filterStatus ? filterStatus.value : '';
+// Search & Dropdown Selection Logic
+function initSearchAndDropdown() {
+  const dropdownWrapper = document.getElementById('searchFieldDropdown');
+  const dropdownBtn = document.getElementById('btnSearchField');
+  const selectedFieldText = document.getElementById('selectedSearchField');
+  const dropdownItems = document.querySelectorAll('#searchFieldMenu .dropdown-item');
+  const searchInput = document.getElementById('topSearchInput');
 
-    const filtered = masterData.filter(item => {
-      const matchQuery = !query ||
-        item.kode.toLowerCase().includes(query) ||
-        item.nama.toLowerCase().includes(query) ||
-        item.lokasi.toLowerCase().includes(query) ||
-        item.pic.toLowerCase().includes(query);
-
-      const matchWilayah = !wilayahVal || item.wilayah === wilayahVal;
-      const matchStatus = !statusVal || item.status === statusVal;
-
-      return matchQuery && matchWilayah && matchStatus;
-    });
-
-    renderTable(filtered);
+  const fieldLabels = {
+    transNo: 'Transaction No',
+    name: 'Name',
+    policeNo: 'Police Number',
+    motor: 'Motor',
+    engineNo: 'Engine Number',
+    frameNo: 'Frame Number',
+    mechanic: 'Mechanic'
   };
 
-  if (searchInput) searchInput.addEventListener('input', applyFilters);
-  if (filterWilayah) filterWilayah.addEventListener('change', applyFilters);
-  if (filterStatus) filterStatus.addEventListener('change', applyFilters);
+  // Toggle Dropdown Menu
+  if (dropdownBtn && dropdownWrapper) {
+    dropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownWrapper.classList.toggle('open');
+    });
 
-  if (btnReset) {
-    btnReset.addEventListener('click', () => {
-      if (searchInput) searchInput.value = '';
-      if (filterWilayah) filterWilayah.value = '';
-      if (filterStatus) filterStatus.value = '';
-      renderTable(masterData);
-      showToast('Filter telah direset', 'info');
+    document.addEventListener('click', (e) => {
+      if (!dropdownWrapper.contains(e.target)) {
+        dropdownWrapper.classList.remove('open');
+      }
+    });
+  }
+
+  // Select Dropdown Item
+  dropdownItems.forEach((item) => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownItems.forEach((btn) => btn.classList.remove('active'));
+      item.classList.add('active');
+
+      activeSearchField = item.getAttribute('data-field');
+      const label = fieldLabels[activeSearchField] || 'Transaction No';
+      if (selectedFieldText) selectedFieldText.textContent = label;
+      if (searchInput) {
+        searchInput.placeholder = `Search by ${label}`;
+        searchInput.focus();
+      }
+      dropdownWrapper.classList.remove('open');
+      applyAllFilters();
+    });
+  });
+
+  // Top Search Input Filter
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      applyAllFilters();
     });
   }
 }
 
-// Modal Form Handling
-function initModal() {
-  const modal = document.getElementById('modalBackdrop');
-  const btnOpen = document.getElementById('btnOpenModal');
-  const btnClose = document.getElementById('btnCloseModal');
-  const btnCancel = document.getElementById('btnCancelModal');
-  const form = document.getElementById('masterForm');
+// Column-level Subheader Filter Inputs
+function initColumnFilters() {
+  const filterInputs = document.querySelectorAll('.sub-filter-input');
+  filterInputs.forEach((input) => {
+    input.addEventListener('input', () => {
+      applyAllFilters();
+    });
+  });
+}
 
+// Combine all search and column filters
+function applyAllFilters() {
+  const topSearch = (document.getElementById('topSearchInput')?.value || '').toLowerCase().trim();
+  const subFilters = {};
+  document.querySelectorAll('.sub-filter-input').forEach((input) => {
+    const key = input.getAttribute('data-filter');
+    const val = input.value.toLowerCase().trim();
+    if (val) subFilters[key] = val;
+  });
+
+  const filtered = pkbData.filter((item) => {
+    // 1. Check Top Search
+    if (topSearch) {
+      const fieldVal = String(item[activeSearchField] || '').toLowerCase();
+      if (!fieldVal.includes(topSearch)) {
+        return false;
+      }
+    }
+
+    // 2. Check Subheader Filters
+    for (const [key, filterVal] of Object.entries(subFilters)) {
+      const itemVal = String(item[key] || '').toLowerCase();
+      if (!itemVal.includes(filterVal)) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  renderTable(filtered);
+}
+
+// Column Header Sorting
+function initSorting() {
+  const headers = document.querySelectorAll('.header-titles-row th[data-col]');
+  headers.forEach((th) => {
+    const content = th.querySelector('.th-content');
+    if (!content) return;
+
+    content.addEventListener('click', () => {
+      const col = th.getAttribute('data-col');
+      if (currentSortColumn === col) {
+        currentSortAsc = !currentSortAsc;
+      } else {
+        currentSortColumn = col;
+        currentSortAsc = true;
+      }
+
+      pkbData.sort((a, b) => {
+        const valA = String(a[col] || '').toLowerCase();
+        const valB = String(b[col] || '').toLowerCase();
+        if (valA < valB) return currentSortAsc ? -1 : 1;
+        if (valA > valB) return currentSortAsc ? 1 : -1;
+        return 0;
+      });
+
+      applyAllFilters();
+    });
+  });
+}
+
+// Equalizer/Filter Toggle Button
+function initEqualizerToggle() {
+  const btn = document.getElementById('btnToggleFilters');
+  const filterRow = document.getElementById('filterRow');
+  if (!btn || !filterRow) return;
+
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('active');
+    if (filterRow.style.display === 'none') {
+      filterRow.style.display = '';
+      showToast('Kolom filter aktif', 'info');
+    } else {
+      filterRow.style.display = 'none';
+      showToast('Kolom filter disembunyikan', 'info');
+    }
+  });
+}
+
+// Kebab Menu Handling
+function initKebabMenu() {
+  const menu = document.getElementById('kebabMenu');
+  const btnView = document.getElementById('kebabActionView');
+  const btnEdit = document.getElementById('kebabActionEdit');
+  const btnPrint = document.getElementById('kebabActionPrint');
+  const statusButtons = document.querySelectorAll('.kebab-item.status-sub');
+
+  if (!menu) return;
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target)) {
+      menu.classList.remove('show');
+    }
+  });
+
+  if (btnView) {
+    btnView.addEventListener('click', () => {
+      menu.classList.remove('show');
+      if (activeSelectedId) viewPkbDetail(activeSelectedId);
+    });
+  }
+
+  if (btnEdit) {
+    btnEdit.addEventListener('click', () => {
+      menu.classList.remove('show');
+      if (activeSelectedId) editPkbItem(activeSelectedId);
+    });
+  }
+
+  if (btnPrint) {
+    btnPrint.addEventListener('click', () => {
+      menu.classList.remove('show');
+      showToast('Mencetak dokumen PKB...', 'info');
+    });
+  }
+
+  statusButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const newStatus = btn.getAttribute('data-set-status');
+      menu.classList.remove('show');
+      if (activeSelectedId && newStatus) {
+        const item = pkbData.find((d) => d.id === activeSelectedId);
+        if (item) {
+          item.status = newStatus;
+          applyAllFilters();
+          showToast(`Status diperbarui menjadi: ${newStatus}`, 'success');
+        }
+      }
+    });
+  });
+}
+
+function openKebabMenu(event, id) {
+  event.stopPropagation();
+  activeSelectedId = id;
+  const menu = document.getElementById('kebabMenu');
+  if (!menu) return;
+
+  const rect = event.currentTarget.getBoundingClientRect();
+  menu.style.top = `${rect.bottom + window.scrollY + 4}px`;
+  menu.style.left = `${Math.min(rect.left + window.scrollX - 80, window.innerWidth - 210)}px`;
+  menu.classList.add('show');
+}
+
+// Detail View Modal
+function viewPkbDetail(id) {
+  const item = pkbData.find((d) => d.id === id);
+  if (!item) return;
+
+  const modal = document.getElementById('detailModal');
+  const body = document.getElementById('detailModalBody');
+  if (!modal || !body) return;
+
+  const statusClass = getStatusClass(item.status);
+
+  body.innerHTML = `
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="detail-label">Status PKB</span>
+        <div><span class="status-pill ${statusClass}">${item.status}</span></div>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Transaction No</span>
+        <span class="detail-val" style="color: var(--primary);">${item.transNo}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Customer Name</span>
+        <span class="detail-val">${item.name}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Police Number</span>
+        <span class="detail-val">${item.policeNo}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Motor Type</span>
+        <span class="detail-val">${item.motor || '—'}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Mechanic</span>
+        <span class="detail-val">${item.mechanic}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Engine Number</span>
+        <span class="detail-val">${item.engineNo || '—'}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Frame Number</span>
+        <span class="detail-val">${item.frameNo || '—'}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Start Hour</span>
+        <span class="detail-val">${item.startHour}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Estimated Hour</span>
+        <span class="detail-val">${item.estimatedHour}</span>
+      </div>
+      <div class="detail-item full-width">
+        <span class="detail-label">Finish Hour</span>
+        <span class="detail-val">${item.finishHour}</span>
+      </div>
+    </div>
+  `;
+
+  modal.classList.add('show');
+}
+
+// Edit PKB Modal
+function editPkbItem(id) {
+  const item = pkbData.find((d) => d.id === id);
+  if (!item) return;
+
+  const modal = document.getElementById('modalBackdrop');
+  const modalTitle = document.getElementById('modalTitle');
   if (!modal) return;
 
-  const openModal = () => {
-    modal.classList.add('show');
-    // Generate next code
-    const nextNum = masterData.length + 1;
-    const nextCode = `MC-2026-${String(nextNum).padStart(3, '0')}`;
-    const codeInput = document.getElementById('formKode');
-    if (codeInput) codeInput.value = nextCode;
-  };
+  if (modalTitle) modalTitle.textContent = 'Edit Data PKB Canvasing';
 
-  const closeModal = () => {
-    modal.classList.remove('show');
-    if (form) form.reset();
-  };
+  document.getElementById('formTransNo').value = item.transNo;
+  document.getElementById('formStatus').value = item.status;
+  document.getElementById('formName').value = item.name;
+  document.getElementById('formPoliceNo').value = item.policeNo;
+  document.getElementById('formMotor').value = item.motor || '';
+  document.getElementById('formMechanic').value = item.mechanic;
+  document.getElementById('formEngineNo').value = item.engineNo || '';
+  document.getElementById('formFrameNo').value = item.frameNo || '';
+  document.getElementById('formStartHour').value = item.startHour;
+  document.getElementById('formEstHour').value = item.estimatedHour;
+  document.getElementById('formFinishHour').value = item.finishHour;
 
-  if (btnOpen) btnOpen.addEventListener('click', openModal);
+  modal.dataset.editId = String(id);
+  modal.classList.add('show');
+}
+
+// Create / Edit Modal Logic
+function initModals() {
+  const modal = document.getElementById('modalBackdrop');
+  const btnCreate = document.getElementById('btnCreatePkb');
+  const btnClose = document.getElementById('btnCloseModal');
+  const btnCancel = document.getElementById('btnCancelModal');
+  const form = document.getElementById('pkbForm');
+
+  const detailModal = document.getElementById('detailModal');
+  const btnCloseDetail = document.getElementById('btnCloseDetailModal');
+  const btnCloseDetail2 = document.getElementById('btnCloseDetailBtn');
+
+  // Open Create Modal
+  if (btnCreate && modal) {
+    btnCreate.addEventListener('click', () => {
+      delete modal.dataset.editId;
+      document.getElementById('modalTitle').textContent = 'Create New PKB Canvasing';
+      if (form) form.reset();
+      // Generate Next Transaction Number
+      const nextNum = 135 + pkbData.length - 5;
+      document.getElementById('formTransNo').value = `027-PKB-2025-DMS0000000${nextNum}`;
+      document.getElementById('formStartHour').value = '15-05-2025';
+      document.getElementById('formEstHour').value = '15-05-2025';
+      document.getElementById('formFinishHour').value = '15-05-2025';
+      modal.classList.add('show');
+    });
+  }
+
+  // Close Modals
+  const closeModal = () => modal.classList.remove('show');
   if (btnClose) btnClose.addEventListener('click', closeModal);
   if (btnCancel) btnCancel.addEventListener('click', closeModal);
 
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-  });
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
 
+  const closeDetail = () => detailModal.classList.remove('show');
+  if (btnCloseDetail) btnCloseDetail.addEventListener('click', closeDetail);
+  if (btnCloseDetail2) btnCloseDetail2.addEventListener('click', closeDetail);
+  if (detailModal) {
+    detailModal.addEventListener('click', (e) => {
+      if (e.target === detailModal) closeDetail();
+    });
+  }
+
+  // Submit Form
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const kode = document.getElementById('formKode').value;
-      const nama = document.getElementById('formNama').value;
-      const wilayah = document.getElementById('formWilayah').value;
-      const lokasi = document.getElementById('formLokasi').value;
-      const tglMulai = document.getElementById('formTglMulai').value;
-      const tglSelesai = document.getElementById('formTglSelesai').value;
-      const pic = document.getElementById('formPIC').value;
-      const target = parseInt(document.getElementById('formTarget').value) || 0;
+      const editId = modal.dataset.editId ? parseInt(modal.dataset.editId) : null;
+      const transNo = document.getElementById('formTransNo').value;
       const status = document.getElementById('formStatus').value;
-      const catatan = document.getElementById('formCatatan').value;
+      const name = document.getElementById('formName').value;
+      const policeNo = document.getElementById('formPoliceNo').value;
+      const motor = document.getElementById('formMotor').value;
+      const mechanic = document.getElementById('formMechanic').value;
+      const engineNo = document.getElementById('formEngineNo').value;
+      const frameNo = document.getElementById('formFrameNo').value;
+      const startHour = document.getElementById('formStartHour').value;
+      const estimatedHour = document.getElementById('formEstHour').value;
+      const finishHour = document.getElementById('formFinishHour').value;
 
-      const formatTgl = (tglStr) => {
-        if (!tglStr) return '';
-        const d = new Date(tglStr);
-        return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-      };
+      if (editId) {
+        // Edit Existing
+        const existing = pkbData.find((d) => d.id === editId);
+        if (existing) {
+          existing.status = status;
+          existing.name = name;
+          existing.policeNo = policeNo;
+          existing.motor = motor;
+          existing.mechanic = mechanic;
+          existing.engineNo = engineNo;
+          existing.frameNo = frameNo;
+          existing.startHour = startHour;
+          existing.estimatedHour = estimatedHour;
+          existing.finishHour = finishHour;
+        }
+        showToast('Data PKB berhasil diperbarui', 'success');
+      } else {
+        // Create New
+        const newItem = {
+          id: Date.now(),
+          status,
+          transNo,
+          name,
+          policeNo,
+          motor,
+          mechanic,
+          engineNo,
+          frameNo,
+          startHour,
+          estimatedHour,
+          finishHour
+        };
+        pkbData.unshift(newItem);
+        showToast('Data PKB berhasil dibuat', 'success');
+      }
 
-      const newItem = {
-        id: Date.now(),
-        kode,
-        nama,
-        wilayah,
-        lokasi,
-        tglMulai,
-        tglSelesai,
-        periode: `${formatTgl(tglMulai)} - ${formatTgl(tglSelesai)}`,
-        pic,
-        target,
-        realisasi: 0,
-        status,
-        catatan
-      };
-
-      masterData.unshift(newItem);
-      renderTable();
       closeModal();
-      showToast(`Data Master Canvasing ${kode} berhasil disimpan!`, 'success');
+      applyAllFilters();
     });
   }
 }
 
-// Global actions
-window.editItem = function(id) {
-  const item = masterData.find(d => d.id === id);
-  if (!item) return;
-  showToast(`Fitur edit untuk ${item.kode} sedang disiapkan.`, 'info');
-};
-
-window.deleteItem = function(id) {
-  const item = masterData.find(d => d.id === id);
-  if (!item) return;
-  if (confirm(`Apakah Anda yakin ingin menghapus data master "${item.nama}" (${item.kode})?`)) {
-    masterData = masterData.filter(d => d.id !== id);
-    renderTable();
-    showToast(`Data ${item.kode} berhasil dihapus.`, 'info');
-  }
-};
-
-// Export button
-function initExportButton() {
-  const btnExport = document.getElementById('btnExport');
-  if (btnExport) {
-    btnExport.addEventListener('click', () => {
-      showToast('Mengunduh rekapan data Master Canvasing (.xlsx)...', 'success');
+// Floating Draft PKB Indicator
+function initDraftPill() {
+  const btn = document.getElementById('btnDraftPkb');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      showToast('3 draft PKB tersimpan siap diterbitkan', 'info');
     });
   }
 }
 
-// Language Switcher
-function initLangSwitcher() {
-  const btnId = document.getElementById('langId');
-  const btnEn = document.getElementById('langEn');
-  if (!btnId || !btnEn) return;
-
-  btnId.addEventListener('click', () => {
-    btnId.classList.add('active');
-    btnEn.classList.remove('active');
-    showToast('Bahasa dialihkan ke Indonesia', 'info');
-  });
-
-  btnEn.addEventListener('click', () => {
-    btnEn.classList.add('active');
-    btnId.classList.remove('active');
-    showToast('Language set to English', 'info');
-  });
-}
-
-// Toast Alert
+// Toast Notification
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   if (!container) return;
@@ -359,22 +603,19 @@ function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   toast.innerHTML = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="12" y1="16" x2="12" y2="12"></line>
-      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
     </svg>
     <span>${message}</span>
   `;
 
   container.appendChild(toast);
 
-  // Trigger animation
-  setTimeout(() => toast.classList.add('show'), 10);
-
-  // Auto remove
   setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  }, 3500);
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px)';
+    toast.style.transition = 'all 0.2s ease';
+    setTimeout(() => toast.remove(), 200);
+  }, 3000);
 }
