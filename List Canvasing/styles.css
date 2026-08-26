@@ -3411,7 +3411,7 @@ body {
 
 /* Booking Modal Dialog Styles */
 .booking-modal-card {
-  max-width: 620px;
+  max-width: 680px;
   width: 92%;
 }
 
@@ -3562,27 +3562,34 @@ body {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: 12px;
-  margin-top: 20px;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 4px;
 }
 
 .btn-manual-booking {
-  background: transparent;
+  background: #f8fafc;
   border: 1px dashed #cbd5e1;
   color: #475569;
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
   font-family: inherit;
+  white-space: nowrap;
 }
 
 .btn-manual-booking:hover {
   border-color: #ea580c;
   color: #ea580c;
   background: #fff7ed;
+}
+
+.booking-modal-actions .btn-primary-modal {
+  white-space: nowrap;
+  padding: 10px 22px;
 }
 
 /* Responsive adjustment for small screens */
