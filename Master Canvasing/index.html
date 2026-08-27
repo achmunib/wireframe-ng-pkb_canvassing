@@ -420,8 +420,8 @@
                   <span class="step-dot"></span>
                 </div>
                 <div class="step-label-group">
-                  <span class="step-title">Carrier Data</span>
-                  <span class="step-desc">Data of the person bringing vehicle</span>
+                  <span class="step-title">Part Dibawa</span>
+                  <span class="step-desc">Penentuan part yang akan dibawa</span>
                 </div>
               </div>
 
@@ -619,59 +619,46 @@
               </div>
             </div>
 
-            <!-- Step 2 Pane: Carrier / Customer Data -->
+            <!-- Step 2 Pane: Part Dibawa (Part Canvasing) -->
             <div class="step-pane" id="stepPane2" style="display: none;">
               <div class="content-card">
-                <div class="card-header">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                   <div class="card-icon-title">
                     <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                      <circle cx="12" cy="7" r="4"></circle>
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                      <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                      <line x1="12" y1="22.08" x2="12" y2="12"></line>
                     </svg>
-                    <h2 class="card-title">Carrier &amp; Customer Information</h2>
+                    <h2 class="card-title">Daftar Part Dibawa</h2>
                   </div>
+                  <button type="button" class="btn-tambah-part-teal" id="btnOpenTambahPartModal">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Tambah</span>
+                  </button>
                 </div>
 
                 <div class="card-body">
-                  <!-- Search Phone Number Input Bar -->
-                  <div class="carrier-search-section">
-                    <div class="form-group">
-                      <label class="form-label" for="wizCarrierSearchPhone">Cari Nomor HP Pelanggan</label>
-                      <div class="carrier-search-bar-wrapper">
-                        <div class="carrier-search-input-pill-container">
-                          <input type="text" id="wizCarrierSearchPhone" class="carrier-search-input" value="085732255998" placeholder="Enter phone number">
-                          <button class="btn-carrier-search" id="btnWizSearchCarrier" type="button">Cari</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="wizard-form-grid mt-3">
-                    <div class="form-group">
-                      <label class="form-label" for="wizName">Customer Name <span class="required-star">*</span></label>
-                      <input type="text" id="wizName" class="form-input" placeholder="Contoh: Grego" value="Grego" required>
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="wizPhone">Phone Number <span class="required-star">*</span></label>
-                      <input type="text" id="wizPhone" class="form-input" placeholder="Contoh: 085732255998" value="085732255998" required>
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="wizRelationship">Relationship with Owner</label>
-                      <select id="wizRelationship" class="form-input">
-                        <option value="Self">Self / Pemilik Sendiri</option>
-                        <option value="Family">Family / Keluarga</option>
-                        <option value="Friend">Friend / Teman</option>
-                        <option value="Driver">Driver / Supir</option>
-                      </select>
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="wizAddress">Address / Location</label>
-                      <input type="text" id="wizAddress" class="form-input" placeholder="Contoh: Jl. Diponegoro No. 45, Kediri" value="Jl. Basuki Rahmat No. 12, Surabaya">
-                    </div>
+                  <div class="part-table-container">
+                    <table class="part-canvasing-table" id="tablePartCanvasing">
+                      <thead>
+                        <tr>
+                          <th style="width: 22%; text-align: left;">Kode Part</th>
+                          <th style="width: 38%; text-align: left;">Nama Part</th>
+                          <th style="width: 12%; text-align: center;">Qty</th>
+                          <th style="width: 18%; text-align: right;">Harga</th>
+                          <th style="width: 10%; text-align: center;">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody id="bodyPartCanvasing">
+                        <tr class="empty-part-row" id="rowEmptyPart">
+                          <td colspan="5" class="text-no-records">No records found</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -1138,6 +1125,58 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-outline" id="btnCloseDetailBtn">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Tambah Part (Step 2 - Part Dibawa) -->
+  <div class="modal-backdrop" id="tambahPartModal">
+    <div class="modal-card modal-tambah-part">
+      <div class="modal-header">
+        <h3 class="modal-title">Tambah Part</h3>
+        <button class="btn-close" id="btnClosePartModal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="formTambahPart" class="tambah-part-form">
+          <div class="part-form-row">
+            <label class="part-form-label" for="modalPartSearch">Part</label>
+            <div class="part-input-autocomplete-wrapper">
+              <input type="text" id="modalPartSearch" class="form-input" placeholder="Insert part name" autocomplete="off" required>
+              <div class="part-suggestions-dropdown" id="partSuggestionsDropdown" style="display: none;"></div>
+            </div>
+          </div>
+
+          <div class="part-form-row">
+            <label class="part-form-label" for="modalPartQty">Qty</label>
+            <input type="number" id="modalPartQty" class="form-input" value="1" min="1" required>
+          </div>
+
+          <div class="part-form-row">
+            <label class="part-form-label" for="modalPartSatuan">Satuan</label>
+            <input type="text" id="modalPartSatuan" class="form-input form-input-disabled" readonly disabled value="PCS">
+          </div>
+
+          <div class="part-form-row">
+            <label class="part-form-label" for="modalPartHarga">Harga</label>
+            <input type="text" id="modalPartHarga" class="form-input form-input-disabled" readonly disabled value="Rp 54.000">
+          </div>
+
+          <div class="part-form-row">
+            <label class="part-form-label" for="modalPartDiskon">Diskon</label>
+            <input type="text" id="modalPartDiskon" class="form-input form-input-disabled" readonly disabled value="Rp 0">
+          </div>
+
+          <div class="part-form-row">
+            <label class="part-form-label" for="modalPartStock">Available Stock</label>
+            <input type="text" id="modalPartStock" class="form-input form-input-disabled" readonly disabled value="25">
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer" style="justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn-outline btn-modal-part-cancel" id="btnCancelPartModal">Kembali</button>
+        <button type="button" class="btn-primary btn-modal-part-save" id="btnSavePartModal">Simpan</button>
       </div>
     </div>
   </div>

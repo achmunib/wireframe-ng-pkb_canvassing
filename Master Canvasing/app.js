@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDraftPill();
   initEqualizerToggle();
   initStepperWizard();
+  initTambahPartModal();
 });
 
 // Render Table Rows matching the Reference Screenshot
@@ -592,6 +593,167 @@ let currentWizStep = 1;
 const totalWizSteps = 5;
 let editingPkbId = null;
 
+// Master Catalog Part Canvasing
+const partCatalog = [
+  { code: '08232-2MB-K0LN1', name: 'AHM OIL MPX2 0.8L', satuan: 'BOTOL', harga: 'Rp 54.000', diskon: 'Rp 0', stock: 45, rawPrice: 54000 },
+  { code: '06455-K59-A71', name: 'PAD SET FR (Kampas Rem Depan)', satuan: 'SET', harga: 'Rp 68.000', diskon: 'Rp 0', stock: 20, rawPrice: 68000 },
+  { code: '31916-KRM-841', name: 'SPARK PLUG CPR9EA-9 (Busi NGK)', satuan: 'PCS', harga: 'Rp 22.000', diskon: 'Rp 0', stock: 35, rawPrice: 22000 },
+  { code: '23100-K44-V01', name: 'BELT DRIVE (V-Belt Beat/Scoopy)', satuan: 'PCS', harga: 'Rp 95.000', diskon: 'Rp 0', stock: 15, rawPrice: 95000 },
+  { code: '17210-K59-A70', name: 'ELEMENT COMP AIR/C (Filter Udara)', satuan: 'PCS', harga: 'Rp 58.000', diskon: 'Rp 0', stock: 18, rawPrice: 58000 },
+  { code: '08293-999-011', name: 'OIL TRANSMISSION (Oli Gardan)', satuan: 'BOTOL', harga: 'Rp 16.000', diskon: 'Rp 0', stock: 50, rawPrice: 16000 }
+];
+
+let partsDibawa = [];
+let selectedPartItem = partCatalog[0];
+
+function renderPartsDibawa() {
+  const tbody = document.getElementById('bodyPartCanvasing');
+  if (!tbody) return;
+
+  if (partsDibawa.length === 0) {
+    tbody.innerHTML = `
+      <tr class="empty-part-row" id="rowEmptyPart">
+        <td colspan="5" class="text-no-records">No records found</td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = partsDibawa.map((item, index) => `
+    <tr>
+      <td style="font-weight: 600; color: #1e293b;">${item.code}</td>
+      <td>${item.name}</td>
+      <td style="text-align: center; font-weight: 600;">${item.qty} ${item.satuan}</td>
+      <td style="text-align: right; font-weight: 600; color: var(--primary);">${item.harga}</td>
+      <td style="text-align: center;">
+        <button type="button" class="btn-del-part-row" title="Hapus Part" onclick="deletePartDibawa(${index})">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function deletePartDibawa(index) {
+  const removed = partsDibawa.splice(index, 1);
+  renderPartsDibawa();
+  if (removed[0]) {
+    showToast(`Part ${removed[0].name} dihapus dari daftar bawaan`, 'info');
+  }
+}
+
+function initTambahPartModal() {
+  const modal = document.getElementById('tambahPartModal');
+  const btnOpen = document.getElementById('btnOpenTambahPartModal');
+  const btnClose = document.getElementById('btnClosePartModal');
+  const btnCancel = document.getElementById('btnCancelPartModal');
+  const btnSave = document.getElementById('btnSavePartModal');
+  const searchInput = document.getElementById('modalPartSearch');
+  const suggestionsBox = document.getElementById('partSuggestionsDropdown');
+  const qtyInput = document.getElementById('modalPartQty');
+  const satuanInput = document.getElementById('modalPartSatuan');
+  const hargaInput = document.getElementById('modalPartHarga');
+  const diskonInput = document.getElementById('modalPartDiskon');
+  const stockInput = document.getElementById('modalPartStock');
+
+  function openModal() {
+    if (!modal) return;
+    modal.classList.add('show');
+    selectedPartItem = partCatalog[0];
+    if (searchInput) searchInput.value = selectedPartItem.name;
+    if (qtyInput) qtyInput.value = 1;
+    if (satuanInput) satuanInput.value = selectedPartItem.satuan;
+    if (hargaInput) hargaInput.value = selectedPartItem.harga;
+    if (diskonInput) diskonInput.value = selectedPartItem.diskon;
+    if (stockInput) stockInput.value = selectedPartItem.stock;
+    if (suggestionsBox) suggestionsBox.style.display = 'none';
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('show');
+  }
+
+  if (btnOpen) btnOpen.addEventListener('click', openModal);
+  if (btnClose) btnClose.addEventListener('click', closeModal);
+  if (btnCancel) btnCancel.addEventListener('click', closeModal);
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  // Autocomplete search
+  if (searchInput && suggestionsBox) {
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase().trim();
+      const matches = partCatalog.filter(p => p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q));
+      if (matches.length > 0) {
+        suggestionsBox.innerHTML = matches.map(p => `
+          <div class="part-suggestion-item" data-code="${p.code}">
+            <strong>${p.code}</strong> - ${p.name} (${p.harga})
+          </div>
+        `).join('');
+        suggestionsBox.style.display = 'block';
+
+        suggestionsBox.querySelectorAll('.part-suggestion-item').forEach(itemEl => {
+          itemEl.addEventListener('click', () => {
+            const code = itemEl.getAttribute('data-code');
+            const found = partCatalog.find(p => p.code === code);
+            if (found) {
+              selectedPartItem = found;
+              searchInput.value = found.name;
+              if (satuanInput) satuanInput.value = found.satuan;
+              if (hargaInput) hargaInput.value = found.harga;
+              if (diskonInput) diskonInput.value = found.diskon;
+              if (stockInput) stockInput.value = found.stock;
+            }
+            suggestionsBox.style.display = 'none';
+          });
+        });
+      } else {
+        suggestionsBox.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+        suggestionsBox.style.display = 'none';
+      }
+    });
+  }
+
+  // Save Part into Step 2 table
+  if (btnSave) {
+    btnSave.addEventListener('click', () => {
+      const partName = searchInput ? searchInput.value.trim() : '';
+      const qty = parseInt(qtyInput ? qtyInput.value : '1', 10) || 1;
+
+      if (!partName) {
+        showToast('Harap pilih atau masukkan nama part', 'info');
+        return;
+      }
+
+      const itemToAdd = {
+        code: selectedPartItem ? selectedPartItem.code : 'PRT-' + Math.floor(1000 + Math.random() * 9000),
+        name: partName,
+        qty: qty,
+        satuan: selectedPartItem ? selectedPartItem.satuan : 'PCS',
+        harga: selectedPartItem ? selectedPartItem.harga : 'Rp 50.000'
+      };
+
+      partsDibawa.push(itemToAdd);
+      renderPartsDibawa();
+      closeModal();
+      showToast(`Part ${itemToAdd.name} (${qty} ${itemToAdd.satuan}) berhasil ditambahkan`, 'success');
+    });
+  }
+}
+
 const sampleVehicles = {
   'JB91E1260677': {
     plate: 'AG 3323 UY',
@@ -691,12 +853,7 @@ function initStepperWizard() {
             return;
           }
         } else if (currentWizStep === 2) {
-          const name = document.getElementById('wizName').value.trim();
-          if (!name) {
-            showToast('Harap isi nama pelanggan', 'info');
-            document.getElementById('wizName').focus();
-            return;
-          }
+          // Step 2: Part Dibawa (optional or warning if empty)
         }
         goToStep(currentWizStep + 1);
       } else {
@@ -870,6 +1027,10 @@ function showCreateWizard(isEdit = false, editId = null) {
     document.getElementById('wizEstHour').value = '15-05-2025';
     document.getElementById('wizFinishHour').value = '15-05-2025';
   }
+
+  // Reset Parts Dibawa Table
+  partsDibawa = [];
+  renderPartsDibawa();
 
   // Reset to Step 1
   goToStep(1);
