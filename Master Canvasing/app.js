@@ -678,10 +678,16 @@ function initStepperWizard() {
       if (currentWizStep < totalWizSteps) {
         // Validate required fields on Step 1 & 2
         if (currentWizStep === 1) {
-          const police = document.getElementById('wizPoliceNo').value.trim();
-          if (!police) {
-            showToast('Harap isi nomor polisi kendaraan', 'info');
-            document.getElementById('wizPoliceNo').focus();
+          const namaCanvasing = document.getElementById('wizNamaCanvasing')?.value.trim();
+          const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value.trim();
+          if (!namaCanvasing) {
+            showToast('Harap isi nama canvasing', 'info');
+            document.getElementById('wizNamaCanvasing')?.focus();
+            return;
+          }
+          if (!lokasiCanvasing) {
+            showToast('Harap isi lokasi canvasing', 'info');
+            document.getElementById('wizLokasiCanvasing')?.focus();
             return;
           }
         } else if (currentWizStep === 2) {
@@ -699,7 +705,7 @@ function initStepperWizard() {
     });
   }
 
-  // Scan Vehicle Action
+  // Scan Vehicle Action (if present)
   if (btnScan) {
     btnScan.addEventListener('click', () => {
       const q = (scanInput ? scanInput.value.trim().toUpperCase() : '');
@@ -712,17 +718,17 @@ function initStepperWizard() {
         year: '2024'
       };
 
-      document.getElementById('wizPoliceNo').value = found.plate;
-      document.getElementById('wizMotor').value = found.motor;
-      document.getElementById('wizEngineNo').value = found.engine;
-      document.getElementById('wizFrameNo').value = found.frame;
+      if (document.getElementById('wizPoliceNo')) document.getElementById('wizPoliceNo').value = found.plate;
+      if (document.getElementById('wizMotor')) document.getElementById('wizMotor').value = found.motor;
+      if (document.getElementById('wizEngineNo')) document.getElementById('wizEngineNo').value = found.engine;
+      if (document.getElementById('wizFrameNo')) document.getElementById('wizFrameNo').value = found.frame;
 
-      document.getElementById('dispWizPlate').textContent = found.plate;
-      document.getElementById('dispWizMotorTitle').textContent = found.motor;
-      document.getElementById('dispWizEngine').textContent = found.engine;
-      document.getElementById('dispWizFrame').textContent = found.frame;
-      document.getElementById('dispWizColor').textContent = found.color;
-      document.getElementById('dispWizYear').textContent = found.year;
+      if (document.getElementById('dispWizPlate')) document.getElementById('dispWizPlate').textContent = found.plate;
+      if (document.getElementById('dispWizMotorTitle')) document.getElementById('dispWizMotorTitle').textContent = found.motor;
+      if (document.getElementById('dispWizEngine')) document.getElementById('dispWizEngine').textContent = found.engine;
+      if (document.getElementById('dispWizFrame')) document.getElementById('dispWizFrame').textContent = found.frame;
+      if (document.getElementById('dispWizColor')) document.getElementById('dispWizColor').textContent = found.color;
+      if (document.getElementById('dispWizYear')) document.getElementById('dispWizYear').textContent = found.year;
 
       showToast(`Kendaraan ${found.plate} (${found.motor}) berhasil discan`, 'success');
     });
@@ -732,14 +738,14 @@ function initStepperWizard() {
   if (btnClearScan) {
     btnClearScan.addEventListener('click', () => {
       if (scanInput) scanInput.value = '';
-      document.getElementById('wizPoliceNo').value = '';
-      document.getElementById('wizMotor').value = '';
-      document.getElementById('wizEngineNo').value = '';
-      document.getElementById('wizFrameNo').value = '';
-      document.getElementById('dispWizPlate').textContent = '-';
-      document.getElementById('dispWizMotorTitle').textContent = '-';
-      document.getElementById('dispWizEngine').textContent = '-';
-      document.getElementById('dispWizFrame').textContent = '-';
+      if (document.getElementById('wizPoliceNo')) document.getElementById('wizPoliceNo').value = '';
+      if (document.getElementById('wizMotor')) document.getElementById('wizMotor').value = '';
+      if (document.getElementById('wizEngineNo')) document.getElementById('wizEngineNo').value = '';
+      if (document.getElementById('wizFrameNo')) document.getElementById('wizFrameNo').value = '';
+      if (document.getElementById('dispWizPlate')) document.getElementById('dispWizPlate').textContent = '-';
+      if (document.getElementById('dispWizMotorTitle')) document.getElementById('dispWizMotorTitle').textContent = '-';
+      if (document.getElementById('dispWizEngine')) document.getElementById('dispWizEngine').textContent = '-';
+      if (document.getElementById('dispWizFrame')) document.getElementById('dispWizFrame').textContent = '-';
       showToast('Input kendaraan dibersihkan', 'info');
     });
   }
@@ -774,19 +780,19 @@ function initStepperWizard() {
     });
   });
 
-  // Live input sync to badge in step 1
+  // Live input sync to badge if present
   const policeInput = document.getElementById('wizPoliceNo');
   const motorInput = document.getElementById('wizMotor');
   if (policeInput) {
     policeInput.addEventListener('input', (e) => {
       const val = e.target.value.trim();
-      document.getElementById('dispWizPlate').textContent = val || '-';
+      if (document.getElementById('dispWizPlate')) document.getElementById('dispWizPlate').textContent = val || '-';
     });
   }
   if (motorInput) {
     motorInput.addEventListener('input', (e) => {
       const val = e.target.value.trim();
-      document.getElementById('dispWizMotorTitle').textContent = val || '-';
+      if (document.getElementById('dispWizMotorTitle')) document.getElementById('dispWizMotorTitle').textContent = val || '-';
     });
   }
 }
@@ -811,25 +817,27 @@ function showCreateWizard(isEdit = false, editId = null) {
       if (bannerDetail) {
         bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${item.transNo}</span> • Edit Data PKB Master Canvasing`;
       }
+      if (document.getElementById('wizKodeCanvasing')) document.getElementById('wizKodeCanvasing').value = '';
+      if (document.getElementById('wizNamaCanvasing')) document.getElementById('wizNamaCanvasing').value = 'Test lagi NG';
+      if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = 'Gedangan Pusat Dunia';
+      if (document.getElementById('wizDari')) document.getElementById('wizDari').value = '26-08-2026';
+      if (document.getElementById('wizSampai')) document.getElementById('wizSampai').value = '27-08-2026';
+      if (document.getElementById('wizProvinsi')) document.getElementById('wizProvinsi').value = 'JAWA TIMUR';
+      if (document.getElementById('wizKabupaten')) document.getElementById('wizKabupaten').value = 'KAB. SIDOARJO';
+      if (document.getElementById('wizKecamatan')) document.getElementById('wizKecamatan').value = 'GEDANGAN';
+      if (document.getElementById('wizKelurahan')) document.getElementById('wizKelurahan').value = 'GEDANGAN';
+
       document.getElementById('wizTransNo').value = item.transNo;
       document.getElementById('wizStatus').value = item.status;
       document.getElementById('wizName').value = item.name;
-      document.getElementById('wizPoliceNo').value = item.policeNo;
-      document.getElementById('wizMotor').value = item.motor || '';
+      if (document.getElementById('wizPoliceNo')) document.getElementById('wizPoliceNo').value = item.policeNo;
+      if (document.getElementById('wizMotor')) document.getElementById('wizMotor').value = item.motor || '';
       document.getElementById('wizMechanic').value = item.mechanic;
-      document.getElementById('wizEngineNo').value = item.engineNo || '';
-      document.getElementById('wizFrameNo').value = item.frameNo || '';
+      if (document.getElementById('wizEngineNo')) document.getElementById('wizEngineNo').value = item.engineNo || '';
+      if (document.getElementById('wizFrameNo')) document.getElementById('wizFrameNo').value = item.frameNo || '';
       document.getElementById('wizStartHour').value = item.startHour;
       document.getElementById('wizEstHour').value = item.estimatedHour;
       document.getElementById('wizFinishHour').value = item.finishHour;
-
-      document.getElementById('dispWizPlate').textContent = item.policeNo;
-      document.getElementById('dispWizMotorTitle').textContent = item.motor || 'HONDA MOTOR';
-      document.getElementById('dispWizEngine').textContent = item.engineNo || '-';
-      document.getElementById('dispWizFrame').textContent = item.frameNo || '-';
-      if (document.getElementById('wizScanVehicleInput')) {
-        document.getElementById('wizScanVehicleInput').value = item.engineNo || item.policeNo;
-      }
     }
   } else {
     // New Record
@@ -840,25 +848,27 @@ function showCreateWizard(isEdit = false, editId = null) {
       bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${newTransNo}</span> • Pendaftaran PKB Master Canvasing Baru`;
     }
 
+    if (document.getElementById('wizKodeCanvasing')) document.getElementById('wizKodeCanvasing').value = '';
+    if (document.getElementById('wizNamaCanvasing')) document.getElementById('wizNamaCanvasing').value = 'Test lagi NG';
+    if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = 'Gedangan Pusat Dunia';
+    if (document.getElementById('wizDari')) document.getElementById('wizDari').value = '26-08-2026';
+    if (document.getElementById('wizSampai')) document.getElementById('wizSampai').value = '27-08-2026';
+    if (document.getElementById('wizProvinsi')) document.getElementById('wizProvinsi').value = 'JAWA TIMUR';
+    if (document.getElementById('wizKabupaten')) document.getElementById('wizKabupaten').value = 'KAB. SIDOARJO';
+    if (document.getElementById('wizKecamatan')) document.getElementById('wizKecamatan').value = 'GEDANGAN';
+    if (document.getElementById('wizKelurahan')) document.getElementById('wizKelurahan').value = 'GEDANGAN';
+
     document.getElementById('wizTransNo').value = newTransNo;
     document.getElementById('wizStatus').value = 'Waiting Mechanic';
     document.getElementById('wizName').value = 'Grego';
-    document.getElementById('wizPoliceNo').value = 'AG 3323 UY';
-    document.getElementById('wizMotor').value = 'ALL NEW SCOOPY';
+    if (document.getElementById('wizPoliceNo')) document.getElementById('wizPoliceNo').value = 'AG 3323 UY';
+    if (document.getElementById('wizMotor')) document.getElementById('wizMotor').value = 'ALL NEW SCOOPY';
     document.getElementById('wizMechanic').value = 'Kalvin';
-    document.getElementById('wizEngineNo').value = 'JB91E1260677';
-    document.getElementById('wizFrameNo').value = 'JB91E12606778J';
+    if (document.getElementById('wizEngineNo')) document.getElementById('wizEngineNo').value = 'JB91E1260677';
+    if (document.getElementById('wizFrameNo')) document.getElementById('wizFrameNo').value = 'JB91E12606778J';
     document.getElementById('wizStartHour').value = '15-05-2025';
     document.getElementById('wizEstHour').value = '15-05-2025';
     document.getElementById('wizFinishHour').value = '15-05-2025';
-
-    document.getElementById('dispWizPlate').textContent = 'AG 3323 UY';
-    document.getElementById('dispWizMotorTitle').textContent = 'ALL NEW SCOOPY';
-    document.getElementById('dispWizEngine').textContent = 'JB91E1260677';
-    document.getElementById('dispWizFrame').textContent = 'JB91E12606778J';
-    if (document.getElementById('wizScanVehicleInput')) {
-      document.getElementById('wizScanVehicleInput').value = 'JB91E1260677';
-    }
   }
 
   // Reset to Step 1
@@ -963,10 +973,10 @@ function goToStep(step) {
 }
 
 function syncSummaryPane() {
-  const plate = document.getElementById('wizPoliceNo').value;
-  const motor = document.getElementById('wizMotor').value;
-  const name = document.getElementById('wizName').value;
-  const mechanic = document.getElementById('wizMechanic').value;
+  const plate = document.getElementById('wizPoliceNo')?.value || 'AG 3323 UY';
+  const motor = document.getElementById('wizMotor')?.value || 'ALL NEW SCOOPY';
+  const name = document.getElementById('wizName')?.value || 'Grego';
+  const mechanic = document.getElementById('wizMechanic')?.value || 'Kalvin';
 
   if (document.getElementById('sumPlate')) document.getElementById('sumPlate').textContent = plate || '-';
   if (document.getElementById('sumMotor')) document.getElementById('sumMotor').textContent = motor || '-';
@@ -975,20 +985,20 @@ function syncSummaryPane() {
 }
 
 function submitWizardForm() {
-  const transNo = document.getElementById('wizTransNo').value;
-  const status = document.getElementById('wizStatus').value;
-  const name = document.getElementById('wizName').value.trim();
-  const policeNo = document.getElementById('wizPoliceNo').value.trim();
-  const motor = document.getElementById('wizMotor').value.trim();
-  const mechanic = document.getElementById('wizMechanic').value;
-  const engineNo = document.getElementById('wizEngineNo').value.trim();
-  const frameNo = document.getElementById('wizFrameNo').value.trim();
-  const startHour = document.getElementById('wizStartHour').value;
-  const estimatedHour = document.getElementById('wizEstHour').value;
-  const finishHour = document.getElementById('wizFinishHour').value;
+  const transNo = document.getElementById('wizTransNo')?.value || '';
+  const status = document.getElementById('wizStatus')?.value || 'Waiting Mechanic';
+  const name = document.getElementById('wizName')?.value.trim() || 'Grego';
+  const policeNo = document.getElementById('wizPoliceNo')?.value?.trim() || 'AG 3323 UY';
+  const motor = document.getElementById('wizMotor')?.value?.trim() || 'ALL NEW SCOOPY';
+  const mechanic = document.getElementById('wizMechanic')?.value || 'Kalvin';
+  const engineNo = document.getElementById('wizEngineNo')?.value?.trim() || 'JB91E1260677';
+  const frameNo = document.getElementById('wizFrameNo')?.value?.trim() || 'JB91E12606778J';
+  const startHour = document.getElementById('wizStartHour')?.value || '15-05-2025';
+  const estimatedHour = document.getElementById('wizEstHour')?.value || '15-05-2025';
+  const finishHour = document.getElementById('wizFinishHour')?.value || '15-05-2025';
 
-  if (!policeNo || !name) {
-    showToast('Harap lengkapi nomor polisi dan nama pelanggan', 'info');
+  if (!name) {
+    showToast('Harap lengkapi data formulir canvasing', 'info');
     return;
   }
 

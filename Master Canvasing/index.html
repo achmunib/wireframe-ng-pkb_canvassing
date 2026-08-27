@@ -407,8 +407,8 @@
                   <span class="step-dot"></span>
                 </div>
                 <div class="step-label-group">
-                  <span class="step-title">Vehicle</span>
-                  <span class="step-desc">Vehicle information and details</span>
+                  <span class="step-title">Informasi Canvasing</span>
+                  <span class="step-desc">Data master &amp; lokasi canvasing</span>
                 </div>
               </div>
 
@@ -468,137 +468,151 @@
 
           <!-- Form Cards Container -->
           <div class="form-container">
-            <!-- Step 1 Pane: Vehicle Information -->
+            <!-- Step 1 Pane: Informasi Canvasing -->
             <div class="step-pane active" id="stepPane1">
               <div class="content-card">
                 <div class="card-header">
                   <div class="card-icon-title">
                     <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="18.5" cy="17.5" r="3.5" />
-                      <circle cx="5.5" cy="17.5" r="3.5" />
-                      <circle cx="15" cy="5" r="1" />
-                      <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
                     </svg>
-                    <h2 class="card-title">Vehicle Information</h2>
+                    <h2 class="card-title">Informasi Canvasing</h2>
                   </div>
                 </div>
 
                 <div class="card-body">
-                  <!-- Scan Vehicle Input Row -->
-                  <div class="scan-section-wrapper">
-                    <div class="scan-label-group">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 7V5a2 2 0 0 1 2-2h2" />
-                        <path d="M17 3h2a2 2 0 0 1 2 2v2" />
-                        <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-                        <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
-                        <line x1="7" y1="8" x2="7" y2="16" />
-                        <line x1="10" y1="8" x2="10" y2="16" />
-                        <line x1="14" y1="8" x2="14" y2="16" />
-                        <line x1="17" y1="8" x2="17" y2="16" />
-                      </svg>
-                      <span class="scan-label-text">Scan Vehicle</span>
+                  <div class="master-canvasing-form-grid">
+                    <!-- Kode Canvasing (Disabled / Gray Background) -->
+                    <div class="form-group full-width">
+                      <label class="form-label" for="wizKodeCanvasing">Kode Canvasing</label>
+                      <input type="text" id="wizKodeCanvasing" class="form-input form-input-disabled" readonly disabled value="">
                     </div>
 
-                    <div class="search-input-wrapper">
-                      <input type="text" id="wizScanVehicleInput" class="form-input scan-input" value="JB91E1260677"
-                        placeholder="Enter machine or frame number">
-                      <button class="btn-scan-outline" id="btnWizScanVehicle" type="button">Scan Vehicle</button>
-                      <button class="btn-trash-outline" id="btnWizClearScan" type="button" title="Clear / Delete input">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                          stroke-linecap="round" stroke-linejoin="round">
-                          <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                          <line x1="10" y1="11" x2="10" y2="17"></line>
-                          <line x1="14" y1="11" x2="14" y2="17"></line>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- Collapsible Vehicle Detail Box -->
-                  <div class="vehicle-info-box" id="wizVehicleInfoBox">
-                    <div class="vehicle-box-header">
-                      <span class="vehicle-plate-title" id="dispWizPlate">AG 3323 UY</span>
-                      <span class="vehicle-plate-sub" id="dispWizMotorTitle">ALL NEW SCOOPY</span>
-                    </div>
-
-                    <div class="vehicle-box-content">
-                      <div class="vehicle-info-grid">
-                        <div class="info-field-group">
-                          <div class="info-field">
-                            <div class="field-label">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="3" />
-                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-                              </svg>
-                              <span>Machine Number</span>
-                            </div>
-                            <div class="field-value" id="dispWizEngine">JB91E1260677</div>
-                          </div>
-                          <div class="info-field">
-                            <div class="field-label">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-                              </svg>
-                              <span>Color</span>
-                            </div>
-                            <div class="field-value" id="dispWizColor">PRESTIGE BLACK</div>
-                          </div>
-                        </div>
-
-                        <div class="info-field-group">
-                          <div class="info-field">
-                            <div class="field-label">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="16" rx="2" />
-                                <line x1="7" y1="8" x2="17" y2="8" />
-                                <line x1="7" y1="12" x2="17" y2="12" />
-                                <line x1="7" y1="16" x2="12" y2="16" />
-                              </svg>
-                              <span>Frame Number</span>
-                            </div>
-                            <div class="field-value" id="dispWizFrame">JB91E12606778J</div>
-                          </div>
-                          <div class="info-field">
-                            <div class="field-label">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                <line x1="16" y1="2" x2="16" y2="6" />
-                                <line x1="8" y1="2" x2="8" y2="6" />
-                                <line x1="3" y1="10" x2="21" y2="10" />
-                              </svg>
-                              <span>Year of Manufacture</span>
-                            </div>
-                            <div class="field-value" id="dispWizYear">2024</div>
-                          </div>
-                        </div>
+                    <!-- Nama Canvasing * -->
+                    <div class="form-group full-width">
+                      <label class="form-label" for="wizNamaCanvasing">Nama Canvasing <span class="required-star">*</span></label>
+                      <div class="input-indicator-wrapper">
+                        <span class="required-indicator-bar"></span>
+                        <input type="text" id="wizNamaCanvasing" class="form-input input-with-indicator" placeholder="Masukkan nama canvasing" value="Test lagi NG" required>
                       </div>
                     </div>
-                  </div>
 
-                  <!-- Editable Vehicle Fields Grid -->
-                  <div class="wizard-form-grid mt-4">
-                    <div class="form-group">
-                      <label class="form-label" for="wizPoliceNo">Police Number <span class="required-star">*</span></label>
-                      <input type="text" id="wizPoliceNo" class="form-input" placeholder="Contoh: AG 3323 UY" value="AG 3323 UY" required>
+                    <!-- Lokasi Canvasing * -->
+                    <div class="form-group full-width">
+                      <label class="form-label" for="wizLokasiCanvasing">Lokasi Canvasing <span class="required-star">*</span></label>
+                      <div class="input-indicator-wrapper">
+                        <span class="required-indicator-bar"></span>
+                        <input type="text" id="wizLokasiCanvasing" class="form-input input-with-indicator" placeholder="Masukkan lokasi canvasing" value="Gedangan Pusat Dunia" required>
+                      </div>
                     </div>
 
-                    <div class="form-group">
-                      <label class="form-label" for="wizMotor">Motor Type <span class="required-star">*</span></label>
-                      <input type="text" id="wizMotor" class="form-input" placeholder="Contoh: ALL NEW SCOOPY" value="ALL NEW SCOOPY" required>
+                    <!-- Dari * (Date Picker) -->
+                    <div class="form-group full-width">
+                      <label class="form-label" for="wizDari">Dari <span class="required-star">*</span></label>
+                      <div class="input-indicator-wrapper date-picker-wrapper">
+                        <span class="required-indicator-bar"></span>
+                        <input type="text" id="wizDari" class="form-input input-with-indicator date-picker-input" value="26-08-2026" placeholder="DD-MM-YYYY" required>
+                        <button type="button" class="btn-datepicker-addon" title="Pilih Tanggal Mulai">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                          </svg>
+                        </button>
+                      </div>
                     </div>
 
-                    <div class="form-group">
-                      <label class="form-label" for="wizEngineNo">Engine Number</label>
-                      <input type="text" id="wizEngineNo" class="form-input" placeholder="Contoh: JB91E1260677" value="JB91E1260677">
+                    <!-- Sampai * (Date Picker) -->
+                    <div class="form-group full-width">
+                      <label class="form-label" for="wizSampai">Sampai <span class="required-star">*</span></label>
+                      <div class="input-indicator-wrapper date-picker-wrapper">
+                        <span class="required-indicator-bar"></span>
+                        <input type="text" id="wizSampai" class="form-input input-with-indicator date-picker-input" value="27-08-2026" placeholder="DD-MM-YYYY" required>
+                        <button type="button" class="btn-datepicker-addon" title="Pilih Tanggal Selesai">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                          </svg>
+                        </button>
+                      </div>
                     </div>
 
-                    <div class="form-group">
-                      <label class="form-label" for="wizFrameNo">Frame Number</label>
-                      <input type="text" id="wizFrameNo" class="form-input" placeholder="Contoh: JB91E12606778J" value="JB91E12606778J">
+                    <!-- Provinsi * (Dropdown) -->
+                    <div class="form-group full-width">
+                      <label class="form-label" for="wizProvinsi">Provinsi <span class="required-star">*</span></label>
+                      <div class="input-indicator-wrapper select-wrapper">
+                        <span class="required-indicator-bar"></span>
+                        <select id="wizProvinsi" class="form-input input-with-indicator form-select" required>
+                          <option value="JAWA TIMUR" selected>JAWA TIMUR</option>
+                          <option value="JAWA TENGAH">JAWA TENGAH</option>
+                          <option value="JAWA BARAT">JAWA BARAT</option>
+                          <option value="DKI JAKARTA">DKI JAKARTA</option>
+                          <option value="BALI">BALI</option>
+                        </select>
+                        <svg class="select-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+
+                    <!-- Kabupaten/Kota * (Dropdown) -->
+                    <div class="form-group full-width">
+                      <label class="form-label" for="wizKabupaten">Kabupaten/Kota <span class="required-star">*</span></label>
+                      <div class="input-indicator-wrapper select-wrapper">
+                        <span class="required-indicator-bar"></span>
+                        <select id="wizKabupaten" class="form-input input-with-indicator form-select" required>
+                          <option value="KAB. SIDOARJO" selected>KAB. SIDOARJO</option>
+                          <option value="KOTA SURABAYA">KOTA SURABAYA</option>
+                          <option value="KAB. GRESIK">KAB. GRESIK</option>
+                          <option value="KAB. MOJOKERTO">KAB. MOJOKERTO</option>
+                          <option value="KAB. PASURUAN">KAB. PASURUAN</option>
+                        </select>
+                        <svg class="select-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+
+                    <!-- Kecamatan * (Dropdown) -->
+                    <div class="form-group full-width">
+                      <label class="form-label" for="wizKecamatan">Kecamatan <span class="required-star">*</span></label>
+                      <div class="input-indicator-wrapper select-wrapper">
+                        <span class="required-indicator-bar"></span>
+                        <select id="wizKecamatan" class="form-input input-with-indicator form-select" required>
+                          <option value="GEDANGAN" selected>GEDANGAN</option>
+                          <option value="WARU">WARU</option>
+                          <option value="SEDATI">SEDATI</option>
+                          <option value="CANDI">CANDI</option>
+                          <option value="BUDURAN">BUDURAN</option>
+                          <option value="SIDOARJO">SIDOARJO</option>
+                        </select>
+                        <svg class="select-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+
+                    <!-- Kelurahan (Dropdown, Optional) -->
+                    <div class="form-group full-width">
+                      <label class="form-label" for="wizKelurahan">Kelurahan</label>
+                      <div class="select-wrapper">
+                        <select id="wizKelurahan" class="form-input form-select">
+                          <option value="GEDANGAN" selected>GEDANGAN</option>
+                          <option value="KEBOANSIKEP">KEBOANSIKEP</option>
+                          <option value="SAWAHOTOC">SAWAHOTOC</option>
+                          <option value="SEMAMBUNG">SEMAMBUNG</option>
+                          <option value="SRUNI">SRUNI</option>
+                          <option value="WEDGE">WEDGE</option>
+                        </select>
+                        <svg class="select-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
