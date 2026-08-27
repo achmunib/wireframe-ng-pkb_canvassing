@@ -433,34 +433,21 @@
                   <span class="step-dot"></span>
                 </div>
                 <div class="step-label-group">
-                  <span class="step-title">Cek Aja Dulu</span>
-                  <span class="step-desc">Pemeriksaan awal &amp; kondisi kendaraan</span>
+                  <span class="step-title">Pilih Mekanik</span>
+                  <span class="step-desc">Penentuan mekanik yang ditugaskan</span>
                 </div>
               </div>
 
               <div class="step-line" id="stepLine3"></div>
 
-              <!-- Step 4 -->
+              <!-- Step 4: Summary -->
               <div class="step-node" data-step="4" id="stepNode4">
                 <div class="step-circle">
                   <span class="step-dot"></span>
                 </div>
                 <div class="step-label-group">
-                  <span class="step-title">Service &amp; Parts</span>
-                  <span class="step-desc">Select services, status &amp; mechanic</span>
-                </div>
-              </div>
-
-              <div class="step-line" id="stepLine4"></div>
-
-              <!-- Step 5 -->
-              <div class="step-node" data-step="5" id="stepNode5">
-                <div class="step-circle">
-                  <span class="step-dot"></span>
-                </div>
-                <div class="step-label-group">
                   <span class="step-title">Summary</span>
-                  <span class="step-desc">Review transaction summary before saving</span>
+                  <span class="step-desc">Review ringkasan master canvasing</span>
                 </div>
               </div>
             </div>
@@ -664,301 +651,210 @@
               </div>
             </div>
 
-            <!-- Step 3 Pane: Cek Aja Dulu -->
+            <!-- Step 3 Pane: Tambah / Pilih Mekanik -->
             <div class="step-pane" id="stepPane3" style="display: none;">
               <div class="content-card">
                 <div class="card-header">
                   <div class="card-icon-title">
                     <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M9 11l3 3L22 4"></path>
-                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
-                    <h2 class="card-title">Cek Aja Dulu (Pemeriksaan Awal Kendaraan)</h2>
+                    <h2 class="card-title">Tambah Mekanik</h2>
                   </div>
                 </div>
 
                 <div class="card-body">
-                  <div class="cek-metrics-row">
-                    <div class="cek-metric-box">
-                      <span class="cek-metric-label">Kilometer (KM) Odometer</span>
-                      <input type="text" id="wizOdometer" class="form-input mt-1" value="12.450 km" placeholder="Contoh: 12.450 km">
+                  <div class="tambah-mekanik-container">
+                    <div class="mekanik-input-header-row">
+                      <label class="form-label" for="selectMekanikCanvasing">Mekanik</label>
+                      <button type="button" class="btn-refresh-mekanik" id="btnRefreshMekanik" title="Refresh Daftar Mekanik">
+                        <svg class="refresh-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="23 4 23 10 17 10"></polyline>
+                          <polyline points="1 20 1 14 7 14"></polyline>
+                          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                        <span>Refresh Mekanik</span>
+                      </button>
                     </div>
 
-                    <div class="cek-metric-box">
-                      <span class="cek-metric-label">Kondisi Bahan Bakar</span>
-                      <select id="wizFuel" class="form-input mt-1">
-                        <option value="Full">Full (Penuh)</option>
-                        <option value="3/4" selected>3/4 Kapasitas</option>
-                        <option value="1/2">1/2 Kapasitas</option>
-                        <option value="1/4">1/4 Kapasitas</option>
-                        <option value="E">Empty (Hampir Habis)</option>
+                    <div class="select-wrapper mt-1">
+                      <select id="selectMekanikCanvasing" class="form-input form-select">
+                        <option value="">Pilih Mekanik...</option>
+                        <option value="Kalvin" data-stall="Stall 1" data-busy="true" data-pkb="027-PKB-2025-DMS0000000134">Kalvin (Stall 1 - Sedang Mengerjakan PKB 027-PKB-2025-DMS0000000134)</option>
+                        <option value="Rizal" data-stall="Stall 2" data-busy="true" data-pkb="027-PKB-2025-DMS0000000130">Rizal (Stall 2 - Sedang Mengerjakan PKB 027-PKB-2025-DMS0000000130)</option>
+                        <option value="Agung" data-stall="Stall 3" data-busy="false">Agung (Stall 3 - Available / Siap Ditugaskan)</option>
+                        <option value="Robin" data-stall="Stall 4" data-busy="true" data-pkb="027-PKB-2025-DMS0000000128">Robin (Stall 4 - Sedang Mengerjakan PKB 027-PKB-2025-DMS0000000128)</option>
+                        <option value="Ratna" data-stall="Stall 5" data-busy="false">Ratna (Stall 5 - Available / Siap Ditugaskan)</option>
+                        <option value="Hendri" data-stall="Stall 6" data-busy="false">Hendri (Stall 6 - Available / Siap Ditugaskan)</option>
                       </select>
+                      <svg class="select-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
                     </div>
 
-                    <div class="cek-metric-box">
-                      <span class="cek-metric-label">Tegangan Aki / Baterai</span>
-                      <input type="text" class="form-input mt-1" value="12.6 Volt (Optimal)" readonly>
+                    <div class="mekanik-btn-simpan-row">
+                      <button type="button" class="btn-primary btn-simpan-mekanik" id="btnAddMekanikToList">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <line x1="12" y1="5" x2="12" y2="19"></line>
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span>Simpan Mekanik</span>
+                      </button>
                     </div>
-                  </div>
 
-                  <div class="cek-checklist-wrapper mt-4">
-                    <h4 class="cek-section-subtitle">Daftar Pengecekan Cepat (Visual &amp; Kelayakan)</h4>
-                    <div class="cek-items-grid">
-                      <label class="cek-check-item">
-                        <input type="checkbox" checked>
-                        <span class="cek-check-custom"></span>
-                        <div class="cek-item-text">
-                          <span class="cek-item-title">Sistem Pengereman (Depan &amp; Belakang)</span>
-                          <span class="cek-item-desc">Ketebalan kampas rem masih aman</span>
-                        </div>
-                      </label>
+                    <div class="mekanik-divider"></div>
 
-                      <label class="cek-check-item">
-                        <input type="checkbox" checked>
-                        <span class="cek-check-custom"></span>
-                        <div class="cek-item-text">
-                          <span class="cek-item-title">Lampu &amp; Kelistrikan</span>
-                          <span class="cek-item-desc">Lampu utama, sein, dan klakson normal</span>
-                        </div>
-                      </label>
-
-                      <label class="cek-check-item">
-                        <input type="checkbox" checked>
-                        <span class="cek-check-custom"></span>
-                        <div class="cek-item-text">
-                          <span class="cek-item-title">Tekanan Udara Ban</span>
-                          <span class="cek-item-desc">Depan 29 psi, Belakang 33 psi</span>
-                        </div>
-                      </label>
-
-                      <label class="cek-check-item">
-                        <input type="checkbox">
-                        <span class="cek-check-custom"></span>
-                        <div class="cek-item-text">
-                          <span class="cek-item-title">Kondisi Oli Mesin</span>
-                          <span class="cek-item-desc">Perlu penggantian oli mesin rutin</span>
-                        </div>
-                      </label>
+                    <div class="part-table-container">
+                      <table class="part-canvasing-table" id="tableMekanikCanvasing">
+                        <thead>
+                          <tr>
+                            <th style="width: 75%; text-align: left;">List Mekanik</th>
+                            <th style="width: 25%; text-align: center;">Aksi</th>
+                          </tr>
+                        </thead>
+                        <tbody id="bodyMekanikCanvasing">
+                          <tr class="empty-part-row" id="rowEmptyMekanik">
+                            <td colspan="2" class="text-no-records">No records found</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Step 4 Pane: Service & Parts / Status & Mechanic -->
+            <!-- Step 4 Pane: Summary & Final Review -->
             <div class="step-pane" id="stepPane4" style="display: none;">
-              <div class="content-card">
-                <div class="card-header">
-                  <div class="card-icon-title">
-                    <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-                    </svg>
-                    <h2 class="card-title">Status PKB, Mekanik &amp; Pilihan Servis</h2>
-                  </div>
-                </div>
-
-                <div class="card-body">
-                  <!-- Row: Status PKB & Mechanic Assignment -->
-                  <div class="wizard-form-grid">
-                    <div class="form-group">
-                      <label class="form-label" for="wizStatus">Status PKB <span class="required-star">*</span></label>
-                      <select id="wizStatus" class="form-input" required>
-                        <option value="Waiting Mechanic" selected>Waiting Mechanic (Menunggu Mekanik)</option>
-                        <option value="In Progress">In Progress (Sedang Dikerjakan)</option>
-                        <option value="Pause">Pause (Ditunda / Menunggu Part)</option>
-                      </select>
-                    </div>
-
-                    <div class="form-group">
-                      <label class="form-label" for="wizMechanic">Assigned Mechanic <span class="required-star">*</span></label>
-                      <select id="wizMechanic" class="form-input" required>
-                        <option value="Kalvin" selected>Kalvin (Stall 1 - Fast Service)</option>
-                        <option value="Rizal">Rizal (Stall 2 - Heavy Repair)</option>
-                        <option value="Agung">Agung (Stall 3 - Tune Up)</option>
-                        <option value="Robin">Robin (Stall 4 - Maintenance)</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <!-- Service Recommendations Matching List Canvasing -->
-                  <div class="sp-recommendations-wrapper mt-4">
-                    <h4 class="cek-section-subtitle">Rekomendasi Paket Servis &amp; Suku Cadang</h4>
-                    <div class="sp-rec-grid">
-                      <!-- Item 1 -->
-                      <div class="sp-rec-item active" id="recItem1">
-                        <div class="sp-rec-accent-bar"></div>
-                        <div class="sp-rec-body">
-                          <h4 class="sp-rec-item-title">Ganti Oli Plus MPX2</h4>
-                          <div class="sp-rec-meta-row">
-                            <span class="sp-meta-chip">
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                              </svg>
-                              <span>10 Menit</span>
-                            </span>
-                            <span class="sp-meta-chip">
-                              <span>Rp 54.000</span>
-                            </span>
-                          </div>
-                        </div>
-                        <button type="button" class="sp-btn-pill-outline sp-btn-added" data-id="1">Terpilih</button>
-                      </div>
-
-                      <!-- Item 2 -->
-                      <div class="sp-rec-item active" id="recItem2">
-                        <div class="sp-rec-accent-bar"></div>
-                        <div class="sp-rec-body">
-                          <h4 class="sp-rec-item-title">Paket Lengkap Matic (Tune Up + CVT)</h4>
-                          <div class="sp-rec-meta-row">
-                            <span class="sp-meta-chip">
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                              </svg>
-                              <span>30 Menit</span>
-                            </span>
-                            <span class="sp-meta-chip">
-                              <span>Rp 120.000</span>
-                            </span>
-                          </div>
-                        </div>
-                        <button type="button" class="sp-btn-pill-outline sp-btn-added" data-id="2">Terpilih</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 5 Pane: Summary & Final Review -->
-            <div class="step-pane" id="stepPane5" style="display: none;">
               <div class="content-card summary-card-container">
                 <div class="summary-header">
                   <h2 class="summary-main-title">Summary</h2>
-                  <h3 class="summary-sub-title">Detail Perintah Kerja Bengkel (PKB) Canvasing</h3>
+                  <h3 class="summary-sub-title">Detail Ringkasan Pendaftaran Master Canvasing</h3>
                 </div>
 
-                <!-- Highlight Cards Row -->
-                <div class="summary-info-grid">
-                  <div class="summary-info-row">
-                    <div class="summary-info-col">
-                      <div class="summary-info-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <rect x="3" y="6" width="18" height="12" rx="2"></rect>
-                          <line x1="7" y1="12" x2="17" y2="12"></line>
-                        </svg>
+                <!-- Section 1: Informasi Master Canvasing -->
+                <div class="summary-section-box">
+                  <div class="summary-section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <span>Informasi Master Canvasing</span>
+                  </div>
+
+                  <div class="summary-info-grid">
+                    <div class="summary-info-row">
+                      <div class="summary-info-col">
+                        <div class="summary-info-icon">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                          </svg>
+                        </div>
+                        <div class="summary-info-content">
+                          <span class="summary-info-label">Nama Canvasing</span>
+                          <span class="summary-info-value" id="sumNamaCanvasing">Test lagi NG</span>
+                        </div>
                       </div>
-                      <div class="summary-info-content">
-                        <span class="summary-info-label">Police Number</span>
-                        <span class="summary-info-value" id="sumPlate">AG 3323 UY</span>
+
+                      <div class="summary-info-col">
+                        <div class="summary-info-icon">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                          </svg>
+                        </div>
+                        <div class="summary-info-content">
+                          <span class="summary-info-label">Lokasi Canvasing</span>
+                          <span class="summary-info-value" id="sumLokasiCanvasing">Gedangan Pusat Dunia</span>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="summary-info-col">
-                      <div class="summary-info-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <circle cx="12" cy="17" r="3.5"></circle>
-                          <path d="M9 3h6"></path>
-                          <path d="M12 3v10.5"></path>
-                          <path d="M6 7l6 3 6-3"></path>
-                        </svg>
-                      </div>
-                      <div class="summary-info-content">
-                        <span class="summary-info-label">Vehicle Type</span>
-                        <span class="summary-info-value" id="sumMotor">ALL NEW SCOOPY</span>
-                      </div>
-                    </div>
-                  </div>
+                    <div class="summary-info-divider"></div>
 
-                  <div class="summary-info-divider"></div>
+                    <div class="summary-info-row">
+                      <div class="summary-info-col">
+                        <div class="summary-info-icon">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                        </div>
+                        <div class="summary-info-content">
+                          <span class="summary-info-label">Periode Canvasing</span>
+                          <span class="summary-info-value" id="sumPeriodeCanvasing">26-08-2026 s/d 27-08-2026</span>
+                        </div>
+                      </div>
 
-                  <div class="summary-info-row">
-                    <div class="summary-info-col">
-                      <div class="summary-info-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                          <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                      </div>
-                      <div class="summary-info-content">
-                        <span class="summary-info-label">Customer Name</span>
-                        <span class="summary-info-value" id="sumName">Grego</span>
-                      </div>
-                    </div>
-
-                    <div class="summary-info-col">
-                      <div class="summary-info-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-                        </svg>
-                      </div>
-                      <div class="summary-info-content">
-                        <span class="summary-info-label">Assigned Mechanic</span>
-                        <span class="summary-info-value" id="sumMechanic">Kalvin</span>
+                      <div class="summary-info-col">
+                        <div class="summary-info-icon">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                            <line x1="8" y1="2" x2="8" y2="18"></line>
+                            <line x1="16" y1="6" x2="16" y2="22"></line>
+                          </svg>
+                        </div>
+                        <div class="summary-info-content">
+                          <span class="summary-info-label">Wilayah / Daerah</span>
+                          <span class="summary-info-value" id="sumWilayahCanvasing">GEDANGAN, KAB. SIDOARJO, JAWA TIMUR</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-
-                <!-- Transaction & Schedule Fields Grid -->
-                <div class="wizard-form-grid mt-4">
-                  <div class="form-group">
-                    <label class="form-label" for="wizTransNo">Transaction No <span class="required-star">*</span></label>
-                    <input type="text" id="wizTransNo" class="form-input" readonly value="027-PKB-2025-DMS0000000135">
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label" for="wizStartHour">Start Date / Hour</label>
-                    <input type="text" id="wizStartHour" class="form-input" value="15-05-2025">
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label" for="wizEstHour">Estimated Hour</label>
-                    <input type="text" id="wizEstHour" class="form-input" value="15-05-2025">
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label" for="wizFinishHour">Finish Hour</label>
-                    <input type="text" id="wizFinishHour" class="form-input" value="15-05-2025">
                   </div>
                 </div>
 
-                <!-- Pricing / Service Summary Table -->
-                <div class="summary-services-section mt-4">
-                  <table class="summary-table">
-                    <thead>
-                      <tr>
-                        <th>Deskripsi Servis &amp; Part</th>
-                        <th style="width: 100px; text-align: center;">Durasi</th>
-                        <th style="width: 130px; text-align: right;">Biaya</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <div class="summary-service-title">Ganti Oli Plus MPX2</div>
-                          <div class="summary-service-subtitle">Oli Mesin 0.8L + Jasa Pengerjaan</div>
-                        </td>
-                        <td style="text-align: center;">10 Menit</td>
-                        <td style="text-align: right; font-weight: 600;">Rp 54.000</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="summary-service-title">Paket Lengkap Matic</div>
-                          <div class="summary-service-subtitle">Tune Up, Pembersihan Injektor &amp; Servis CVT</div>
-                        </td>
-                        <td style="text-align: center;">30 Menit</td>
-                        <td style="text-align: right; font-weight: 600;">Rp 120.000</td>
-                      </tr>
-                      <tr class="summary-total-row">
-                        <td colspan="2" style="font-weight: 700;">Total Estimasi Biaya PKB</td>
-                        <td style="text-align: right; font-weight: 800; color: var(--primary); font-size: 15px;">Rp 174.000</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <!-- Section 2: Daftar Part Dibawa -->
+                <div class="summary-section-box mt-4">
+                  <div class="summary-section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                      <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                      <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    <span>Daftar Part Dibawa</span>
+                  </div>
+
+                  <div class="part-table-container mt-2">
+                    <table class="part-canvasing-table">
+                      <thead>
+                        <tr>
+                          <th style="width: 22%; text-align: left;">Kode Part</th>
+                          <th style="width: 40%; text-align: left;">Nama Part</th>
+                          <th style="width: 15%; text-align: center;">Qty</th>
+                          <th style="width: 23%; text-align: right;">Harga</th>
+                        </tr>
+                      </thead>
+                      <tbody id="sumPartsTableBody">
+                        <tr class="empty-part-row">
+                          <td colspan="4" class="text-no-records">Belum ada part yang ditambahkan</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Section 3: Daftar Mekanik Ditugaskan -->
+                <div class="summary-section-box mt-4">
+                  <div class="summary-section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>Mekanik yang Ditugaskan</span>
+                  </div>
+
+                  <div class="summary-mechanics-list mt-2" id="sumMechanicsListContainer">
+                    <span style="color: #64748b; font-size: 13px; font-style: italic;">Belum ada mekanik yang dipilih</span>
+                  </div>
                 </div>
               </div>
             </div>

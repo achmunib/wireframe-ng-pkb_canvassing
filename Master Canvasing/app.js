@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initEqualizerToggle();
   initStepperWizard();
   initTambahPartModal();
+  initTambahMekanikStep();
 });
 
 // Render Table Rows matching the Reference Screenshot
@@ -590,7 +591,7 @@ function showToast(message, type = 'info') {
 // ==========================================================================
 
 let currentWizStep = 1;
-const totalWizSteps = 5;
+const totalWizSteps = 4;
 let editingPkbId = null;
 
 // Master Catalog Part Canvasing
@@ -750,6 +751,117 @@ function initTambahPartModal() {
       renderPartsDibawa();
       closeModal();
       showToast(`Part ${itemToAdd.name} (${qty} ${itemToAdd.satuan}) berhasil ditambahkan`, 'success');
+    });
+  }
+}
+
+// Master Catalog Mekanik & Assignment Status
+const mechanicCatalog = [
+  { name: 'Kalvin', stall: 'Stall 1', isBusy: true, currentPkb: '027-PKB-2025-DMS0000000134' },
+  { name: 'Rizal', stall: 'Stall 2', isBusy: true, currentPkb: '027-PKB-2025-DMS0000000130' },
+  { name: 'Agung', stall: 'Stall 3', isBusy: false, currentPkb: null },
+  { name: 'Robin', stall: 'Stall 4', isBusy: true, currentPkb: '027-PKB-2025-DMS0000000128' },
+  { name: 'Ratna', stall: 'Stall 5', isBusy: false, currentPkb: null },
+  { name: 'Hendri', stall: 'Stall 6', isBusy: false, currentPkb: null }
+];
+
+let selectedMechanicsList = [];
+
+function renderSelectedMechanics() {
+  const tbody = document.getElementById('bodyMekanikCanvasing');
+  if (!tbody) return;
+
+  if (selectedMechanicsList.length === 0) {
+    tbody.innerHTML = `
+      <tr class="empty-part-row" id="rowEmptyMekanik">
+        <td colspan="2" class="text-no-records">No records found</td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = selectedMechanicsList.map((m, index) => `
+    <tr>
+      <td>
+        <div class="mechanic-name-cell">
+          <span style="font-weight: 600; color: #1e293b;">${m.name} (${m.stall})</span>
+          ${m.isBusy ? `
+            <span class="mechanic-busy-warning" title="Sedang mengerjakan PKB lain: ${m.currentPkb}">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <span>Sedang Mengerjakan PKB Lain (${m.currentPkb})</span>
+            </span>
+          ` : ''}
+        </div>
+      </td>
+      <td style="text-align: center;">
+        <button type="button" class="btn-del-part-row" title="Hapus Mekanik" onclick="deleteSelectedMechanic(${index})">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function deleteSelectedMechanic(index) {
+  const removed = selectedMechanicsList.splice(index, 1);
+  renderSelectedMechanics();
+  if (removed[0]) {
+    showToast(`Mekanik ${removed[0].name} dihapus dari daftar`, 'info');
+  }
+}
+
+function initTambahMekanikStep() {
+  const selectEl = document.getElementById('selectMekanikCanvasing');
+  const btnAdd = document.getElementById('btnAddMekanikToList');
+  const btnRefresh = document.getElementById('btnRefreshMekanik');
+
+  if (btnAdd && selectEl) {
+    btnAdd.addEventListener('click', () => {
+      const val = selectEl.value;
+      if (!val) {
+        showToast('Harap pilih mekanik terlebih dahulu', 'info');
+        return;
+      }
+
+      const existing = selectedMechanicsList.find(m => m.name === val);
+      if (existing) {
+        showToast(`Mekanik ${val} sudah ada dalam daftar`, 'info');
+        return;
+      }
+
+      const found = mechanicCatalog.find(m => m.name === val) || {
+        name: val,
+        stall: 'Stall 1',
+        isBusy: false,
+        currentPkb: null
+      };
+
+      selectedMechanicsList.push(found);
+      renderSelectedMechanics();
+      selectEl.value = '';
+
+      if (found.isBusy) {
+        showToast(`⚠️ Peringatan: Mekanik ${found.name} sedang mengerjakan PKB (${found.currentPkb}), namun tetap berhasil ditambahkan ke daftar.`, 'warning');
+      } else {
+        showToast(`Mekanik ${found.name} berhasil ditambahkan ke daftar`, 'success');
+      }
+    });
+  }
+
+  if (btnRefresh) {
+    btnRefresh.addEventListener('click', () => {
+      btnRefresh.classList.add('rotating');
+      setTimeout(() => {
+        btnRefresh.classList.remove('rotating');
+        showToast('Daftar status dan ketersediaan mekanik berhasil diperbarui', 'info');
+      }, 500);
     });
   }
 }
@@ -1032,6 +1144,10 @@ function showCreateWizard(isEdit = false, editId = null) {
   partsDibawa = [];
   renderPartsDibawa();
 
+  // Reset Selected Mechanics Table
+  selectedMechanicsList = [];
+  renderSelectedMechanics();
+
   // Reset to Step 1
   goToStep(1);
 
@@ -1113,7 +1229,7 @@ function goToStep(step) {
   }
 
   if (nextText) {
-    nextText.textContent = step === totalWizSteps ? (editingPkbId ? 'Perbarui PKB' : 'Simpan PKB') : 'Next';
+    nextText.textContent = step === totalWizSteps ? (editingPkbId ? 'Perbarui Master Canvasing' : 'Simpan Master Canvasing') : 'Next';
   }
 
   if (nextIcon) {
@@ -1124,8 +1240,8 @@ function goToStep(step) {
     }
   }
 
-  // If on Step 5, sync the summary fields
-  if (step === 5) {
+  // If on Step 4 (Summary), sync the summary fields
+  if (step === totalWizSteps) {
     syncSummaryPane();
   }
 
@@ -1134,69 +1250,100 @@ function goToStep(step) {
 }
 
 function syncSummaryPane() {
-  const plate = document.getElementById('wizPoliceNo')?.value || 'AG 3323 UY';
-  const motor = document.getElementById('wizMotor')?.value || 'ALL NEW SCOOPY';
-  const name = document.getElementById('wizName')?.value || 'Grego';
-  const mechanic = document.getElementById('wizMechanic')?.value || 'Kalvin';
+  const namaCanvasing = document.getElementById('wizNamaCanvasing')?.value || 'Test lagi NG';
+  const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value || 'Gedangan Pusat Dunia';
+  const dari = document.getElementById('wizDari')?.value || '26-08-2026';
+  const sampai = document.getElementById('wizSampai')?.value || '27-08-2026';
+  const provinsi = document.getElementById('wizProvinsi')?.value || 'JAWA TIMUR';
+  const kabupaten = document.getElementById('wizKabupaten')?.value || 'KAB. SIDOARJO';
+  const kecamatan = document.getElementById('wizKecamatan')?.value || 'GEDANGAN';
+  const kelurahan = document.getElementById('wizKelurahan')?.value || 'GEDANGAN';
 
-  if (document.getElementById('sumPlate')) document.getElementById('sumPlate').textContent = plate || '-';
-  if (document.getElementById('sumMotor')) document.getElementById('sumMotor').textContent = motor || '-';
-  if (document.getElementById('sumName')) document.getElementById('sumName').textContent = name || '-';
-  if (document.getElementById('sumMechanic')) document.getElementById('sumMechanic').textContent = mechanic || '-';
+  if (document.getElementById('sumNamaCanvasing')) document.getElementById('sumNamaCanvasing').textContent = namaCanvasing || '-';
+  if (document.getElementById('sumLokasiCanvasing')) document.getElementById('sumLokasiCanvasing').textContent = lokasiCanvasing || '-';
+  if (document.getElementById('sumPeriodeCanvasing')) document.getElementById('sumPeriodeCanvasing').textContent = `${dari} s/d ${sampai}`;
+  if (document.getElementById('sumWilayahCanvasing')) {
+    const regionParts = [kelurahan, kecamatan, kabupaten, provinsi].filter(Boolean);
+    document.getElementById('sumWilayahCanvasing').textContent = regionParts.join(', ') || '-';
+  }
+
+  // Render Parts Dibawa in Summary
+  const sumPartsBody = document.getElementById('sumPartsTableBody');
+  if (sumPartsBody) {
+    if (partsDibawa.length === 0) {
+      sumPartsBody.innerHTML = `
+        <tr class="empty-part-row">
+          <td colspan="4" class="text-no-records">Belum ada part yang ditambahkan</td>
+        </tr>
+      `;
+    } else {
+      sumPartsBody.innerHTML = partsDibawa.map(p => `
+        <tr>
+          <td style="font-weight: 600; color: #1e293b;">${p.code}</td>
+          <td>${p.name}</td>
+          <td style="text-align: center; font-weight: 600;">${p.qty} ${p.satuan}</td>
+          <td style="text-align: right; font-weight: 600; color: var(--primary);">${p.harga}</td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // Render Mechanics in Summary
+  const sumMechContainer = document.getElementById('sumMechanicsListContainer');
+  if (sumMechContainer) {
+    if (selectedMechanicsList.length === 0) {
+      sumMechContainer.innerHTML = `<span style="color: #64748b; font-size: 13px; font-style: italic;">Belum ada mekanik yang dipilih</span>`;
+    } else {
+      sumMechContainer.innerHTML = selectedMechanicsList.map(m => `
+        <div class="summary-mech-badge ${m.isBusy ? 'busy' : ''}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span><strong>${m.name}</strong> (${m.stall})</span>
+          ${m.isBusy ? `<span style="color: #b45309; font-size: 11.5px; font-weight: 700;">(⚠️ Sedang PKB Lain: ${m.currentPkb})</span>` : ''}
+        </div>
+      `).join('');
+    }
+  }
 }
 
 function submitWizardForm() {
-  const transNo = document.getElementById('wizTransNo')?.value || '';
-  const status = document.getElementById('wizStatus')?.value || 'Waiting Mechanic';
-  const name = document.getElementById('wizName')?.value.trim() || 'Grego';
-  const policeNo = document.getElementById('wizPoliceNo')?.value?.trim() || 'AG 3323 UY';
-  const motor = document.getElementById('wizMotor')?.value?.trim() || 'ALL NEW SCOOPY';
-  const mechanic = document.getElementById('wizMechanic')?.value || 'Kalvin';
-  const engineNo = document.getElementById('wizEngineNo')?.value?.trim() || 'JB91E1260677';
-  const frameNo = document.getElementById('wizFrameNo')?.value?.trim() || 'JB91E12606778J';
-  const startHour = document.getElementById('wizStartHour')?.value || '15-05-2025';
-  const estimatedHour = document.getElementById('wizEstHour')?.value || '15-05-2025';
-  const finishHour = document.getElementById('wizFinishHour')?.value || '15-05-2025';
+  const namaCanvasing = document.getElementById('wizNamaCanvasing')?.value.trim() || 'Test lagi NG';
+  const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value.trim() || 'Gedangan Pusat Dunia';
+  const dari = document.getElementById('wizDari')?.value || '26-08-2026';
+  const sampai = document.getElementById('wizSampai')?.value || '27-08-2026';
 
-  if (!name) {
-    showToast('Harap lengkapi data formulir canvasing', 'info');
-    return;
-  }
+  const nextNum = 135 + pkbData.length - 5;
+  const newTransNo = `027-PKB-2025-DMS0000000${nextNum}`;
+  const mechNames = selectedMechanicsList.map(m => m.name).join(', ') || 'Kalvin';
 
   if (editingPkbId) {
-    // Edit existing record
     const existing = pkbData.find(d => d.id === editingPkbId);
     if (existing) {
-      existing.status = status;
-      existing.name = name;
-      existing.policeNo = policeNo;
-      existing.motor = motor;
-      existing.mechanic = mechanic;
-      existing.engineNo = engineNo;
-      existing.frameNo = frameNo;
-      existing.startHour = startHour;
-      existing.estimatedHour = estimatedHour;
-      existing.finishHour = finishHour;
+      existing.name = namaCanvasing;
+      existing.mechanic = mechNames;
+      existing.startHour = dari;
+      existing.finishHour = sampai;
     }
-    showToast(`Data PKB ${transNo} berhasil diperbarui`, 'success');
+    showToast(`Master Canvasing ${existing.transNo} berhasil diperbarui`, 'success');
   } else {
-    // Create new record
     const newItem = {
       id: Date.now(),
-      status,
-      transNo,
-      name,
-      policeNo,
-      motor,
-      mechanic,
-      engineNo,
-      frameNo,
-      startHour,
-      estimatedHour,
-      finishHour
+      status: 'Waiting Mechanic',
+      transNo: newTransNo,
+      name: namaCanvasing,
+      policeNo: 'AG 3323 UY',
+      motor: 'ALL NEW SCOOPY',
+      mechanic: mechNames,
+      engineNo: 'JB91E1260677',
+      frameNo: 'JB91E12606778J',
+      startHour: dari,
+      estimatedHour: sampai,
+      finishHour: sampai
     };
     pkbData.unshift(newItem);
-    showToast(`PKB Canvasing baru ${transNo} berhasil disimpan!`, 'success');
+    showToast(`Master Canvasing baru ${newTransNo} berhasil disimpan!`, 'success');
   }
 
   // Refresh Table & return to table view
