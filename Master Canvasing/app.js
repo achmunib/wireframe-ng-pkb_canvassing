@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initModals();
   initDraftPill();
   initEqualizerToggle();
+  initStepperWizard();
 });
 
 // Render Table Rows matching the Reference Screenshot
@@ -450,37 +451,14 @@ function viewPkbDetail(id) {
   modal.classList.add('show');
 }
 
-// Edit PKB Modal
+// Edit PKB Action - Opens Stepper Wizard in Edit Mode
 function editPkbItem(id) {
-  const item = pkbData.find((d) => d.id === id);
-  if (!item) return;
-
-  const modal = document.getElementById('modalBackdrop');
-  const modalTitle = document.getElementById('modalTitle');
-  if (!modal) return;
-
-  if (modalTitle) modalTitle.textContent = 'Edit Data PKB Canvasing';
-
-  document.getElementById('formTransNo').value = item.transNo;
-  document.getElementById('formStatus').value = item.status;
-  document.getElementById('formName').value = item.name;
-  document.getElementById('formPoliceNo').value = item.policeNo;
-  document.getElementById('formMotor').value = item.motor || '';
-  document.getElementById('formMechanic').value = item.mechanic;
-  document.getElementById('formEngineNo').value = item.engineNo || '';
-  document.getElementById('formFrameNo').value = item.frameNo || '';
-  document.getElementById('formStartHour').value = item.startHour;
-  document.getElementById('formEstHour').value = item.estimatedHour;
-  document.getElementById('formFinishHour').value = item.finishHour;
-
-  modal.dataset.editId = String(id);
-  modal.classList.add('show');
+  showCreateWizard(true, id);
 }
 
-// Create / Edit Modal Logic
+// Create / Edit Modal Logic (For Detail Modal and Fallback)
 function initModals() {
   const modal = document.getElementById('modalBackdrop');
-  const btnCreate = document.getElementById('btnCreatePkb');
   const btnClose = document.getElementById('btnCloseModal');
   const btnCancel = document.getElementById('btnCancelModal');
   const form = document.getElementById('pkbForm');
@@ -489,21 +467,7 @@ function initModals() {
   const btnCloseDetail = document.getElementById('btnCloseDetailModal');
   const btnCloseDetail2 = document.getElementById('btnCloseDetailBtn');
 
-  // Open Create Modal
-  if (btnCreate && modal) {
-    btnCreate.addEventListener('click', () => {
-      delete modal.dataset.editId;
-      document.getElementById('modalTitle').textContent = 'Create New PKB Canvasing';
-      if (form) form.reset();
-      // Generate Next Transaction Number
-      const nextNum = 135 + pkbData.length - 5;
-      document.getElementById('formTransNo').value = `027-PKB-2025-DMS0000000${nextNum}`;
-      document.getElementById('formStartHour').value = '15-05-2025';
-      document.getElementById('formEstHour').value = '15-05-2025';
-      document.getElementById('formFinishHour').value = '15-05-2025';
-      modal.classList.add('show');
-    });
-  }
+
 
   // Close Modals
   const closeModal = () => modal.classList.remove('show');
@@ -618,4 +582,453 @@ function showToast(message, type = 'info') {
     toast.style.transition = 'all 0.2s ease';
     setTimeout(() => toast.remove(), 200);
   }, 3000);
+}
+
+// ==========================================================================
+// Stepper Wizard Controller (Matching List Canvasing - Booking Page)
+// ==========================================================================
+
+let currentWizStep = 1;
+const totalWizSteps = 5;
+let editingPkbId = null;
+
+const sampleVehicles = {
+  'JB91E1260677': {
+    plate: 'AG 3323 UY',
+    motor: 'ALL NEW SCOOPY',
+    engine: 'JB91E1260677',
+    frame: 'JB91E12606778J',
+    color: 'PRESTIGE BLACK',
+    year: '2024'
+  },
+  'JB91E1260676': {
+    plate: 'AE 3392 OI',
+    motor: 'ALL NEW VARIO',
+    engine: 'JB91E1260676',
+    frame: 'JB91E12606767S',
+    color: 'MATTE RED',
+    year: '2023'
+  },
+  'JB91E1260675': {
+    plate: 'T 2727 HAH',
+    motor: 'HONDA BEAT DELUXE',
+    engine: 'JB91E1260675',
+    frame: 'JB91E1260675LK',
+    color: 'SILVER METALLIC',
+    year: '2024'
+  },
+  'JB91E1260674': {
+    plate: 'AG 6524 RFA',
+    motor: 'ALL NEW VARIO',
+    engine: 'JB91E1260674',
+    frame: 'JB91E1260674JU',
+    color: 'PEARL WHITE',
+    year: '2024'
+  }
+};
+
+function initStepperWizard() {
+  const btnCreate = document.getElementById('btnCreatePkb');
+  const btnBackToTable = document.getElementById('btnBackToTable');
+  const btnWizPrev = document.getElementById('btnWizPrev');
+  const btnWizNext = document.getElementById('btnWizNext');
+  const btnScan = document.getElementById('btnWizScanVehicle');
+  const btnClearScan = document.getElementById('btnWizClearScan');
+  const btnSearchCarrier = document.getElementById('btnWizSearchCarrier');
+  const scanInput = document.getElementById('wizScanVehicleInput');
+
+  // Step node clicks
+  for (let i = 1; i <= totalWizSteps; i++) {
+    const node = document.getElementById(`stepNode${i}`);
+    if (node) {
+      node.addEventListener('click', () => {
+        goToStep(i);
+      });
+    }
+  }
+
+  // Open Create Wizard
+  if (btnCreate) {
+    btnCreate.addEventListener('click', () => {
+      showCreateWizard(false);
+    });
+  }
+
+  // Back to table button in top banner
+  if (btnBackToTable) {
+    btnBackToTable.addEventListener('click', () => {
+      showTableView();
+    });
+  }
+
+  // Prev Button in bottom actions
+  if (btnWizPrev) {
+    btnWizPrev.addEventListener('click', () => {
+      if (currentWizStep > 1) {
+        goToStep(currentWizStep - 1);
+      } else {
+        showTableView();
+      }
+    });
+  }
+
+  // Next / Submit Button
+  if (btnWizNext) {
+    btnWizNext.addEventListener('click', () => {
+      if (currentWizStep < totalWizSteps) {
+        // Validate required fields on Step 1 & 2
+        if (currentWizStep === 1) {
+          const police = document.getElementById('wizPoliceNo').value.trim();
+          if (!police) {
+            showToast('Harap isi nomor polisi kendaraan', 'info');
+            document.getElementById('wizPoliceNo').focus();
+            return;
+          }
+        } else if (currentWizStep === 2) {
+          const name = document.getElementById('wizName').value.trim();
+          if (!name) {
+            showToast('Harap isi nama pelanggan', 'info');
+            document.getElementById('wizName').focus();
+            return;
+          }
+        }
+        goToStep(currentWizStep + 1);
+      } else {
+        submitWizardForm();
+      }
+    });
+  }
+
+  // Scan Vehicle Action
+  if (btnScan) {
+    btnScan.addEventListener('click', () => {
+      const q = (scanInput ? scanInput.value.trim().toUpperCase() : '');
+      const found = sampleVehicles[q] || {
+        plate: 'AG ' + Math.floor(1000 + Math.random() * 9000) + ' PKB',
+        motor: 'HONDA NEW MODEL',
+        engine: q || 'JB91E' + Math.floor(1000000 + Math.random() * 9000000),
+        frame: 'MH1' + (q || 'JB91E') + '99',
+        color: 'METALLIC BLACK',
+        year: '2024'
+      };
+
+      document.getElementById('wizPoliceNo').value = found.plate;
+      document.getElementById('wizMotor').value = found.motor;
+      document.getElementById('wizEngineNo').value = found.engine;
+      document.getElementById('wizFrameNo').value = found.frame;
+
+      document.getElementById('dispWizPlate').textContent = found.plate;
+      document.getElementById('dispWizMotorTitle').textContent = found.motor;
+      document.getElementById('dispWizEngine').textContent = found.engine;
+      document.getElementById('dispWizFrame').textContent = found.frame;
+      document.getElementById('dispWizColor').textContent = found.color;
+      document.getElementById('dispWizYear').textContent = found.year;
+
+      showToast(`Kendaraan ${found.plate} (${found.motor}) berhasil discan`, 'success');
+    });
+  }
+
+  // Clear Scan Action
+  if (btnClearScan) {
+    btnClearScan.addEventListener('click', () => {
+      if (scanInput) scanInput.value = '';
+      document.getElementById('wizPoliceNo').value = '';
+      document.getElementById('wizMotor').value = '';
+      document.getElementById('wizEngineNo').value = '';
+      document.getElementById('wizFrameNo').value = '';
+      document.getElementById('dispWizPlate').textContent = '-';
+      document.getElementById('dispWizMotorTitle').textContent = '-';
+      document.getElementById('dispWizEngine').textContent = '-';
+      document.getElementById('dispWizFrame').textContent = '-';
+      showToast('Input kendaraan dibersihkan', 'info');
+    });
+  }
+
+  // Search Carrier Action
+  if (btnSearchCarrier) {
+    btnSearchCarrier.addEventListener('click', () => {
+      const phoneInput = document.getElementById('wizCarrierSearchPhone');
+      const phone = phoneInput ? phoneInput.value.trim() : '';
+      if (phone) {
+        document.getElementById('wizPhone').value = phone;
+        showToast(`Data pelanggan untuk ${phone} ditemukan`, 'success');
+      }
+    });
+  }
+
+  // Service toggle buttons in Step 4
+  const recButtons = document.querySelectorAll('.sp-btn-pill-outline');
+  recButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.sp-rec-item');
+      if (item) {
+        item.classList.toggle('active');
+        if (item.classList.contains('active')) {
+          btn.classList.add('sp-btn-added');
+          btn.textContent = 'Terpilih';
+        } else {
+          btn.classList.remove('sp-btn-added');
+          btn.textContent = '+ Add';
+        }
+      }
+    });
+  });
+
+  // Live input sync to badge in step 1
+  const policeInput = document.getElementById('wizPoliceNo');
+  const motorInput = document.getElementById('wizMotor');
+  if (policeInput) {
+    policeInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      document.getElementById('dispWizPlate').textContent = val || '-';
+    });
+  }
+  if (motorInput) {
+    motorInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      document.getElementById('dispWizMotorTitle').textContent = val || '-';
+    });
+  }
+}
+
+function showCreateWizard(isEdit = false, editId = null) {
+  editingPkbId = isEdit ? editId : null;
+  const tableView = document.getElementById('masterTableView');
+  const wizardView = document.getElementById('createMasterView');
+  const bannerDetail = document.getElementById('wizardBannerDetail');
+  const transNoPill = document.getElementById('dispWizardTransNo');
+
+  if (tableView) tableView.style.display = 'none';
+  if (wizardView) {
+    wizardView.style.display = 'flex';
+    wizardView.style.animation = 'fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+  }
+
+  if (isEdit && editId) {
+    const item = pkbData.find(d => d.id === editId);
+    if (item) {
+      if (transNoPill) transNoPill.textContent = item.transNo;
+      if (bannerDetail) {
+        bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${item.transNo}</span> • Edit Data PKB Master Canvasing`;
+      }
+      document.getElementById('wizTransNo').value = item.transNo;
+      document.getElementById('wizStatus').value = item.status;
+      document.getElementById('wizName').value = item.name;
+      document.getElementById('wizPoliceNo').value = item.policeNo;
+      document.getElementById('wizMotor').value = item.motor || '';
+      document.getElementById('wizMechanic').value = item.mechanic;
+      document.getElementById('wizEngineNo').value = item.engineNo || '';
+      document.getElementById('wizFrameNo').value = item.frameNo || '';
+      document.getElementById('wizStartHour').value = item.startHour;
+      document.getElementById('wizEstHour').value = item.estimatedHour;
+      document.getElementById('wizFinishHour').value = item.finishHour;
+
+      document.getElementById('dispWizPlate').textContent = item.policeNo;
+      document.getElementById('dispWizMotorTitle').textContent = item.motor || 'HONDA MOTOR';
+      document.getElementById('dispWizEngine').textContent = item.engineNo || '-';
+      document.getElementById('dispWizFrame').textContent = item.frameNo || '-';
+      if (document.getElementById('wizScanVehicleInput')) {
+        document.getElementById('wizScanVehicleInput').value = item.engineNo || item.policeNo;
+      }
+    }
+  } else {
+    // New Record
+    const nextNum = 135 + pkbData.length - 5;
+    const newTransNo = `027-PKB-2025-DMS0000000${nextNum}`;
+    if (transNoPill) transNoPill.textContent = newTransNo;
+    if (bannerDetail) {
+      bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${newTransNo}</span> • Pendaftaran PKB Master Canvasing Baru`;
+    }
+
+    document.getElementById('wizTransNo').value = newTransNo;
+    document.getElementById('wizStatus').value = 'Waiting Mechanic';
+    document.getElementById('wizName').value = 'Grego';
+    document.getElementById('wizPoliceNo').value = 'AG 3323 UY';
+    document.getElementById('wizMotor').value = 'ALL NEW SCOOPY';
+    document.getElementById('wizMechanic').value = 'Kalvin';
+    document.getElementById('wizEngineNo').value = 'JB91E1260677';
+    document.getElementById('wizFrameNo').value = 'JB91E12606778J';
+    document.getElementById('wizStartHour').value = '15-05-2025';
+    document.getElementById('wizEstHour').value = '15-05-2025';
+    document.getElementById('wizFinishHour').value = '15-05-2025';
+
+    document.getElementById('dispWizPlate').textContent = 'AG 3323 UY';
+    document.getElementById('dispWizMotorTitle').textContent = 'ALL NEW SCOOPY';
+    document.getElementById('dispWizEngine').textContent = 'JB91E1260677';
+    document.getElementById('dispWizFrame').textContent = 'JB91E12606778J';
+    if (document.getElementById('wizScanVehicleInput')) {
+      document.getElementById('wizScanVehicleInput').value = 'JB91E1260677';
+    }
+  }
+
+  // Reset to Step 1
+  goToStep(1);
+
+  // Notify parent layout shell of subcrumb
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({
+      type: 'UPDATE_CRUMB',
+      subCrumb: isEdit ? 'Edit PKB' : 'Create New'
+    }, '*');
+  }
+}
+
+function showTableView() {
+  const tableView = document.getElementById('masterTableView');
+  const wizardView = document.getElementById('createMasterView');
+
+  if (wizardView) wizardView.style.display = 'none';
+  if (tableView) {
+    tableView.style.display = 'block';
+    tableView.style.animation = 'fadeIn 0.25s ease';
+  }
+
+  // Reset breadcrumb in parent shell
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({
+      type: 'UPDATE_CRUMB',
+      subCrumb: null
+    }, '*');
+  }
+}
+
+function goToStep(step) {
+  currentWizStep = step;
+
+  // Update Stepper Nodes and Lines
+  for (let i = 1; i <= totalWizSteps; i++) {
+    const node = document.getElementById(`stepNode${i}`);
+    if (node) {
+      node.classList.remove('active', 'completed');
+      if (i === step) {
+        node.classList.add('active');
+      } else if (i < step) {
+        node.classList.add('completed');
+      }
+    }
+
+    if (i < totalWizSteps) {
+      const line = document.getElementById(`stepLine${i}`);
+      if (line) {
+        if (i < step) {
+          line.classList.add('active');
+        } else {
+          line.classList.remove('active');
+        }
+      }
+    }
+  }
+
+  // Update Panes Visibility
+  for (let i = 1; i <= totalWizSteps; i++) {
+    const pane = document.getElementById(`stepPane${i}`);
+    if (pane) {
+      if (i === step) {
+        pane.style.display = 'block';
+        pane.style.animation = 'fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+      } else {
+        pane.style.display = 'none';
+      }
+    }
+  }
+
+  // Update Bottom Action Button Texts & Icons
+  const prevText = document.getElementById('btnWizPrevText');
+  const nextText = document.getElementById('btnWizNextText');
+  const nextIcon = document.getElementById('btnWizNextIcon');
+
+  if (prevText) {
+    prevText.textContent = step === 1 ? 'Kembali ke Tabel' : 'Kembali';
+  }
+
+  if (nextText) {
+    nextText.textContent = step === totalWizSteps ? (editingPkbId ? 'Perbarui PKB' : 'Simpan PKB') : 'Next';
+  }
+
+  if (nextIcon) {
+    if (step === totalWizSteps) {
+      nextIcon.innerHTML = `<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline>`;
+    } else {
+      nextIcon.innerHTML = `<polyline points="9 18 15 12 9 6"></polyline>`;
+    }
+  }
+
+  // If on Step 5, sync the summary fields
+  if (step === 5) {
+    syncSummaryPane();
+  }
+
+  // Scroll to top of content
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function syncSummaryPane() {
+  const plate = document.getElementById('wizPoliceNo').value;
+  const motor = document.getElementById('wizMotor').value;
+  const name = document.getElementById('wizName').value;
+  const mechanic = document.getElementById('wizMechanic').value;
+
+  if (document.getElementById('sumPlate')) document.getElementById('sumPlate').textContent = plate || '-';
+  if (document.getElementById('sumMotor')) document.getElementById('sumMotor').textContent = motor || '-';
+  if (document.getElementById('sumName')) document.getElementById('sumName').textContent = name || '-';
+  if (document.getElementById('sumMechanic')) document.getElementById('sumMechanic').textContent = mechanic || '-';
+}
+
+function submitWizardForm() {
+  const transNo = document.getElementById('wizTransNo').value;
+  const status = document.getElementById('wizStatus').value;
+  const name = document.getElementById('wizName').value.trim();
+  const policeNo = document.getElementById('wizPoliceNo').value.trim();
+  const motor = document.getElementById('wizMotor').value.trim();
+  const mechanic = document.getElementById('wizMechanic').value;
+  const engineNo = document.getElementById('wizEngineNo').value.trim();
+  const frameNo = document.getElementById('wizFrameNo').value.trim();
+  const startHour = document.getElementById('wizStartHour').value;
+  const estimatedHour = document.getElementById('wizEstHour').value;
+  const finishHour = document.getElementById('wizFinishHour').value;
+
+  if (!policeNo || !name) {
+    showToast('Harap lengkapi nomor polisi dan nama pelanggan', 'info');
+    return;
+  }
+
+  if (editingPkbId) {
+    // Edit existing record
+    const existing = pkbData.find(d => d.id === editingPkbId);
+    if (existing) {
+      existing.status = status;
+      existing.name = name;
+      existing.policeNo = policeNo;
+      existing.motor = motor;
+      existing.mechanic = mechanic;
+      existing.engineNo = engineNo;
+      existing.frameNo = frameNo;
+      existing.startHour = startHour;
+      existing.estimatedHour = estimatedHour;
+      existing.finishHour = finishHour;
+    }
+    showToast(`Data PKB ${transNo} berhasil diperbarui`, 'success');
+  } else {
+    // Create new record
+    const newItem = {
+      id: Date.now(),
+      status,
+      transNo,
+      name,
+      policeNo,
+      motor,
+      mechanic,
+      engineNo,
+      frameNo,
+      startHour,
+      estimatedHour,
+      finishHour
+    };
+    pkbData.unshift(newItem);
+    showToast(`PKB Canvasing baru ${transNo} berhasil disimpan!`, 'success');
+  }
+
+  // Refresh Table & return to table view
+  applyAllFilters();
+  showTableView();
 }

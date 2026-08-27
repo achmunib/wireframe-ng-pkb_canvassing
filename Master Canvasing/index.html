@@ -24,6 +24,13 @@
       <!-- Standalone Header (hidden inside iframe portal) -->
       <header class="top-header">
         <div class="header-left">
+          <button class="menu-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+            </svg>
+          </button>
           <div class="breadcrumbs">
             <span class="crumb-parent">Reception</span>
             <span class="crumb-separator">/</span>
@@ -49,7 +56,9 @@
 
       <!-- Page Content matching Uploaded Screenshot -->
       <main class="page-content">
-        <!-- Top Toolbar Header -->
+        <!-- View 1: Master Canvasing Table View -->
+        <div class="master-table-view" id="masterTableView">
+          <!-- Top Toolbar Header -->
         <div class="pkb-toolbar-row">
           <!-- Left: PKB List Title & + Create Button -->
           <div class="pkb-title-group">
@@ -364,6 +373,617 @@
           <span>Draft PKB</span>
           <span class="draft-badge-count">3</span>
         </div>
+        </div>
+
+        <!-- View 2: Create New Master Canvassing Stepper Wizard (Matches List Canvasing - Booking Page) -->
+        <div class="create-master-wizard-view" id="createMasterView" style="display: none;">
+          <!-- Top Method / Context Banner -->
+          <div class="selected-method-banner" id="selectedMethodBanner">
+            <div class="method-banner-left">
+              <span class="method-chip booking" id="methodChip">
+                <span class="method-chip-dot"></span>
+                <span id="methodChipText">Metode: Booking Canvasing</span>
+              </span>
+              <span class="method-banner-detail" id="methodBannerDetail">
+                <span class="trans-id-pill" id="dispWizardTransNo">027-PKB-2025-DMS0000000135</span> • Pendaftaran PKB Master Canvasing Baru
+              </span>
+            </div>
+            <button type="button" class="btn-switch-method" id="btnBackToTable" title="Kembali ke Daftar PKB">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>Kembali ke Tabel</span>
+            </button>
+          </div>
+
+          <!-- Stepper Wizard Component -->
+          <section class="stepper-section">
+            <div class="stepper-container">
+              <!-- Step 1 (Active) -->
+              <div class="step-node active" data-step="1" id="stepNode1">
+                <div class="step-circle">
+                  <span class="step-dot"></span>
+                </div>
+                <div class="step-label-group">
+                  <span class="step-title">Vehicle</span>
+                  <span class="step-desc">Vehicle information and details</span>
+                </div>
+              </div>
+
+              <div class="step-line" id="stepLine1"></div>
+
+              <!-- Step 2 -->
+              <div class="step-node" data-step="2" id="stepNode2">
+                <div class="step-circle">
+                  <span class="step-dot"></span>
+                </div>
+                <div class="step-label-group">
+                  <span class="step-title">Carrier Data</span>
+                  <span class="step-desc">Data of the person bringing vehicle</span>
+                </div>
+              </div>
+
+              <div class="step-line" id="stepLine2"></div>
+
+              <!-- Step 3 -->
+              <div class="step-node" data-step="3" id="stepNode3">
+                <div class="step-circle">
+                  <span class="step-dot"></span>
+                </div>
+                <div class="step-label-group">
+                  <span class="step-title">Cek Aja Dulu</span>
+                  <span class="step-desc">Pemeriksaan awal &amp; kondisi kendaraan</span>
+                </div>
+              </div>
+
+              <div class="step-line" id="stepLine3"></div>
+
+              <!-- Step 4 -->
+              <div class="step-node" data-step="4" id="stepNode4">
+                <div class="step-circle">
+                  <span class="step-dot"></span>
+                </div>
+                <div class="step-label-group">
+                  <span class="step-title">Service &amp; Parts</span>
+                  <span class="step-desc">Select services, status &amp; mechanic</span>
+                </div>
+              </div>
+
+              <div class="step-line" id="stepLine4"></div>
+
+              <!-- Step 5 -->
+              <div class="step-node" data-step="5" id="stepNode5">
+                <div class="step-circle">
+                  <span class="step-dot"></span>
+                </div>
+                <div class="step-label-group">
+                  <span class="step-title">Summary</span>
+                  <span class="step-desc">Review transaction summary before saving</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Form Cards Container -->
+          <div class="form-container">
+            <!-- Step 1 Pane: Vehicle Information -->
+            <div class="step-pane active" id="stepPane1">
+              <div class="content-card">
+                <div class="card-header">
+                  <div class="card-icon-title">
+                    <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="18.5" cy="17.5" r="3.5" />
+                      <circle cx="5.5" cy="17.5" r="3.5" />
+                      <circle cx="15" cy="5" r="1" />
+                      <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
+                    </svg>
+                    <h2 class="card-title">Vehicle Information</h2>
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  <!-- Scan Vehicle Input Row -->
+                  <div class="scan-section-wrapper">
+                    <div class="scan-label-group">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                        <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                        <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                        <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                        <line x1="7" y1="8" x2="7" y2="16" />
+                        <line x1="10" y1="8" x2="10" y2="16" />
+                        <line x1="14" y1="8" x2="14" y2="16" />
+                        <line x1="17" y1="8" x2="17" y2="16" />
+                      </svg>
+                      <span class="scan-label-text">Scan Vehicle</span>
+                    </div>
+
+                    <div class="search-input-wrapper">
+                      <input type="text" id="wizScanVehicleInput" class="form-input scan-input" value="JB91E1260677"
+                        placeholder="Enter machine or frame number">
+                      <button class="btn-scan-outline" id="btnWizScanVehicle" type="button">Scan Vehicle</button>
+                      <button class="btn-trash-outline" id="btnWizClearScan" type="button" title="Clear / Delete input">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                          <line x1="10" y1="11" x2="10" y2="17"></line>
+                          <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Collapsible Vehicle Detail Box -->
+                  <div class="vehicle-info-box" id="wizVehicleInfoBox">
+                    <div class="vehicle-box-header">
+                      <span class="vehicle-plate-title" id="dispWizPlate">AG 3323 UY</span>
+                      <span class="vehicle-plate-sub" id="dispWizMotorTitle">ALL NEW SCOOPY</span>
+                    </div>
+
+                    <div class="vehicle-box-content">
+                      <div class="vehicle-info-grid">
+                        <div class="info-field-group">
+                          <div class="info-field">
+                            <div class="field-label">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3" />
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                              </svg>
+                              <span>Machine Number</span>
+                            </div>
+                            <div class="field-value" id="dispWizEngine">JB91E1260677</div>
+                          </div>
+                          <div class="info-field">
+                            <div class="field-label">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                              </svg>
+                              <span>Color</span>
+                            </div>
+                            <div class="field-value" id="dispWizColor">PRESTIGE BLACK</div>
+                          </div>
+                        </div>
+
+                        <div class="info-field-group">
+                          <div class="info-field">
+                            <div class="field-label">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="16" rx="2" />
+                                <line x1="7" y1="8" x2="17" y2="8" />
+                                <line x1="7" y1="12" x2="17" y2="12" />
+                                <line x1="7" y1="16" x2="12" y2="16" />
+                              </svg>
+                              <span>Frame Number</span>
+                            </div>
+                            <div class="field-value" id="dispWizFrame">JB91E12606778J</div>
+                          </div>
+                          <div class="info-field">
+                            <div class="field-label">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                              </svg>
+                              <span>Year of Manufacture</span>
+                            </div>
+                            <div class="field-value" id="dispWizYear">2024</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Editable Vehicle Fields Grid -->
+                  <div class="wizard-form-grid mt-4">
+                    <div class="form-group">
+                      <label class="form-label" for="wizPoliceNo">Police Number <span class="required-star">*</span></label>
+                      <input type="text" id="wizPoliceNo" class="form-input" placeholder="Contoh: AG 3323 UY" value="AG 3323 UY" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="wizMotor">Motor Type <span class="required-star">*</span></label>
+                      <input type="text" id="wizMotor" class="form-input" placeholder="Contoh: ALL NEW SCOOPY" value="ALL NEW SCOOPY" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="wizEngineNo">Engine Number</label>
+                      <input type="text" id="wizEngineNo" class="form-input" placeholder="Contoh: JB91E1260677" value="JB91E1260677">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="wizFrameNo">Frame Number</label>
+                      <input type="text" id="wizFrameNo" class="form-input" placeholder="Contoh: JB91E12606778J" value="JB91E12606778J">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 Pane: Carrier / Customer Data -->
+            <div class="step-pane" id="stepPane2" style="display: none;">
+              <div class="content-card">
+                <div class="card-header">
+                  <div class="card-icon-title">
+                    <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <h2 class="card-title">Carrier &amp; Customer Information</h2>
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  <!-- Search Phone Number Input Bar -->
+                  <div class="carrier-search-section">
+                    <div class="form-group">
+                      <label class="form-label" for="wizCarrierSearchPhone">Cari Nomor HP Pelanggan</label>
+                      <div class="carrier-search-bar-wrapper">
+                        <div class="carrier-search-input-pill-container">
+                          <input type="text" id="wizCarrierSearchPhone" class="carrier-search-input" value="085732255998" placeholder="Enter phone number">
+                          <button class="btn-carrier-search" id="btnWizSearchCarrier" type="button">Cari</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="wizard-form-grid mt-3">
+                    <div class="form-group">
+                      <label class="form-label" for="wizName">Customer Name <span class="required-star">*</span></label>
+                      <input type="text" id="wizName" class="form-input" placeholder="Contoh: Grego" value="Grego" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="wizPhone">Phone Number <span class="required-star">*</span></label>
+                      <input type="text" id="wizPhone" class="form-input" placeholder="Contoh: 085732255998" value="085732255998" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="wizRelationship">Relationship with Owner</label>
+                      <select id="wizRelationship" class="form-input">
+                        <option value="Self">Self / Pemilik Sendiri</option>
+                        <option value="Family">Family / Keluarga</option>
+                        <option value="Friend">Friend / Teman</option>
+                        <option value="Driver">Driver / Supir</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="wizAddress">Address / Location</label>
+                      <input type="text" id="wizAddress" class="form-input" placeholder="Contoh: Jl. Diponegoro No. 45, Kediri" value="Jl. Basuki Rahmat No. 12, Surabaya">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 Pane: Cek Aja Dulu -->
+            <div class="step-pane" id="stepPane3" style="display: none;">
+              <div class="content-card">
+                <div class="card-header">
+                  <div class="card-icon-title">
+                    <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M9 11l3 3L22 4"></path>
+                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                    <h2 class="card-title">Cek Aja Dulu (Pemeriksaan Awal Kendaraan)</h2>
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  <div class="cek-metrics-row">
+                    <div class="cek-metric-box">
+                      <span class="cek-metric-label">Kilometer (KM) Odometer</span>
+                      <input type="text" id="wizOdometer" class="form-input mt-1" value="12.450 km" placeholder="Contoh: 12.450 km">
+                    </div>
+
+                    <div class="cek-metric-box">
+                      <span class="cek-metric-label">Kondisi Bahan Bakar</span>
+                      <select id="wizFuel" class="form-input mt-1">
+                        <option value="Full">Full (Penuh)</option>
+                        <option value="3/4" selected>3/4 Kapasitas</option>
+                        <option value="1/2">1/2 Kapasitas</option>
+                        <option value="1/4">1/4 Kapasitas</option>
+                        <option value="E">Empty (Hampir Habis)</option>
+                      </select>
+                    </div>
+
+                    <div class="cek-metric-box">
+                      <span class="cek-metric-label">Tegangan Aki / Baterai</span>
+                      <input type="text" class="form-input mt-1" value="12.6 Volt (Optimal)" readonly>
+                    </div>
+                  </div>
+
+                  <div class="cek-checklist-wrapper mt-4">
+                    <h4 class="cek-section-subtitle">Daftar Pengecekan Cepat (Visual &amp; Kelayakan)</h4>
+                    <div class="cek-items-grid">
+                      <label class="cek-check-item">
+                        <input type="checkbox" checked>
+                        <span class="cek-check-custom"></span>
+                        <div class="cek-item-text">
+                          <span class="cek-item-title">Sistem Pengereman (Depan &amp; Belakang)</span>
+                          <span class="cek-item-desc">Ketebalan kampas rem masih aman</span>
+                        </div>
+                      </label>
+
+                      <label class="cek-check-item">
+                        <input type="checkbox" checked>
+                        <span class="cek-check-custom"></span>
+                        <div class="cek-item-text">
+                          <span class="cek-item-title">Lampu &amp; Kelistrikan</span>
+                          <span class="cek-item-desc">Lampu utama, sein, dan klakson normal</span>
+                        </div>
+                      </label>
+
+                      <label class="cek-check-item">
+                        <input type="checkbox" checked>
+                        <span class="cek-check-custom"></span>
+                        <div class="cek-item-text">
+                          <span class="cek-item-title">Tekanan Udara Ban</span>
+                          <span class="cek-item-desc">Depan 29 psi, Belakang 33 psi</span>
+                        </div>
+                      </label>
+
+                      <label class="cek-check-item">
+                        <input type="checkbox">
+                        <span class="cek-check-custom"></span>
+                        <div class="cek-item-text">
+                          <span class="cek-item-title">Kondisi Oli Mesin</span>
+                          <span class="cek-item-desc">Perlu penggantian oli mesin rutin</span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4 Pane: Service & Parts / Status & Mechanic -->
+            <div class="step-pane" id="stepPane4" style="display: none;">
+              <div class="content-card">
+                <div class="card-header">
+                  <div class="card-icon-title">
+                    <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                    <h2 class="card-title">Status PKB, Mekanik &amp; Pilihan Servis</h2>
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  <!-- Row: Status PKB & Mechanic Assignment -->
+                  <div class="wizard-form-grid">
+                    <div class="form-group">
+                      <label class="form-label" for="wizStatus">Status PKB <span class="required-star">*</span></label>
+                      <select id="wizStatus" class="form-input" required>
+                        <option value="Waiting Mechanic" selected>Waiting Mechanic (Menunggu Mekanik)</option>
+                        <option value="In Progress">In Progress (Sedang Dikerjakan)</option>
+                        <option value="Pause">Pause (Ditunda / Menunggu Part)</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="wizMechanic">Assigned Mechanic <span class="required-star">*</span></label>
+                      <select id="wizMechanic" class="form-input" required>
+                        <option value="Kalvin" selected>Kalvin (Stall 1 - Fast Service)</option>
+                        <option value="Rizal">Rizal (Stall 2 - Heavy Repair)</option>
+                        <option value="Agung">Agung (Stall 3 - Tune Up)</option>
+                        <option value="Robin">Robin (Stall 4 - Maintenance)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Service Recommendations Matching List Canvasing -->
+                  <div class="sp-recommendations-wrapper mt-4">
+                    <h4 class="cek-section-subtitle">Rekomendasi Paket Servis &amp; Suku Cadang</h4>
+                    <div class="sp-rec-grid">
+                      <!-- Item 1 -->
+                      <div class="sp-rec-item active" id="recItem1">
+                        <div class="sp-rec-accent-bar"></div>
+                        <div class="sp-rec-body">
+                          <h4 class="sp-rec-item-title">Ganti Oli Plus MPX2</h4>
+                          <div class="sp-rec-meta-row">
+                            <span class="sp-meta-chip">
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                              </svg>
+                              <span>10 Menit</span>
+                            </span>
+                            <span class="sp-meta-chip">
+                              <span>Rp 54.000</span>
+                            </span>
+                          </div>
+                        </div>
+                        <button type="button" class="sp-btn-pill-outline sp-btn-added" data-id="1">Terpilih</button>
+                      </div>
+
+                      <!-- Item 2 -->
+                      <div class="sp-rec-item active" id="recItem2">
+                        <div class="sp-rec-accent-bar"></div>
+                        <div class="sp-rec-body">
+                          <h4 class="sp-rec-item-title">Paket Lengkap Matic (Tune Up + CVT)</h4>
+                          <div class="sp-rec-meta-row">
+                            <span class="sp-meta-chip">
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                              </svg>
+                              <span>30 Menit</span>
+                            </span>
+                            <span class="sp-meta-chip">
+                              <span>Rp 120.000</span>
+                            </span>
+                          </div>
+                        </div>
+                        <button type="button" class="sp-btn-pill-outline sp-btn-added" data-id="2">Terpilih</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 5 Pane: Summary & Final Review -->
+            <div class="step-pane" id="stepPane5" style="display: none;">
+              <div class="content-card summary-card-container">
+                <div class="summary-header">
+                  <h2 class="summary-main-title">Summary</h2>
+                  <h3 class="summary-sub-title">Detail Perintah Kerja Bengkel (PKB) Canvasing</h3>
+                </div>
+
+                <!-- Highlight Cards Row -->
+                <div class="summary-info-grid">
+                  <div class="summary-info-row">
+                    <div class="summary-info-col">
+                      <div class="summary-info-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="3" y="6" width="18" height="12" rx="2"></rect>
+                          <line x1="7" y1="12" x2="17" y2="12"></line>
+                        </svg>
+                      </div>
+                      <div class="summary-info-content">
+                        <span class="summary-info-label">Police Number</span>
+                        <span class="summary-info-value" id="sumPlate">AG 3323 UY</span>
+                      </div>
+                    </div>
+
+                    <div class="summary-info-col">
+                      <div class="summary-info-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="17" r="3.5"></circle>
+                          <path d="M9 3h6"></path>
+                          <path d="M12 3v10.5"></path>
+                          <path d="M6 7l6 3 6-3"></path>
+                        </svg>
+                      </div>
+                      <div class="summary-info-content">
+                        <span class="summary-info-label">Vehicle Type</span>
+                        <span class="summary-info-value" id="sumMotor">ALL NEW SCOOPY</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="summary-info-divider"></div>
+
+                  <div class="summary-info-row">
+                    <div class="summary-info-col">
+                      <div class="summary-info-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                      </div>
+                      <div class="summary-info-content">
+                        <span class="summary-info-label">Customer Name</span>
+                        <span class="summary-info-value" id="sumName">Grego</span>
+                      </div>
+                    </div>
+
+                    <div class="summary-info-col">
+                      <div class="summary-info-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                        </svg>
+                      </div>
+                      <div class="summary-info-content">
+                        <span class="summary-info-label">Assigned Mechanic</span>
+                        <span class="summary-info-value" id="sumMechanic">Kalvin</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Transaction & Schedule Fields Grid -->
+                <div class="wizard-form-grid mt-4">
+                  <div class="form-group">
+                    <label class="form-label" for="wizTransNo">Transaction No <span class="required-star">*</span></label>
+                    <input type="text" id="wizTransNo" class="form-input" readonly value="027-PKB-2025-DMS0000000135">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="wizStartHour">Start Date / Hour</label>
+                    <input type="text" id="wizStartHour" class="form-input" value="15-05-2025">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="wizEstHour">Estimated Hour</label>
+                    <input type="text" id="wizEstHour" class="form-input" value="15-05-2025">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="wizFinishHour">Finish Hour</label>
+                    <input type="text" id="wizFinishHour" class="form-input" value="15-05-2025">
+                  </div>
+                </div>
+
+                <!-- Pricing / Service Summary Table -->
+                <div class="summary-services-section mt-4">
+                  <table class="summary-table">
+                    <thead>
+                      <tr>
+                        <th>Deskripsi Servis &amp; Part</th>
+                        <th style="width: 100px; text-align: center;">Durasi</th>
+                        <th style="width: 130px; text-align: right;">Biaya</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div class="summary-service-title">Ganti Oli Plus MPX2</div>
+                          <div class="summary-service-subtitle">Oli Mesin 0.8L + Jasa Pengerjaan</div>
+                        </td>
+                        <td style="text-align: center;">10 Menit</td>
+                        <td style="text-align: right; font-weight: 600;">Rp 54.000</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="summary-service-title">Paket Lengkap Matic</div>
+                          <div class="summary-service-subtitle">Tune Up, Pembersihan Injektor &amp; Servis CVT</div>
+                        </td>
+                        <td style="text-align: center;">30 Menit</td>
+                        <td style="text-align: right; font-weight: 600;">Rp 120.000</td>
+                      </tr>
+                      <tr class="summary-total-row">
+                        <td colspan="2" style="font-weight: 700;">Total Estimasi Biaya PKB</td>
+                        <td style="text-align: right; font-weight: 800; color: var(--primary); font-size: 15px;">Rp 174.000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stepper Bottom Navigation Action Bar -->
+          <div class="bottom-actions wizard-bottom-actions">
+            <button type="button" class="btn-kembali" id="btnWizPrev">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              <span id="btnWizPrevText">Kembali ke Tabel</span>
+            </button>
+
+            <div class="bottom-actions-right">
+              <button type="button" class="btn-next" id="btnWizNext">
+                <span id="btnWizNextText">Next</span>
+                <svg id="btnWizNextIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   </div>
@@ -416,7 +1036,7 @@
   <div class="modal-backdrop" id="modalBackdrop">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 class="modal-title" id="modalTitle">Create New PKB Canvasing</h3>
+        <h3 class="modal-title" id="modalTitle">Create New Master Canvasing</h3>
         <button class="btn-close" id="btnCloseModal">&times;</button>
       </div>
 

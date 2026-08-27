@@ -36,12 +36,13 @@ function initIframeCommunication() {
   window.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'UPDATE_CRUMB') {
       const crumbActive = document.getElementById('crumbActive');
-      if (crumbActive && currentModule === 'list') {
-        if (event.data.subCrumb) {
-          crumbActive.innerHTML = `List Canvasing <span style="color:#cbd5e1;margin:0 4px;">/</span> <span style="color:#ea580c;font-weight:700;">${event.data.subCrumb}</span>`;
-        } else {
-          crumbActive.textContent = 'List Canvasing';
-        }
+      if (!crumbActive) return;
+
+      const moduleName = currentModule === 'master' ? 'Master Canvasing' : 'List Canvasing';
+      if (event.data.subCrumb) {
+        crumbActive.innerHTML = `${moduleName} <span style="color:#cbd5e1;margin:0 4px;">/</span> <span style="color:#ea580c;font-weight:700;">${event.data.subCrumb}</span>`;
+      } else {
+        crumbActive.textContent = moduleName;
       }
     }
   });
