@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initEqualizerToggle();
   initStepperWizard();
   initTambahPartModal();
+  initUploadPartModal();
   initTambahMekanikStep();
 });
 
@@ -602,18 +603,22 @@ let currentWizStep = 1;
 const totalWizSteps = 4;
 let editingPkbId = null;
 
-// Master Catalog Part Canvasing
+// Master Catalog Part Canvasing with realistic AHASS Honda Genuine Parts & Stock
 const partCatalog = [
   { code: '08232-2MB-K0LN1', name: 'AHM OIL MPX2 0.8L', satuan: 'BOTOL', harga: 'Rp 54.000', diskon: 'Rp 0', stock: 45, rawPrice: 54000 },
+  { code: '08232-2MA-K0LN1', name: 'AHM OIL MPX1 0.8L (Bebek/Sport)', satuan: 'BOTOL', harga: 'Rp 52.000', diskon: 'Rp 0', stock: 30, rawPrice: 52000 },
   { code: '06455-K59-A71', name: 'PAD SET FR (Kampas Rem Depan)', satuan: 'SET', harga: 'Rp 68.000', diskon: 'Rp 0', stock: 20, rawPrice: 68000 },
+  { code: '43130-KZL-930', name: 'SHOE SET BRAKE (Kampas Rem Belakang)', satuan: 'SET', harga: 'Rp 52.000', diskon: 'Rp 0', stock: 25, rawPrice: 52000 },
   { code: '31916-KRM-841', name: 'SPARK PLUG CPR9EA-9 (Busi NGK)', satuan: 'PCS', harga: 'Rp 22.000', diskon: 'Rp 0', stock: 35, rawPrice: 22000 },
   { code: '23100-K44-V01', name: 'BELT DRIVE (V-Belt Beat/Scoopy)', satuan: 'PCS', harga: 'Rp 95.000', diskon: 'Rp 0', stock: 15, rawPrice: 95000 },
   { code: '17210-K59-A70', name: 'ELEMENT COMP AIR/C (Filter Udara)', satuan: 'PCS', harga: 'Rp 58.000', diskon: 'Rp 0', stock: 18, rawPrice: 58000 },
-  { code: '08293-999-011', name: 'OIL TRANSMISSION (Oli Gardan)', satuan: 'BOTOL', harga: 'Rp 16.000', diskon: 'Rp 0', stock: 50, rawPrice: 16000 }
+  { code: '08293-999-011', name: 'OIL TRANSMISSION (Oli Gardan)', satuan: 'BOTOL', harga: 'Rp 16.000', diskon: 'Rp 0', stock: 50, rawPrice: 16000 },
+  { code: '34901-K59-A71', name: 'BULB HEADLIGHT (Bohlam Depan LED)', satuan: 'PCS', harga: 'Rp 45.000', diskon: 'Rp 0', stock: 12, rawPrice: 45000 }
 ];
 
 let partsDibawa = [];
 let selectedPartItem = partCatalog[0];
+let uploadedParsedData = [];
 
 function renderPartsDibawa() {
   const tbody = document.getElementById('bodyPartCanvasing');
@@ -704,7 +709,7 @@ function initTambahPartModal() {
       if (matches.length > 0) {
         suggestionsBox.innerHTML = matches.map(p => `
           <div class="part-suggestion-item" data-code="${p.code}">
-            <strong>${p.code}</strong> - ${p.name} (${p.harga})
+            <strong>${p.code}</strong> - ${p.name} (Stok: ${p.stock} ${p.satuan})
           </div>
         `).join('');
         suggestionsBox.style.display = 'block';
@@ -736,7 +741,7 @@ function initTambahPartModal() {
     });
   }
 
-  // Save Part into Step 2 table
+  // Save Part into Step 2 table with Stock Validation
   if (btnSave) {
     btnSave.addEventListener('click', () => {
       const partName = searchInput ? searchInput.value.trim() : '';
@@ -747,20 +752,429 @@ function initTambahPartModal() {
         return;
       }
 
+      if (qty <= 0) {
+        showToast('Qty harus berupa angka lebih besar dari 0', 'info');
+        return;
+      }
+
+      // Stock validation check
+      if (selectedPartItem && qty > selectedPartItem.stock) {
+        showToast(`Qty (${qty}) melebihi stok yang tersedia (${selectedPartItem.stock} ${selectedPartItem.satuan})`, 'info');
+        if (qtyInput) qtyInput.focus();
+        return;
+      }
+
       const itemToAdd = {
         code: selectedPartItem ? selectedPartItem.code : 'PRT-' + Math.floor(1000 + Math.random() * 9000),
-        name: partName,
+        name: selectedPartItem ? selectedPartItem.name : partName,
         qty: qty,
         satuan: selectedPartItem ? selectedPartItem.satuan : 'PCS',
         harga: selectedPartItem ? selectedPartItem.harga : 'Rp 50.000'
       };
 
-      partsDibawa.push(itemToAdd);
+      // Check if already in list
+      const existingIdx = partsDibawa.findIndex(p => p.code === itemToAdd.code);
+      if (existingIdx >= 0) {
+        const totalQty = partsDibawa[existingIdx].qty + qty;
+        if (selectedPartItem && totalQty > selectedPartItem.stock) {
+          showToast(`Total Qty (${totalQty}) melebihi stok tersedia (${selectedPartItem.stock})`, 'info');
+          return;
+        }
+        partsDibawa[existingIdx].qty = totalQty;
+      } else {
+        partsDibawa.push(itemToAdd);
+      }
+
       renderPartsDibawa();
       closeModal();
       showToast(`Part ${itemToAdd.name} (${qty} ${itemToAdd.satuan}) berhasil ditambahkan`, 'success');
     });
   }
+}
+
+// ==========================================================================
+// Upload Part Modal & Available Stock Validation Engine
+// ==========================================================================
+function initUploadPartModal() {
+  const modal = document.getElementById('uploadPartModal');
+  const btnOpen = document.getElementById('btnOpenUploadPartModal');
+  const btnClose = document.getElementById('btnCloseUploadPartModal');
+  const btnCancel = document.getElementById('btnCancelUploadModal');
+  const btnDownloadTemplate = document.getElementById('btnDownloadPartTemplate');
+  const dropzone = document.getElementById('uploadPartDropzone');
+  const fileInput = document.getElementById('fileUploadPart');
+  const btnBrowse = document.getElementById('btnBrowsePartFile');
+  const dropzoneSelected = document.getElementById('dropzoneSelectedFile');
+  const dropzoneText = document.getElementById('dropzoneTextContent');
+  const fileNameDisplay = document.getElementById('uploadedFileName');
+  const btnRemoveFile = document.getElementById('btnRemoveUploadedFile');
+
+  const summaryGrid = document.getElementById('validationSummaryGrid');
+  const statTotal = document.getElementById('statTotalRows');
+  const statValid = document.getElementById('statValidRows');
+  const statError = document.getElementById('statErrorRows');
+
+  const previewSection = document.getElementById('previewTableSection');
+  const previewRowsCount = document.getElementById('previewRowsCount');
+  const tbodyPreview = document.getElementById('tbodyPreviewUpload');
+
+  const btnImportValidOnly = document.getElementById('btnImportValidOnly');
+  const btnImportAll = document.getElementById('btnImportAllPart');
+  const countValidOnlySpan = document.getElementById('countValidOnly');
+
+  function openModal() {
+    if (!modal) return;
+    modal.classList.add('show');
+    resetUploadState();
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('show');
+    resetUploadState();
+  }
+
+  function resetUploadState() {
+    uploadedParsedData = [];
+    if (fileInput) fileInput.value = '';
+    if (dropzoneSelected) dropzoneSelected.style.display = 'none';
+    if (dropzoneText) dropzoneText.style.display = 'block';
+    if (summaryGrid) summaryGrid.style.display = 'none';
+    if (previewSection) previewSection.style.display = 'none';
+    if (tbodyPreview) tbodyPreview.innerHTML = '';
+    if (btnImportValidOnly) btnImportValidOnly.style.display = 'none';
+    if (btnImportAll) {
+      btnImportAll.disabled = true;
+      btnImportAll.textContent = 'Simpan ke Daftar Part';
+      btnImportAll.title = '';
+    }
+  }
+
+  if (btnOpen) btnOpen.addEventListener('click', openModal);
+  if (btnClose) btnClose.addEventListener('click', closeModal);
+  if (btnCancel) btnCancel.addEventListener('click', closeModal);
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  // Download Template
+  if (btnDownloadTemplate) {
+    btnDownloadTemplate.addEventListener('click', () => {
+      downloadPartTemplate();
+    });
+  }
+
+  // Browse File Button
+  if (btnBrowse && fileInput) {
+    btnBrowse.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fileInput.click();
+    });
+  }
+
+  // Dropzone Interaction
+  if (dropzone && fileInput) {
+    dropzone.addEventListener('click', (e) => {
+      if (e.target !== btnRemoveFile && !btnRemoveFile?.contains(e.target)) {
+        fileInput.click();
+      }
+    });
+
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        handleFileSelection(e.dataTransfer.files[0]);
+      }
+    });
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        handleFileSelection(e.target.files[0]);
+      }
+    });
+  }
+
+  if (btnRemoveFile) {
+    btnRemoveFile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      resetUploadState();
+    });
+  }
+
+  // Parse and validate uploaded file
+  function handleFileSelection(file) {
+    if (!file) return;
+
+    if (fileNameDisplay) fileNameDisplay.textContent = file.name;
+    if (dropzoneSelected) dropzoneSelected.style.display = 'block';
+    if (dropzoneText) dropzoneText.style.display = 'none';
+
+    const reader = new FileReader();
+
+    if (window.XLSX) {
+      reader.onload = function (e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const jsonRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+          processRawRows(jsonRows, file.name);
+        } catch (err) {
+          console.error('Error parsing Excel file:', err);
+          showToast('Format file tidak dapat diproses', 'info');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      // Fallback CSV parser
+      reader.onload = function (e) {
+        const text = e.target.result;
+        const lines = text.split(/\r\n|\n/).map(line => line.split(',').map(c => c.trim().replace(/^["']|["']$/g, '')));
+        processRawRows(lines, file.name);
+      };
+      reader.readAsText(file);
+    }
+  }
+
+  function processRawRows(rawRows, fileName) {
+    if (!rawRows || rawRows.length < 2) {
+      showToast('File tidak memiliki data baris atau format kosong', 'info');
+      return;
+    }
+
+    // Identify column indices from header
+    const headerRow = rawRows[0].map(h => String(h).trim().toLowerCase());
+    let codeIndex = -1;
+    let qtyIndex = -1;
+
+    headerRow.forEach((col, idx) => {
+      if (col.includes('kode') || col.includes('part') || col.includes('item') || col.includes('sku')) {
+        if (codeIndex === -1) codeIndex = idx;
+      }
+      if (col.includes('qty') || col.includes('jumlah') || col.includes('kuantitas') || col.includes('banyak') || col.includes('count')) {
+        if (qtyIndex === -1) qtyIndex = idx;
+      }
+    });
+
+    if (codeIndex === -1) codeIndex = 0;
+    if (qtyIndex === -1) qtyIndex = 1;
+
+    uploadedParsedData = [];
+
+    for (let i = 1; i < rawRows.length; i++) {
+      const row = rawRows[i];
+      if (!row || row.length === 0 || (row.length === 1 && !row[0])) continue;
+
+      const rawCode = String(row[codeIndex] || '').trim();
+      const rawQtyStr = String(row[qtyIndex] || '').trim();
+
+      if (!rawCode && !rawQtyStr) continue;
+
+      const qty = parseInt(rawQtyStr, 10);
+
+      // Match against partCatalog
+      const cleanCode = rawCode.toLowerCase().replace(/[\s\-_]/g, '');
+      const matchedPart = partCatalog.find(p => {
+        const pClean = p.code.toLowerCase().replace(/[\s\-_]/g, '');
+        return pClean === cleanCode || p.code.toLowerCase() === rawCode.toLowerCase() || p.name.toLowerCase().includes(rawCode.toLowerCase());
+      });
+
+      let status = 'valid';
+      let message = '✅ Lolos Validasi (Stok Cukup)';
+      let isValid = true;
+      let availStock = matchedPart ? matchedPart.stock : 0;
+      let partName = matchedPart ? matchedPart.name : 'Part Tidak Terdaftar';
+      let satuan = matchedPart ? matchedPart.satuan : 'PCS';
+      let harga = matchedPart ? matchedPart.harga : '-';
+
+      if (!matchedPart) {
+        status = 'notfound';
+        message = '❌ Part Tidak Terdaftar di Sistem';
+        isValid = false;
+      } else if (isNaN(qty) || qty <= 0) {
+        status = 'invalidqty';
+        message = '❌ Qty Tidak Valid (> 0)';
+        isValid = false;
+      } else if (qty > matchedPart.stock) {
+        status = 'overstock';
+        message = `❌ Melebihi Stok (Tersedia: ${matchedPart.stock} ${satuan})`;
+        isValid = false;
+      } else {
+        status = 'valid';
+        message = `✅ Lolos Validasi (Tersedia: ${matchedPart.stock} ${satuan})`;
+        isValid = true;
+      }
+
+      uploadedParsedData.push({
+        rowNum: i,
+        inputCode: rawCode || (matchedPart ? matchedPart.code : '-'),
+        matchedPart: matchedPart,
+        name: partName,
+        qty: isNaN(qty) ? 0 : qty,
+        satuan: satuan,
+        harga: harga,
+        stock: availStock,
+        status: status,
+        message: message,
+        isValid: isValid
+      });
+    }
+
+    renderValidationPreview();
+  }
+
+  function renderValidationPreview() {
+    if (uploadedParsedData.length === 0) {
+      showToast('Tidak ada data baris yang dapat diproses', 'info');
+      return;
+    }
+
+    const totalCount = uploadedParsedData.length;
+    const validCount = uploadedParsedData.filter(d => d.isValid).length;
+    const errorCount = totalCount - validCount;
+
+    if (summaryGrid) summaryGrid.style.display = 'grid';
+    if (statTotal) statTotal.textContent = totalCount;
+    if (statValid) statValid.textContent = `${validCount} Part`;
+    if (statError) statError.textContent = `${errorCount} Part`;
+
+    if (previewSection) previewSection.style.display = 'flex';
+    if (previewRowsCount) previewRowsCount.textContent = `${totalCount} data baris terdeteksi`;
+
+    if (tbodyPreview) {
+      tbodyPreview.innerHTML = uploadedParsedData.map((item, idx) => `
+        <tr class="${item.isValid ? '' : 'row-invalid-stock'}">
+          <td style="text-align: center; font-weight: 600; color: #64748b;">${idx + 1}</td>
+          <td style="font-weight: 600; color: #1e293b;">${item.inputCode}</td>
+          <td>${item.name}</td>
+          <td style="text-align: center; font-weight: 700; color: ${item.isValid ? '#1e293b' : '#dc2626'};">
+            ${item.qty} ${item.satuan}
+          </td>
+          <td style="text-align: center; font-weight: 600; color: #0284c7;">
+            ${item.stock} ${item.satuan}
+          </td>
+          <td>
+            <span class="badge-part-status ${item.status}">
+              ${item.message}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Configure Footer Action Buttons
+    if (validCount > 0 && errorCount > 0) {
+      if (btnImportValidOnly) {
+        btnImportValidOnly.style.display = 'inline-flex';
+        if (countValidOnlySpan) countValidOnlySpan.textContent = validCount;
+      }
+      if (btnImportAll) {
+        btnImportAll.disabled = true;
+        btnImportAll.textContent = `Simpan ke Daftar Part (${totalCount})`;
+        btnImportAll.title = 'Perbaiki baris yang bermasalah atau pilih "Import Valid Saja"';
+      }
+    } else if (validCount > 0 && errorCount === 0) {
+      if (btnImportValidOnly) btnImportValidOnly.style.display = 'none';
+      if (btnImportAll) {
+        btnImportAll.disabled = false;
+        btnImportAll.textContent = `Simpan ke Daftar Part (${validCount})`;
+      }
+    } else {
+      // 0 valid items
+      if (btnImportValidOnly) btnImportValidOnly.style.display = 'none';
+      if (btnImportAll) {
+        btnImportAll.disabled = true;
+        btnImportAll.textContent = 'Simpan ke Daftar Part (0)';
+      }
+    }
+  }
+
+  // Import Action Handlers
+  if (btnImportAll) {
+    btnImportAll.addEventListener('click', () => {
+      const itemsToImport = uploadedParsedData.filter(d => d.isValid);
+      executeImport(itemsToImport);
+    });
+  }
+
+  if (btnImportValidOnly) {
+    btnImportValidOnly.addEventListener('click', () => {
+      const itemsToImport = uploadedParsedData.filter(d => d.isValid);
+      executeImport(itemsToImport);
+    });
+  }
+
+  function executeImport(items) {
+    if (!items || items.length === 0) {
+      showToast('Tidak ada part valid yang dapat diimpor', 'info');
+      return;
+    }
+
+    items.forEach(item => {
+      const code = item.matchedPart ? item.matchedPart.code : item.inputCode;
+      const existingIdx = partsDibawa.findIndex(p => p.code === code);
+      if (existingIdx >= 0) {
+        partsDibawa[existingIdx].qty += item.qty;
+      } else {
+        partsDibawa.push({
+          code: code,
+          name: item.name,
+          qty: item.qty,
+          satuan: item.satuan,
+          harga: item.harga
+        });
+      }
+    });
+
+    renderPartsDibawa();
+    closeModal();
+    showToast(`Berhasil menambahkan ${items.length} part ke daftar bawaan canvasing`, 'success');
+  }
+}
+
+// Download Template Excel (.xlsx) generator
+function downloadPartTemplate() {
+  const templateData = [
+    { 'Kode Part': '08232-2MB-K0LN1', 'Qty': 10 },
+    { 'Kode Part': '06455-K59-A71', 'Qty': 5 },
+    { 'Kode Part': '31916-KRM-841', 'Qty': 8 },
+    { 'Kode Part': '23100-K44-V01', 'Qty': 25 } // Note: intentionally higher than stock (15) to demonstrate validation
+  ];
+
+  if (window.XLSX) {
+    const ws = XLSX.utils.json_to_sheet(templateData);
+    ws['!cols'] = [{ wch: 25 }, { wch: 10 }];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Template Part Canvasing');
+    XLSX.writeFile(wb, 'Template_Upload_Part_Canvasing.xlsx');
+  } else {
+    // CSV fallback
+    const csvContent = 'data:text/csv;charset=utf-8,Kode Part,Qty\n' + templateData.map(r => `"${r['Kode Part']}",${r['Qty']}`).join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'Template_Upload_Part_Canvasing.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+  showToast('Template file Excel berhasil diunduh', 'success');
 }
 
 // Master Catalog Mekanik & Assignment Status

@@ -530,13 +530,23 @@
                     </svg>
                     <h2 class="card-title">Daftar Part Dibawa</h2>
                   </div>
-                  <button type="button" class="btn-tambah-part-teal" id="btnOpenTambahPartModal">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    <span>Tambah</span>
-                  </button>
+                  <div class="header-actions" style="display: flex; gap: 8px; align-items: center;">
+                    <button type="button" class="btn-upload-part-outline" id="btnOpenUploadPartModal" title="Upload Daftar Part dari File Excel">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                      </svg>
+                      <span>Upload Part</span>
+                    </button>
+                    <button type="button" class="btn-tambah-part-teal" id="btnOpenTambahPartModal">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                      <span>Tambah</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div class="card-body">
@@ -936,6 +946,135 @@
     </div>
   </div>
 
+  <!-- Modal Upload Part (Step 2 - Part Dibawa) -->
+  <div class="modal-backdrop" id="uploadPartModal">
+    <div class="modal-card modal-upload-part">
+      <div class="modal-header">
+        <div class="modal-header-icon-title">
+          <div class="modal-header-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <div>
+            <h3 class="modal-title">Upload Part Canvasing</h3>
+            <p class="modal-subtitle">Unggah berkas Excel / CSV untuk menambahkan banyak part sekaligus</p>
+          </div>
+        </div>
+        <button class="btn-close" id="btnCloseUploadPartModal">&times;</button>
+      </div>
+
+      <div class="modal-body upload-modal-body">
+        <!-- Template Download Section -->
+        <div class="template-download-banner">
+          <div class="template-info">
+            <div class="template-info-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+            </div>
+            <div class="template-text">
+              <div class="template-title">Format File: Kolom <strong>Kode Part</strong> dan <strong>Qty</strong></div>
+              <div class="template-subtext">Pastikan file sesuai template resmi untuk pengecekan stok otomatis.</div>
+            </div>
+          </div>
+          <button type="button" class="btn-download-template" id="btnDownloadPartTemplate">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Unduh Template Excel</span>
+          </button>
+        </div>
+
+        <!-- Dropzone Area -->
+        <div class="upload-dropzone" id="uploadPartDropzone">
+          <input type="file" id="fileUploadPart" accept=".xlsx, .xls, .csv" style="display: none;">
+          <div class="dropzone-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4ba3be" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="12" y1="18" x2="12" y2="12"></line>
+              <polyline points="9 15 12 12 15 15"></polyline>
+            </svg>
+          </div>
+          <div class="dropzone-text" id="dropzoneTextContent">
+            <span class="dropzone-title">Tarik & lepaskan file Excel (.xlsx / .xls / .csv) di sini</span>
+            <span class="dropzone-sub">atau <button type="button" class="btn-browse-file" id="btnBrowsePartFile">Pilih File</button> dari komputer</span>
+          </div>
+          <div class="dropzone-selected-file" id="dropzoneSelectedFile" style="display: none;">
+            <div class="file-chip">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <span class="file-name" id="uploadedFileName">part_canvasing.xlsx</span>
+              <button type="button" class="btn-remove-file" id="btnRemoveUploadedFile" title="Hapus file">&times;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Validation Summary Cards -->
+        <div class="validation-summary-grid" id="validationSummaryGrid" style="display: none;">
+          <div class="summary-stat-card total">
+            <div class="stat-num" id="statTotalRows">0</div>
+            <div class="stat-label">Total Baris Part</div>
+          </div>
+          <div class="summary-stat-card valid">
+            <div class="stat-num" id="statValidRows">0</div>
+            <div class="stat-label">✅ Stok Cukup (Valid)</div>
+          </div>
+          <div class="summary-stat-card warning">
+            <div class="stat-num" id="statErrorRows">0</div>
+            <div class="stat-label">❌ Stok Kurang / Invalid</div>
+          </div>
+        </div>
+
+        <!-- Preview Table Section -->
+        <div class="preview-table-section" id="previewTableSection" style="display: none;">
+          <div class="preview-table-header">
+            <span class="preview-title">Hasil Pemeriksaan Ketersediaan Stok:</span>
+            <span class="preview-count" id="previewRowsCount">0 data terdeteksi</span>
+          </div>
+          <div class="preview-table-wrapper">
+            <table class="preview-part-table" id="tablePreviewUpload">
+              <thead>
+                <tr>
+                  <th style="width: 5%; text-align: center;">No</th>
+                  <th style="width: 22%; text-align: left;">Kode Part</th>
+                  <th style="width: 26%; text-align: left;">Nama Part</th>
+                  <th style="width: 13%; text-align: center;">Qty Req</th>
+                  <th style="width: 14%; text-align: center;">Avail Stock</th>
+                  <th style="width: 20%; text-align: left;">Status / Validasi</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyPreviewUpload">
+                <!-- Generated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer upload-modal-footer">
+        <button type="button" class="btn-outline" id="btnCancelUploadModal">Batal</button>
+        <div class="upload-footer-actions">
+          <button type="button" class="btn-secondary-action" id="btnImportValidOnly" style="display: none;">
+            Import Valid Saja (<span id="countValidOnly">0</span>)
+          </button>
+          <button type="button" class="btn-primary" id="btnImportAllPart" disabled>
+            Simpan ke Daftar Part
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Tambah Part (Step 2 - Part Dibawa) -->
   <div class="modal-backdrop" id="tambahPartModal">
     <div class="modal-card modal-tambah-part">
@@ -991,6 +1130,8 @@
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
 
+  <!-- SheetJS / XLSX parser for robust Excel/CSV client-side parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="app.js"></script>
 </body>
 
