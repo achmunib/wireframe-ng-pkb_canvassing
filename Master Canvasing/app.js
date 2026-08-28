@@ -1,89 +1,136 @@
 /**
- * Master Canvasing / PKB List Module Application Logic
+ * Master Canvasing Module Application Logic
  * MPM AHASS Canvasing System
  */
 
-// Initial Data matching exact uploaded reference image
-let pkbData = [
+// Initial Data with realistic AHASS Canvasing operations
+let masterCanvasingData = [
   {
     id: 1,
-    status: 'Waiting Mechanic',
-    transNo: '051-PKB-CNVS-2026-DMS000001',
-    name: 'Grego',
-    policeNo: 'AG 3323 UY',
-    motor: 'ALL NEW SCOOPY',
-    engineNo: 'JB91E1260677',
-    frameNo: 'JB91E12606778J',
-    mechanic: 'Kalvin',
-    startHour: '15-05-2026',
-    estimatedHour: '15-05-2026',
-    finishHour: '15-05-2026'
+    kodeCanvasing: '051-CNVS-2026-DMS0000000020',
+    namaCanvasing: 'AHASS Roadshow & Service Keliling',
+    lokasi: 'Lapangan Balai Desa Wage',
+    provinsi: 'JAWA TIMUR',
+    kota: 'KAB. SIDOARJO',
+    kecamatan: 'TAMAN',
+    kelurahan: 'WAGE',
+    dari: '26-08-2026',
+    sampai: '27-08-2026',
+    petugas: 'Kalvin, Rizal'
   },
   {
     id: 2,
-    status: 'Waiting Mechanic',
-    transNo: '051-PKB-CNVS-2026-DMS000002',
-    name: 'Renata',
-    policeNo: 'AE 3392 OI',
-    motor: 'ALL NEW VARIO',
-    engineNo: 'JB91E1260676',
-    frameNo: 'JB91E12606767S',
-    mechanic: 'Rizal',
-    startHour: '15-05-2026',
-    estimatedHour: '15-05-2026',
-    finishHour: '15-05-2026'
+    kodeCanvasing: '051-CNVS-2026-DMS0000000019',
+    namaCanvasing: 'AHASS Peduli Warga Jelbuk',
+    lokasi: 'Balai Desa Sucopangepok',
+    provinsi: 'JAWA TIMUR',
+    kota: 'KAB. JEMBER',
+    kecamatan: 'JELBUK',
+    kelurahan: 'SUCOPANGEPOK',
+    dari: '25-08-2026',
+    sampai: '28-08-2026',
+    petugas: 'Agung, Hendri'
   },
   {
     id: 3,
-    status: 'Waiting Mechanic',
-    transNo: '051-PKB-CNVS-2026-DMS000003',
-    name: 'Mentari',
-    policeNo: 'T 2727 HAH',
-    motor: '',
-    engineNo: 'JB91E1260675',
-    frameNo: 'JB91E1260675LK',
-    mechanic: 'Agung',
-    startHour: '15-05-2026',
-    estimatedHour: '15-05-2026',
-    finishHour: '15-05-2026'
+    kodeCanvasing: '051-CNVS-2026-DMS0000000004',
+    namaCanvasing: 'Service Kunjung Kampus Surabaya',
+    lokasi: 'Plaza Barat Kampus Wonokromo',
+    provinsi: 'JAWA TIMUR',
+    kota: 'KOTA SURABAYA',
+    kecamatan: 'WONOKROMO',
+    kelurahan: 'NGAGEL',
+    dari: '20-08-2026',
+    sampai: '22-08-2026',
+    petugas: 'Robin, Ratna'
   },
   {
     id: 4,
-    status: 'In Progress',
-    transNo: '051-PKB-CNVS-2026-DMS000004',
-    name: 'Vincent',
-    policeNo: 'AG 6524 RFA',
-    motor: 'ALL NEW VARIO',
-    engineNo: 'JB91E1260674',
-    frameNo: 'JB91E1260674JU',
-    mechanic: 'Robin',
-    startHour: '15-05-2026',
-    estimatedHour: '15-05-2026',
-    finishHour: '15-05-2026'
+    kodeCanvasing: '051-CNVS-2026-DMS0000000002',
+    namaCanvasing: 'Canvasing Komunitas Honda Wonokromo',
+    lokasi: 'Parkir Sentra Kuliner Wonokromo',
+    provinsi: 'JAWA TIMUR',
+    kota: 'KOTA SURABAYA',
+    kecamatan: 'WONOKROMO',
+    kelurahan: 'WONOKROMO',
+    dari: '18-08-2026',
+    sampai: '19-08-2026',
+    petugas: 'Ratna'
   },
   {
     id: 5,
-    status: 'Pause',
-    transNo: '051-PKB-CNVS-2026-DMS000005',
-    name: 'Sylkinta',
-    policeNo: 'AG 3738 BS',
-    motor: '',
-    engineNo: 'JB91E1260671',
-    frameNo: 'JB91E1260671LP',
-    mechanic: 'Ratna',
-    startHour: '15-05-2026',
-    estimatedHour: '15-05-2026',
-    finishHour: '15-05-2026'
+    kodeCanvasing: '051-CNVS-2026-DMS0000000001',
+    namaCanvasing: 'AHASS Keliling Desa Gampingrowo',
+    lokasi: 'Halaman Kantor Kecamatan Tarik',
+    provinsi: 'JAWA TIMUR',
+    kota: 'KAB. SIDOARJO',
+    kecamatan: 'TARIK',
+    kelurahan: 'GAMPINGROWO',
+    dari: '10-08-2026',
+    sampai: '12-08-2026',
+    petugas: 'Kalvin'
+  },
+  {
+    id: 6,
+    kodeCanvasing: '051-CNVS-2025-DMS0000000023',
+    namaCanvasing: 'Program Servis Hemat Akhir Tahun',
+    lokasi: 'Alun-Alun Sidoarjo',
+    provinsi: 'JAWA TIMUR',
+    kota: 'KAB. SIDOARJO',
+    kecamatan: 'SIDOARJO',
+    kelurahan: 'BULUSIDOKARE',
+    dari: '15-12-2025',
+    sampai: '17-12-2025',
+    petugas: 'Rizal, Kalvin'
+  },
+  {
+    id: 7,
+    kodeCanvasing: '051-CNVS-2025-DMS0000000017',
+    namaCanvasing: 'AHASS Sahabat Pelanggan Wonokromo',
+    lokasi: 'Pelataran Ruko Darmo Trade Center',
+    provinsi: 'JAWA TIMUR',
+    kota: 'KOTA SURABAYA',
+    kecamatan: 'WONOKROMO',
+    kelurahan: 'WONOKROMO',
+    dari: '05-11-2025',
+    sampai: '08-11-2025',
+    petugas: 'Agung'
+  },
+  {
+    id: 8,
+    kodeCanvasing: '051-CNVS-2025-DMS0000000015',
+    namaCanvasing: 'Service Kunjung Instansi Bapenda',
+    lokasi: 'Gedung Bapenda Jawa Timur Gubeng',
+    provinsi: 'JAWA TIMUR',
+    kota: 'KOTA SURABAYA',
+    kecamatan: 'GUBENG',
+    kelurahan: 'GUBENG',
+    dari: '22-10-2025',
+    sampai: '24-10-2025',
+    petugas: 'Robin'
+  },
+  {
+    id: 9,
+    kodeCanvasing: '051-CNVS-2025-DMS0000000014',
+    namaCanvasing: 'Honda Roadshow & Uji Emisi Gratis',
+    lokasi: 'Area Terbuka Taman Bungkul',
+    provinsi: 'JAWA TIMUR',
+    kota: 'KOTA SURABAYA',
+    kecamatan: 'WONOKROMO',
+    kelurahan: 'NGAGEL',
+    dari: '14-10-2025',
+    sampai: '15-10-2025',
+    petugas: 'Kalvin'
   }
 ];
 
-// Helper to generate formatted Transaction No: 051-PKB-CNVS-YYYY-DMSXXXXXX
-function generateNextTransNo() {
+// Helper to generate formatted Kode Canvasing: 051-CNVS-YYYY-DMSXXXXXXXXXX
+function generateNextKodeCanvasing() {
   const currentYear = new Date().getFullYear() || 2026;
-  let maxSeq = 0;
-  pkbData.forEach(item => {
-    if (item.transNo) {
-      const match = item.transNo.match(/DMS(\d+)/i);
+  let maxSeq = 20;
+  masterCanvasingData.forEach(item => {
+    if (item.kodeCanvasing) {
+      const match = item.kodeCanvasing.match(/DMS(\d+)/i);
       if (match) {
         const num = parseInt(match[1], 10);
         if (num > maxSeq) maxSeq = num;
@@ -91,10 +138,10 @@ function generateNextTransNo() {
     }
   });
   const nextSeq = maxSeq + 1;
-  return `051-PKB-CNVS-${currentYear}-DMS${String(nextSeq).padStart(6, '0')}`;
+  return `051-CNVS-${currentYear}-DMS${String(nextSeq).padStart(10, '0')}`;
 }
 
-let activeSearchField = 'transNo';
+let activeSearchField = 'kodeCanvasing';
 let activeSelectedId = null;
 let currentSortColumn = null;
 let currentSortAsc = true;
@@ -114,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Render Table Rows matching the Reference Screenshot
-function renderTable(dataToRender = pkbData) {
+function renderTable(dataToRender = masterCanvasingData) {
   const tbody = document.getElementById('pkbTableBody');
   const infoText = document.getElementById('tableInfo');
   if (!tbody) return;
@@ -124,57 +171,41 @@ function renderTable(dataToRender = pkbData) {
   if (dataToRender.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="12" style="text-align: center; padding: 48px 20px; color: #94a3b8;">
+        <td colspan="8" style="text-align: center; padding: 48px 20px; color: #94a3b8;">
           <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #cbd5e1;">
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <span style="font-weight: 600; color: #64748b;">Data PKB tidak ditemukan</span>
+            <span style="font-weight: 600; color: #64748b;">Data Canvasing tidak ditemukan</span>
             <span style="font-size: 13px;">Sesuaikan kata kunci pencarian atau filter kolom.</span>
           </div>
         </td>
       </tr>
     `;
-    if (infoText) infoText.textContent = `Showing 0 to 0 of ${pkbData.length} entries`;
+    if (infoText) infoText.textContent = `Showing 0 to 0 of ${masterCanvasingData.length} entries`;
     return;
   }
 
   dataToRender.forEach((item) => {
-    const statusClass = getStatusClass(item.status);
     const tr = document.createElement('tr');
 
     tr.innerHTML = `
-      <td class="col-action">
-        <div class="col-action-cell">
-          <button class="btn-row-action btn-view" title="View PKB" onclick="viewPkbDetail(${item.id})">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-          </button>
-          <button class="btn-row-action btn-kebab" title="More Options" onclick="openKebabMenu(event, ${item.id})">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="1.5"></circle>
-              <circle cx="12" cy="5" r="1.5"></circle>
-              <circle cx="12" cy="19" r="1.5"></circle>
-            </svg>
-          </button>
-        </div>
+      <td class="col-aksi" style="text-align: center; width: 52px; min-width: 52px;">
+        <button type="button" class="btn-action-view-eye" title="View Detail" onclick="viewCanvasingDetail(${item.id})">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3.5"></circle>
+          </svg>
+        </button>
       </td>
-      <td class="col-status">
-        <span class="status-pill ${statusClass}">${item.status}</span>
-      </td>
-      <td class="col-trans">${item.transNo}</td>
-      <td class="col-name">${item.name}</td>
-      <td class="col-police">${item.policeNo}</td>
-      <td class="col-motor">${item.motor || ''}</td>
-      <td class="col-engine">${item.engineNo || ''}</td>
-      <td class="col-frame">${item.frameNo || ''}</td>
-      <td class="col-mechanic">${item.mechanic}</td>
-      <td class="col-starthour">${item.startHour}</td>
-      <td class="col-esthour">${item.estimatedHour}</td>
-      <td class="col-finishhour">${item.finishHour}</td>
+      <td class="col-kode">${item.kodeCanvasing}</td>
+      <td class="col-nama">${item.namaCanvasing}</td>
+      <td class="col-lokasi">${item.lokasi}</td>
+      <td class="col-provinsi">${item.provinsi}</td>
+      <td class="col-kota">${item.kota}</td>
+      <td class="col-kecamatan">${item.kecamatan}</td>
+      <td class="col-kelurahan">${item.kelurahan}</td>
     `;
 
     tbody.appendChild(tr);
@@ -183,13 +214,6 @@ function renderTable(dataToRender = pkbData) {
   if (infoText) {
     infoText.textContent = `Showing 1 to ${dataToRender.length} of ${dataToRender.length} entries`;
   }
-}
-
-function getStatusClass(status) {
-  if (status === 'Waiting Mechanic') return 'waiting-mechanic';
-  if (status === 'In Progress') return 'in-progress';
-  if (status === 'Pause') return 'pause';
-  return 'completed';
 }
 
 // Search & Dropdown Selection Logic
@@ -201,13 +225,13 @@ function initSearchAndDropdown() {
   const searchInput = document.getElementById('topSearchInput');
 
   const fieldLabels = {
-    transNo: 'Transaction No',
-    name: 'Name',
-    policeNo: 'Police Number',
-    motor: 'Motor',
-    engineNo: 'Engine Number',
-    frameNo: 'Frame Number',
-    mechanic: 'Mechanic'
+    kodeCanvasing: 'Kode Canvasing',
+    namaCanvasing: 'Nama Canvasing',
+    lokasi: 'Lokasi',
+    provinsi: 'Provinsi',
+    kota: 'Kota',
+    kecamatan: 'Kecamatan',
+    kelurahan: 'Kelurahan'
   };
 
   // Toggle Dropdown Menu
@@ -232,7 +256,7 @@ function initSearchAndDropdown() {
       item.classList.add('active');
 
       activeSearchField = item.getAttribute('data-field');
-      const label = fieldLabels[activeSearchField] || 'Transaction No';
+      const label = fieldLabels[activeSearchField] || 'Kode Canvasing';
       if (selectedFieldText) selectedFieldText.textContent = label;
       if (searchInput) {
         searchInput.placeholder = `Search by ${label}`;
@@ -271,7 +295,7 @@ function applyAllFilters() {
     if (val) subFilters[key] = val;
   });
 
-  const filtered = pkbData.filter((item) => {
+  const filtered = masterCanvasingData.filter((item) => {
     // 1. Check Top Search
     if (topSearch) {
       const fieldVal = String(item[activeSearchField] || '').toLowerCase();
@@ -310,7 +334,7 @@ function initSorting() {
         currentSortAsc = true;
       }
 
-      pkbData.sort((a, b) => {
+      masterCanvasingData.sort((a, b) => {
         const valA = String(a[col] || '').toLowerCase();
         const valB = String(b[col] || '').toLowerCase();
         if (valA < valB) return currentSortAsc ? -1 : 1;
@@ -361,38 +385,23 @@ function initKebabMenu() {
   if (btnView) {
     btnView.addEventListener('click', () => {
       menu.classList.remove('show');
-      if (activeSelectedId) viewPkbDetail(activeSelectedId);
+      if (activeSelectedId) viewCanvasingDetail(activeSelectedId);
     });
   }
 
   if (btnEdit) {
     btnEdit.addEventListener('click', () => {
       menu.classList.remove('show');
-      if (activeSelectedId) editPkbItem(activeSelectedId);
+      if (activeSelectedId) editCanvasingItem(activeSelectedId);
     });
   }
 
   if (btnPrint) {
     btnPrint.addEventListener('click', () => {
       menu.classList.remove('show');
-      showToast('Mencetak dokumen PKB...', 'info');
+      showToast('Mencetak dokumen Canvasing...', 'info');
     });
   }
-
-  statusButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const newStatus = btn.getAttribute('data-set-status');
-      menu.classList.remove('show');
-      if (activeSelectedId && newStatus) {
-        const item = pkbData.find((d) => d.id === activeSelectedId);
-        if (item) {
-          item.status = newStatus;
-          applyAllFilters();
-          showToast(`Status diperbarui menjadi: ${newStatus}`, 'success');
-        }
-      }
-    });
-  });
 }
 
 function openKebabMenu(event, id) {
@@ -408,61 +417,51 @@ function openKebabMenu(event, id) {
 }
 
 // Detail View Modal
-function viewPkbDetail(id) {
-  const item = pkbData.find((d) => d.id === id);
+function viewCanvasingDetail(id) {
+  const item = masterCanvasingData.find((d) => d.id === id);
   if (!item) return;
 
   const modal = document.getElementById('detailModal');
   const body = document.getElementById('detailModalBody');
   if (!modal || !body) return;
 
-  const statusClass = getStatusClass(item.status);
-
   body.innerHTML = `
     <div class="detail-grid">
-      <div class="detail-item">
-        <span class="detail-label">Status PKB</span>
-        <div><span class="status-pill ${statusClass}">${item.status}</span></div>
+      <div class="detail-item full-width" style="margin-bottom: 4px;">
+        <span class="detail-label">Kode Canvasing</span>
+        <span class="detail-val" style="color: var(--primary); font-weight: 700; font-size: 15px; font-family: monospace;">${item.kodeCanvasing}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Transaction No</span>
-        <span class="detail-val" style="color: var(--primary);">${item.transNo}</span>
+        <span class="detail-label">Nama Canvasing</span>
+        <span class="detail-val" style="font-weight: 600;">${item.namaCanvasing}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Customer Name</span>
-        <span class="detail-val">${item.name}</span>
+        <span class="detail-label">Lokasi</span>
+        <span class="detail-val">${item.lokasi}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Police Number</span>
-        <span class="detail-val">${item.policeNo}</span>
+        <span class="detail-label">Provinsi</span>
+        <span class="detail-val">${item.provinsi}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Motor Type</span>
-        <span class="detail-val">${item.motor || '—'}</span>
+        <span class="detail-label">Kota / Kabupaten</span>
+        <span class="detail-val">${item.kota}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Mechanic</span>
-        <span class="detail-val">${item.mechanic}</span>
+        <span class="detail-label">Kecamatan</span>
+        <span class="detail-val">${item.kecamatan}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Engine Number</span>
-        <span class="detail-val">${item.engineNo || '—'}</span>
+        <span class="detail-label">Kelurahan</span>
+        <span class="detail-val">${item.kelurahan}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Frame Number</span>
-        <span class="detail-val">${item.frameNo || '—'}</span>
+        <span class="detail-label">Periode Tanggal</span>
+        <span class="detail-val">${item.dari || '26-08-2026'} s/d ${item.sampai || '27-08-2026'}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Start Hour</span>
-        <span class="detail-val">${item.startHour}</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Estimated Hour</span>
-        <span class="detail-val">${item.estimatedHour}</span>
-      </div>
-      <div class="detail-item full-width">
-        <span class="detail-label">Finish Hour</span>
-        <span class="detail-val">${item.finishHour}</span>
+        <span class="detail-label">Mekanik / Petugas</span>
+        <span class="detail-val">${item.petugas || 'Kalvin, Rizal'}</span>
       </div>
     </div>
   `;
@@ -470,8 +469,8 @@ function viewPkbDetail(id) {
   modal.classList.add('show');
 }
 
-// Edit PKB Action - Opens Stepper Wizard in Edit Mode
-function editPkbItem(id) {
+// Edit Action - Opens Stepper Wizard in Edit Mode
+function editCanvasingItem(id) {
   showCreateWizard(true, id);
 }
 
@@ -528,38 +527,30 @@ function initModals() {
 
       if (editId) {
         // Edit Existing
-        const existing = pkbData.find((d) => d.id === editId);
+        const existing = masterCanvasingData.find((d) => d.id === editId);
         if (existing) {
-          existing.status = status;
-          existing.name = name;
-          existing.policeNo = policeNo;
-          existing.motor = motor;
-          existing.mechanic = mechanic;
-          existing.engineNo = engineNo;
-          existing.frameNo = frameNo;
-          existing.startHour = startHour;
-          existing.estimatedHour = estimatedHour;
-          existing.finishHour = finishHour;
+          existing.namaCanvasing = name;
+          existing.kodeCanvasing = transNo;
+          existing.petugas = mechanic;
         }
-        showToast('Data PKB berhasil diperbarui', 'success');
+        showToast('Data Master Canvasing berhasil diperbarui', 'success');
       } else {
         // Create New
         const newItem = {
           id: Date.now(),
-          status,
-          transNo,
-          name,
-          policeNo,
-          motor,
-          mechanic,
-          engineNo,
-          frameNo,
-          startHour,
-          estimatedHour,
-          finishHour
+          kodeCanvasing: transNo,
+          namaCanvasing: name,
+          lokasi: 'Sidoarjo',
+          provinsi: 'JAWA TIMUR',
+          kota: 'KAB. SIDOARJO',
+          kecamatan: 'TAMAN',
+          kelurahan: 'WAGE',
+          dari: startHour,
+          sampai: finishHour,
+          petugas: mechanic
         };
-        pkbData.unshift(newItem);
-        showToast('Data PKB berhasil dibuat', 'success');
+        masterCanvasingData.unshift(newItem);
+        showToast('Data Master Canvasing berhasil dibuat', 'success');
       }
 
       closeModal();
@@ -1097,63 +1088,41 @@ function showCreateWizard(isEdit = false, editId = null) {
   }
 
   if (isEdit && editId) {
-    const item = pkbData.find(d => d.id === editId);
+    const item = masterCanvasingData.find(d => d.id === editId);
     if (item) {
-      if (transNoPill) transNoPill.textContent = item.transNo;
+      if (transNoPill) transNoPill.textContent = item.kodeCanvasing;
       if (bannerDetail) {
-        bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${item.transNo}</span> • Edit Data PKB Master Canvasing`;
+        bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${item.kodeCanvasing}</span> • Edit Data Master Canvasing`;
       }
-      if (document.getElementById('wizKodeCanvasing')) document.getElementById('wizKodeCanvasing').value = '';
-      if (document.getElementById('wizNamaCanvasing')) document.getElementById('wizNamaCanvasing').value = 'Test lagi NG';
-      if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = 'Gedangan Pusat Dunia';
-      if (document.getElementById('wizDari')) document.getElementById('wizDari').value = '26-08-2026';
-      if (document.getElementById('wizSampai')) document.getElementById('wizSampai').value = '27-08-2026';
-      if (document.getElementById('wizProvinsi')) document.getElementById('wizProvinsi').value = 'JAWA TIMUR';
-      if (document.getElementById('wizKabupaten')) document.getElementById('wizKabupaten').value = 'KAB. SIDOARJO';
-      if (document.getElementById('wizKecamatan')) document.getElementById('wizKecamatan').value = 'GEDANGAN';
-      if (document.getElementById('wizKelurahan')) document.getElementById('wizKelurahan').value = 'GEDANGAN';
-
-      document.getElementById('wizTransNo').value = item.transNo;
-      document.getElementById('wizStatus').value = item.status;
-      document.getElementById('wizName').value = item.name;
-      if (document.getElementById('wizPoliceNo')) document.getElementById('wizPoliceNo').value = item.policeNo;
-      if (document.getElementById('wizMotor')) document.getElementById('wizMotor').value = item.motor || '';
-      document.getElementById('wizMechanic').value = item.mechanic;
-      if (document.getElementById('wizEngineNo')) document.getElementById('wizEngineNo').value = item.engineNo || '';
-      if (document.getElementById('wizFrameNo')) document.getElementById('wizFrameNo').value = item.frameNo || '';
-      document.getElementById('wizStartHour').value = item.startHour;
-      document.getElementById('wizEstHour').value = item.estimatedHour;
-      document.getElementById('wizFinishHour').value = item.finishHour;
+      if (document.getElementById('wizKodeCanvasing')) document.getElementById('wizKodeCanvasing').value = item.kodeCanvasing;
+      if (document.getElementById('wizNamaCanvasing')) document.getElementById('wizNamaCanvasing').value = item.namaCanvasing;
+      if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = item.lokasi;
+      if (document.getElementById('wizDari')) document.getElementById('wizDari').value = item.dari || '26-08-2026';
+      if (document.getElementById('wizSampai')) document.getElementById('wizSampai').value = item.sampai || '27-08-2026';
+      if (document.getElementById('wizProvinsi')) document.getElementById('wizProvinsi').value = item.provinsi || 'JAWA TIMUR';
+      if (document.getElementById('wizKabupaten')) document.getElementById('wizKabupaten').value = item.kota || 'KAB. SIDOARJO';
+      if (document.getElementById('wizKecamatan')) document.getElementById('wizKecamatan').value = item.kecamatan || 'GEDANGAN';
+      if (document.getElementById('wizKelurahan')) document.getElementById('wizKelurahan').value = item.kelurahan || 'GEDANGAN';
+      if (document.getElementById('wizTransNo')) document.getElementById('wizTransNo').value = item.kodeCanvasing;
     }
   } else {
     // New Record
-    const newTransNo = generateNextTransNo();
-    if (transNoPill) transNoPill.textContent = newTransNo;
+    const newKode = generateNextKodeCanvasing();
+    if (transNoPill) transNoPill.textContent = newKode;
     if (bannerDetail) {
-      bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${newTransNo}</span> • Pendaftaran PKB Master Canvasing Baru`;
+      bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${newKode}</span> • Pendaftaran Master Canvasing Baru`;
     }
 
     if (document.getElementById('wizKodeCanvasing')) document.getElementById('wizKodeCanvasing').value = '';
-    if (document.getElementById('wizNamaCanvasing')) document.getElementById('wizNamaCanvasing').value = 'Test lagi NG';
-    if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = 'Gedangan Pusat Dunia';
+    if (document.getElementById('wizNamaCanvasing')) document.getElementById('wizNamaCanvasing').value = 'AHASS Service Kunjung PT Maspion I';
+    if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = 'Area Parkir PT Maspion I Gedangan';
     if (document.getElementById('wizDari')) document.getElementById('wizDari').value = '26-08-2026';
     if (document.getElementById('wizSampai')) document.getElementById('wizSampai').value = '27-08-2026';
     if (document.getElementById('wizProvinsi')) document.getElementById('wizProvinsi').value = 'JAWA TIMUR';
     if (document.getElementById('wizKabupaten')) document.getElementById('wizKabupaten').value = 'KAB. SIDOARJO';
     if (document.getElementById('wizKecamatan')) document.getElementById('wizKecamatan').value = 'GEDANGAN';
-    if (document.getElementById('wizKelurahan')) document.getElementById('wizKelurahan').value = 'GEDANGAN';
-
-    document.getElementById('wizTransNo').value = newTransNo;
-    document.getElementById('wizStatus').value = 'Waiting Mechanic';
-    document.getElementById('wizName').value = 'Grego';
-    if (document.getElementById('wizPoliceNo')) document.getElementById('wizPoliceNo').value = 'AG 3323 UY';
-    if (document.getElementById('wizMotor')) document.getElementById('wizMotor').value = 'ALL NEW SCOOPY';
-    document.getElementById('wizMechanic').value = 'Kalvin';
-    if (document.getElementById('wizEngineNo')) document.getElementById('wizEngineNo').value = 'JB91E1260677';
-    if (document.getElementById('wizFrameNo')) document.getElementById('wizFrameNo').value = 'JB91E12606778J';
-    document.getElementById('wizStartHour').value = '15-05-2025';
-    document.getElementById('wizEstHour').value = '15-05-2025';
-    document.getElementById('wizFinishHour').value = '15-05-2025';
+    if (document.getElementById('wizKelurahan')) document.getElementById('wizKelurahan').value = 'SAWOTRATAP';
+    if (document.getElementById('wizTransNo')) document.getElementById('wizTransNo').value = newKode;
   }
 
   // Reset Parts Dibawa Table
@@ -1171,7 +1140,7 @@ function showCreateWizard(isEdit = false, editId = null) {
   if (window.parent && window.parent !== window) {
     window.parent.postMessage({
       type: 'UPDATE_CRUMB',
-      subCrumb: isEdit ? 'Edit PKB' : 'Create New'
+      subCrumb: isEdit ? 'Edit Master Canvasing' : 'Create New'
     }, '*');
   }
 }
@@ -1266,14 +1235,14 @@ function goToStep(step) {
 }
 
 function syncSummaryPane() {
-  const namaCanvasing = document.getElementById('wizNamaCanvasing')?.value || 'Test lagi NG';
-  const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value || 'Gedangan Pusat Dunia';
+  const namaCanvasing = document.getElementById('wizNamaCanvasing')?.value || 'AHASS Service Kunjung PT Maspion I';
+  const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value || 'Area Parkir PT Maspion I Gedangan';
   const dari = document.getElementById('wizDari')?.value || '26-08-2026';
   const sampai = document.getElementById('wizSampai')?.value || '27-08-2026';
   const provinsi = document.getElementById('wizProvinsi')?.value || 'JAWA TIMUR';
   const kabupaten = document.getElementById('wizKabupaten')?.value || 'KAB. SIDOARJO';
   const kecamatan = document.getElementById('wizKecamatan')?.value || 'GEDANGAN';
-  const kelurahan = document.getElementById('wizKelurahan')?.value || 'GEDANGAN';
+  const kelurahan = document.getElementById('wizKelurahan')?.value || 'SAWOTRATAP';
 
   if (document.getElementById('sumNamaCanvasing')) document.getElementById('sumNamaCanvasing').textContent = namaCanvasing || '-';
   if (document.getElementById('sumLokasiCanvasing')) document.getElementById('sumLokasiCanvasing').textContent = lokasiCanvasing || '-';
@@ -1325,40 +1294,48 @@ function syncSummaryPane() {
 }
 
 function submitWizardForm() {
-  const namaCanvasing = document.getElementById('wizNamaCanvasing')?.value.trim() || 'Test lagi NG';
-  const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value.trim() || 'Gedangan Pusat Dunia';
+  const namaCanvasing = document.getElementById('wizNamaCanvasing')?.value.trim() || 'AHASS Service Kunjung PT Maspion I';
+  const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value.trim() || 'Area Parkir PT Maspion I Gedangan';
   const dari = document.getElementById('wizDari')?.value || '26-08-2026';
   const sampai = document.getElementById('wizSampai')?.value || '27-08-2026';
+  const provinsi = document.getElementById('wizProvinsi')?.value || 'JAWA TIMUR';
+  const kabupaten = document.getElementById('wizKabupaten')?.value || 'KAB. SIDOARJO';
+  const kecamatan = document.getElementById('wizKecamatan')?.value || 'GEDANGAN';
+  const kelurahan = document.getElementById('wizKelurahan')?.value || 'SAWOTRATAP';
 
-  const newTransNo = document.getElementById('wizTransNo')?.value || generateNextTransNo();
+  const newKode = document.getElementById('wizTransNo')?.value || generateNextKodeCanvasing();
   const mechNames = selectedMechanicsList.map(m => m.name).join(', ') || 'Kalvin';
 
   if (editingPkbId) {
-    const existing = pkbData.find(d => d.id === editingPkbId);
+    const existing = masterCanvasingData.find(d => d.id === editingPkbId);
     if (existing) {
-      existing.name = namaCanvasing;
-      existing.mechanic = mechNames;
-      existing.startHour = dari;
-      existing.finishHour = sampai;
+      existing.namaCanvasing = namaCanvasing;
+      existing.lokasi = lokasiCanvasing;
+      existing.provinsi = provinsi;
+      existing.kota = kabupaten;
+      existing.kecamatan = kecamatan;
+      existing.kelurahan = kelurahan;
+      existing.dari = dari;
+      existing.sampai = sampai;
+      existing.petugas = mechNames;
     }
-    showToast(`Master Canvasing ${existing.transNo} berhasil diperbarui`, 'success');
+    showToast(`Master Canvasing ${existing.kodeCanvasing} berhasil diperbarui`, 'success');
   } else {
     const newItem = {
       id: Date.now(),
-      status: 'Waiting Mechanic',
-      transNo: newTransNo,
-      name: namaCanvasing,
-      policeNo: 'AG 3323 UY',
-      motor: 'ALL NEW SCOOPY',
-      mechanic: mechNames,
-      engineNo: 'JB91E1260677',
-      frameNo: 'JB91E12606778J',
-      startHour: dari,
-      estimatedHour: sampai,
-      finishHour: sampai
+      kodeCanvasing: newKode,
+      namaCanvasing: namaCanvasing,
+      lokasi: lokasiCanvasing,
+      provinsi: provinsi,
+      kota: kabupaten,
+      kecamatan: kecamatan,
+      kelurahan: kelurahan,
+      dari: dari,
+      sampai: sampai,
+      petugas: mechNames
     };
-    pkbData.unshift(newItem);
-    showToast(`Master Canvasing baru ${newTransNo} berhasil disimpan!`, 'success');
+    masterCanvasingData.unshift(newItem);
+    showToast(`Master Canvasing baru ${newKode} berhasil disimpan!`, 'success');
   }
 
   // Refresh Table & return to table view

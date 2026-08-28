@@ -74,26 +74,26 @@
             <!-- Search Type Dropdown Pill -->
             <div class="dropdown-wrapper" id="searchFieldDropdown">
               <button class="pill-dropdown-btn" id="btnSearchField">
-                <span id="selectedSearchField">Transaction No</span>
+                <span id="selectedSearchField">Kode Canvasing</span>
                 <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </button>
               <div class="dropdown-menu" id="searchFieldMenu">
-                <button class="dropdown-item active" data-field="transNo">Transaction No</button>
-                <button class="dropdown-item" data-field="name">Name</button>
-                <button class="dropdown-item" data-field="policeNo">Police Number</button>
-                <button class="dropdown-item" data-field="motor">Motor</button>
-                <button class="dropdown-item" data-field="engineNo">Engine Number</button>
-                <button class="dropdown-item" data-field="frameNo">Frame Number</button>
-                <button class="dropdown-item" data-field="mechanic">Mechanic</button>
+                <button class="dropdown-item active" data-field="kodeCanvasing">Kode Canvasing</button>
+                <button class="dropdown-item" data-field="namaCanvasing">Nama Canvasing</button>
+                <button class="dropdown-item" data-field="lokasi">Lokasi</button>
+                <button class="dropdown-item" data-field="provinsi">Provinsi</button>
+                <button class="dropdown-item" data-field="kota">Kota</button>
+                <button class="dropdown-item" data-field="kecamatan">Kecamatan</button>
+                <button class="dropdown-item" data-field="kelurahan">Kelurahan</button>
               </div>
             </div>
 
             <!-- Pill Search Input -->
             <div class="pill-search-box">
-              <input type="text" id="topSearchInput" placeholder="Search by Transaction No" autocomplete="off">
+              <input type="text" id="topSearchInput" placeholder="Search by Kode Canvasing" autocomplete="off">
             </div>
 
             <!-- Circular Equalizer/Filter Button -->
@@ -121,91 +121,58 @@
               <thead>
                 <!-- Row 1: Column Headers with Filter Funnel Icons -->
                 <tr class="header-titles-row">
-                  <th class="col-action" style="width: 75px;"></th>
-                  <th class="col-status" data-col="status">
+                  <th class="col-aksi-head" style="width: 52px; min-width: 52px; text-align: center;"></th>
+                  <th class="col-kode" data-col="kodeCanvasing">
                     <div class="th-content">
-                      <span>Status</span>
+                      <span>Kode Canvasing</span>
                       <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                       </svg>
                     </div>
                   </th>
-                  <th class="col-trans" data-col="transNo">
+                  <th class="col-nama" data-col="namaCanvasing">
                     <div class="th-content">
-                      <span>Transaction No</span>
+                      <span>Nama Canvasing</span>
                       <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                       </svg>
                     </div>
                   </th>
-                  <th class="col-name" data-col="name">
+                  <th class="col-lokasi" data-col="lokasi">
                     <div class="th-content">
-                      <span>Name</span>
+                      <span>Lokasi</span>
                       <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                       </svg>
                     </div>
                   </th>
-                  <th class="col-police" data-col="policeNo">
+                  <th class="col-provinsi" data-col="provinsi">
                     <div class="th-content">
-                      <span>Police Number</span>
+                      <span>Provinsi</span>
                       <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                       </svg>
                     </div>
                   </th>
-                  <th class="col-motor" data-col="motor">
+                  <th class="col-kota" data-col="kota">
                     <div class="th-content">
-                      <span>Motor</span>
+                      <span>Kota</span>
                       <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                       </svg>
                     </div>
                   </th>
-                  <th class="col-engine" data-col="engineNo">
+                  <th class="col-kecamatan" data-col="kecamatan">
                     <div class="th-content">
-                      <span>Engine Number</span>
+                      <span>Kecamatan</span>
                       <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                       </svg>
                     </div>
                   </th>
-                  <th class="col-frame" data-col="frameNo">
+                  <th class="col-kelurahan" data-col="kelurahan">
                     <div class="th-content">
-                      <span>Frame Number</span>
-                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                      </svg>
-                    </div>
-                  </th>
-                  <th class="col-mechanic" data-col="mechanic">
-                    <div class="th-content">
-                      <span>Mechanic</span>
-                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                      </svg>
-                    </div>
-                  </th>
-                  <th class="col-starthour" data-col="startHour">
-                    <div class="th-content">
-                      <span>Start Hour</span>
-                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                      </svg>
-                    </div>
-                  </th>
-                  <th class="col-esthour" data-col="estimatedHour">
-                    <div class="th-content stacked-header">
-                      <span>Estimated</span>
-                      <span>Hour</span>
-                      <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                      </svg>
-                    </div>
-                  </th>
-                  <th class="col-finishhour" data-col="finishHour">
-                    <div class="th-content">
-                      <span>Finish Hour</span>
+                      <span>Kelurahan</span>
                       <svg class="funnel-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                       </svg>
@@ -215,131 +182,75 @@
 
                 <!-- Row 2: Subheader Filter / Search Row with Icons -->
                 <tr class="header-filters-row" id="filterRow">
-                  <th class="col-action"></th>
-                  <th class="col-status">
+                  <th class="col-aksi-head" style="width: 52px; min-width: 52px;"></th>
+                  <th class="col-kode">
                     <div class="filter-cell">
                       <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                       </svg>
-                      <input type="text" class="sub-filter-input" data-filter="status" placeholder="">
+                      <input type="text" class="sub-filter-input" data-filter="kodeCanvasing" placeholder="">
                     </div>
                   </th>
-                  <th class="col-trans">
+                  <th class="col-nama">
                     <div class="filter-cell">
                       <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                       </svg>
-                      <input type="text" class="sub-filter-input" data-filter="transNo" placeholder="">
+                      <input type="text" class="sub-filter-input" data-filter="namaCanvasing" placeholder="">
                     </div>
                   </th>
-                  <th class="col-name">
+                  <th class="col-lokasi">
                     <div class="filter-cell">
                       <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                       </svg>
-                      <input type="text" class="sub-filter-input" data-filter="name" placeholder="">
+                      <input type="text" class="sub-filter-input" data-filter="lokasi" placeholder="">
                     </div>
                   </th>
-                  <th class="col-police">
+                  <th class="col-provinsi">
                     <div class="filter-cell">
                       <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                       </svg>
-                      <input type="text" class="sub-filter-input" data-filter="policeNo" placeholder="">
+                      <input type="text" class="sub-filter-input" data-filter="provinsi" placeholder="">
                     </div>
                   </th>
-                  <th class="col-motor">
+                  <th class="col-kota">
                     <div class="filter-cell">
                       <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                       </svg>
-                      <input type="text" class="sub-filter-input" data-filter="motor" placeholder="">
+                      <input type="text" class="sub-filter-input" data-filter="kota" placeholder="">
                     </div>
                   </th>
-                  <th class="col-engine">
+                  <th class="col-kecamatan">
                     <div class="filter-cell">
                       <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                       </svg>
-                      <input type="text" class="sub-filter-input" data-filter="engineNo" placeholder="">
+                      <input type="text" class="sub-filter-input" data-filter="kecamatan" placeholder="">
                     </div>
                   </th>
-                  <th class="col-frame">
+                  <th class="col-kelurahan">
                     <div class="filter-cell">
                       <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                       </svg>
-                      <input type="text" class="sub-filter-input" data-filter="frameNo" placeholder="">
-                    </div>
-                  </th>
-                  <th class="col-mechanic">
-                    <div class="filter-cell">
-                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                      </svg>
-                      <input type="text" class="sub-filter-input" data-filter="mechanic" placeholder="">
-                    </div>
-                  </th>
-                  <th class="col-starthour">
-                    <div class="filter-cell date-filter-cell">
-                      <svg class="sub-cal-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                      </svg>
-                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                      </svg>
-                      <input type="text" class="sub-filter-input" data-filter="startHour" placeholder="">
-                    </div>
-                  </th>
-                  <th class="col-esthour">
-                    <div class="filter-cell date-filter-cell">
-                      <svg class="sub-cal-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                      </svg>
-                      <svg class="sub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                      </svg>
-                      <input type="text" class="sub-filter-input" data-filter="estimatedHour" placeholder="">
-                    </div>
-                  </th>
-                  <th class="col-finishhour">
-                    <div class="filter-cell date-filter-cell">
-                      <svg class="sub-cal-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                      </svg>
-                      <input type="text" class="sub-filter-input" data-filter="finishHour" placeholder="">
+                      <input type="text" class="sub-filter-input" data-filter="kelurahan" placeholder="">
                     </div>
                   </th>
                 </tr>
@@ -482,7 +393,7 @@
                       <label class="form-label" for="wizNamaCanvasing">Nama Canvasing <span class="required-star">*</span></label>
                       <div class="input-indicator-wrapper">
                         <span class="required-indicator-bar"></span>
-                        <input type="text" id="wizNamaCanvasing" class="form-input input-with-indicator" placeholder="Masukkan nama canvasing" value="Test lagi NG" required>
+                        <input type="text" id="wizNamaCanvasing" class="form-input input-with-indicator" placeholder="Masukkan nama canvasing" value="AHASS Service Kunjung PT Maspion I" required>
                       </div>
                     </div>
 
@@ -491,7 +402,7 @@
                       <label class="form-label" for="wizLokasiCanvasing">Lokasi Canvasing <span class="required-star">*</span></label>
                       <div class="input-indicator-wrapper">
                         <span class="required-indicator-bar"></span>
-                        <input type="text" id="wizLokasiCanvasing" class="form-input input-with-indicator" placeholder="Masukkan lokasi canvasing" value="Gedangan Pusat Dunia" required>
+                        <input type="text" id="wizLokasiCanvasing" class="form-input input-with-indicator" placeholder="Masukkan lokasi canvasing" value="Area Parkir PT Maspion I Gedangan" required>
                       </div>
                     </div>
 
@@ -759,7 +670,7 @@
                         </div>
                         <div class="summary-info-content">
                           <span class="summary-info-label">Nama Canvasing</span>
-                          <span class="summary-info-value" id="sumNamaCanvasing">Test lagi NG</span>
+                          <span class="summary-info-value" id="sumNamaCanvasing">AHASS Service Kunjung PT Maspion I</span>
                         </div>
                       </div>
 
@@ -772,7 +683,7 @@
                         </div>
                         <div class="summary-info-content">
                           <span class="summary-info-label">Lokasi Canvasing</span>
-                          <span class="summary-info-value" id="sumLokasiCanvasing">Gedangan Pusat Dunia</span>
+                          <span class="summary-info-value" id="sumLokasiCanvasing">Area Parkir PT Maspion I Gedangan</span>
                         </div>
                       </div>
                     </div>
@@ -1013,7 +924,7 @@
   <div class="modal-backdrop" id="detailModal">
     <div class="modal-card detail-card">
       <div class="modal-header">
-        <h3 class="modal-title" id="detailModalTitle">Detail Perintah Kerja Bengkel (PKB)</h3>
+        <h3 class="modal-title" id="detailModalTitle">Detail Master Canvasing</h3>
         <button class="btn-close" id="btnCloseDetailModal">&times;</button>
       </div>
       <div class="modal-body" id="detailModalBody">
