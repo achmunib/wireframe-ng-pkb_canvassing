@@ -19,7 +19,7 @@ const MODULES = {
   }
 };
 
-let currentModule = 'master';
+let currentModule = 'list';
 
 document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
@@ -191,10 +191,10 @@ function switchModule(moduleKey, updateHash = true) {
  */
 function handleInitialRoute() {
   const hash = window.location.hash;
-  if (hash === '#list-canvasing') {
-    switchModule('list', false);
-  } else {
+  if (hash === '#master-canvasing') {
     switchModule('master', false);
+  } else {
+    switchModule('list', false);
   }
 }
 

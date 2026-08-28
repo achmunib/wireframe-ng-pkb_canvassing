@@ -8,74 +8,91 @@ let pkbData = [
   {
     id: 1,
     status: 'Waiting Mechanic',
-    transNo: '027-PKB-2025-DMS0000000134',
+    transNo: '051-PKB-CNVS-2026-DMS000001',
     name: 'Grego',
     policeNo: 'AG 3323 UY',
     motor: 'ALL NEW SCOOPY',
     engineNo: 'JB91E1260677',
     frameNo: 'JB91E12606778J',
     mechanic: 'Kalvin',
-    startHour: '15-05-2025',
-    estimatedHour: '15-05-2025',
-    finishHour: '15-05-2025'
+    startHour: '15-05-2026',
+    estimatedHour: '15-05-2026',
+    finishHour: '15-05-2026'
   },
   {
     id: 2,
     status: 'Waiting Mechanic',
-    transNo: '027-PKB-2025-DMS0000000130',
+    transNo: '051-PKB-CNVS-2026-DMS000002',
     name: 'Renata',
     policeNo: 'AE 3392 OI',
     motor: 'ALL NEW VARIO',
     engineNo: 'JB91E1260676',
     frameNo: 'JB91E12606767S',
     mechanic: 'Rizal',
-    startHour: '15-05-2025',
-    estimatedHour: '15-05-2025',
-    finishHour: '15-05-2025'
+    startHour: '15-05-2026',
+    estimatedHour: '15-05-2026',
+    finishHour: '15-05-2026'
   },
   {
     id: 3,
     status: 'Waiting Mechanic',
-    transNo: '027-PKB-2025-DMS0000000129',
+    transNo: '051-PKB-CNVS-2026-DMS000003',
     name: 'Mentari',
     policeNo: 'T 2727 HAH',
     motor: '',
     engineNo: 'JB91E1260675',
     frameNo: 'JB91E1260675LK',
     mechanic: 'Agung',
-    startHour: '15-05-2025',
-    estimatedHour: '15-05-2025',
-    finishHour: '15-05-2025'
+    startHour: '15-05-2026',
+    estimatedHour: '15-05-2026',
+    finishHour: '15-05-2026'
   },
   {
     id: 4,
     status: 'In Progress',
-    transNo: '027-PKB-2025-DMS0000000128',
+    transNo: '051-PKB-CNVS-2026-DMS000004',
     name: 'Vincent',
     policeNo: 'AG 6524 RFA',
     motor: 'ALL NEW VARIO',
     engineNo: 'JB91E1260674',
     frameNo: 'JB91E1260674JU',
     mechanic: 'Robin',
-    startHour: '15-05-2025',
-    estimatedHour: '15-05-2025',
-    finishHour: '15-05-2025'
+    startHour: '15-05-2026',
+    estimatedHour: '15-05-2026',
+    finishHour: '15-05-2026'
   },
   {
     id: 5,
     status: 'Pause',
-    transNo: '027-PKB-2025-DMS0000000127',
+    transNo: '051-PKB-CNVS-2026-DMS000005',
     name: 'Sylkinta',
     policeNo: 'AG 3738 BS',
     motor: '',
     engineNo: 'JB91E1260671',
     frameNo: 'JB91E1260671LP',
     mechanic: 'Ratna',
-    startHour: '15-05-2025',
-    estimatedHour: '15-05-2025',
-    finishHour: '15-05-2025'
+    startHour: '15-05-2026',
+    estimatedHour: '15-05-2026',
+    finishHour: '15-05-2026'
   }
 ];
+
+// Helper to generate formatted Transaction No: 051-PKB-CNVS-YYYY-DMSXXXXXX
+function generateNextTransNo() {
+  const currentYear = new Date().getFullYear() || 2026;
+  let maxSeq = 0;
+  pkbData.forEach(item => {
+    if (item.transNo) {
+      const match = item.transNo.match(/DMS(\d+)/i);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxSeq) maxSeq = num;
+      }
+    }
+  });
+  const nextSeq = maxSeq + 1;
+  return `051-PKB-CNVS-${currentYear}-DMS${String(nextSeq).padStart(6, '0')}`;
+}
 
 let activeSearchField = 'transNo';
 let activeSelectedId = null;
@@ -757,10 +774,10 @@ function initTambahPartModal() {
 
 // Master Catalog Mekanik & Assignment Status
 const mechanicCatalog = [
-  { name: 'Kalvin', stall: 'Stall 1', isBusy: true, currentPkb: '027-PKB-2025-DMS0000000134' },
-  { name: 'Rizal', stall: 'Stall 2', isBusy: true, currentPkb: '027-PKB-2025-DMS0000000130' },
+  { name: 'Kalvin', stall: 'Stall 1', isBusy: true, currentPkb: '051-PKB-CNVS-2026-DMS000001' },
+  { name: 'Rizal', stall: 'Stall 2', isBusy: true, currentPkb: '051-PKB-CNVS-2026-DMS000002' },
   { name: 'Agung', stall: 'Stall 3', isBusy: false, currentPkb: null },
-  { name: 'Robin', stall: 'Stall 4', isBusy: true, currentPkb: '027-PKB-2025-DMS0000000128' },
+  { name: 'Robin', stall: 'Stall 4', isBusy: true, currentPkb: '051-PKB-CNVS-2026-DMS000004' },
   { name: 'Ratna', stall: 'Stall 5', isBusy: false, currentPkb: null },
   { name: 'Hendri', stall: 'Stall 6', isBusy: false, currentPkb: null }
 ];
@@ -1110,8 +1127,7 @@ function showCreateWizard(isEdit = false, editId = null) {
     }
   } else {
     // New Record
-    const nextNum = 135 + pkbData.length - 5;
-    const newTransNo = `027-PKB-2025-DMS0000000${nextNum}`;
+    const newTransNo = generateNextTransNo();
     if (transNoPill) transNoPill.textContent = newTransNo;
     if (bannerDetail) {
       bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${newTransNo}</span> • Pendaftaran PKB Master Canvasing Baru`;
@@ -1314,8 +1330,7 @@ function submitWizardForm() {
   const dari = document.getElementById('wizDari')?.value || '26-08-2026';
   const sampai = document.getElementById('wizSampai')?.value || '27-08-2026';
 
-  const nextNum = 135 + pkbData.length - 5;
-  const newTransNo = `027-PKB-2025-DMS0000000${nextNum}`;
+  const newTransNo = document.getElementById('wizTransNo')?.value || generateNextTransNo();
   const mechNames = selectedMechanicsList.map(m => m.name).join(', ') || 'Kalvin';
 
   if (editingPkbId) {
