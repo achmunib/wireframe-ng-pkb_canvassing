@@ -1178,7 +1178,7 @@ function downloadPartTemplate() {
 }
 
 // Master Catalog Mekanik & Assignment Status
-const mechanicCatalog = [
+let mechanicCatalog = [
   { name: 'Kalvin', stall: 'Stall 1', isBusy: true, currentPkb: '051-PKB-CNVS-2026-DMS000001' },
   { name: 'Rizal', stall: 'Stall 2', isBusy: true, currentPkb: '051-PKB-CNVS-2026-DMS000002' },
   { name: 'Agung', stall: 'Stall 3', isBusy: false, currentPkb: null },
@@ -1188,6 +1188,42 @@ const mechanicCatalog = [
 ];
 
 let selectedMechanicsList = [];
+
+function renderMechanicSelectOptions() {
+  const selectEl = document.getElementById('selectMekanikCanvasing');
+  if (!selectEl) return;
+
+  selectEl.innerHTML = '<option value="">Pilih Mekanik...</option>' + mechanicCatalog.map(m => {
+    if (m.isBusy) {
+      return `<option value="${m.name}" data-stall="${m.stall}" data-busy="true" data-pkb="${m.currentPkb}">${m.name} (${m.stall} - Sedang Mengerjakan PKB ${m.currentPkb})</option>`;
+    } else {
+      return `<option value="${m.name}" data-stall="${m.stall}" data-busy="false">${m.name} (${m.stall} - Available / Siap Ditugaskan)</option>`;
+    }
+  }).join('');
+  selectEl.value = '';
+}
+
+function refreshMechanicStatus() {
+  // Randomize status for each mechanic (Available vs Sedang Mengerjakan)
+  mechanicCatalog.forEach((m, index) => {
+    // Generate pseudo-random boolean
+    const isBusy = Math.random() < 0.5;
+    m.isBusy = isBusy;
+    if (isBusy) {
+      const randomPkbNum = Math.floor(Math.random() * 900000) + 100000;
+      m.currentPkb = `051-PKB-CNVS-2026-DMS${randomPkbNum}`;
+    } else {
+      m.currentPkb = null;
+    }
+  });
+
+  // Re-render select options with newly randomized statuses
+  renderMechanicSelectOptions();
+
+  // Reset selected mechanics table to empty
+  selectedMechanicsList = [];
+  renderSelectedMechanics();
+}
 
 function renderSelectedMechanics() {
   const tbody = document.getElementById('bodyMekanikCanvasing');
@@ -1244,6 +1280,8 @@ function initTambahMekanikStep() {
   const btnAdd = document.getElementById('btnAddMekanikToList');
   const btnRefresh = document.getElementById('btnRefreshMekanik');
 
+  renderMechanicSelectOptions();
+
   if (btnAdd && selectEl) {
     btnAdd.addEventListener('click', () => {
       const val = selectEl.value;
@@ -1265,7 +1303,7 @@ function initTambahMekanikStep() {
         currentPkb: null
       };
 
-      selectedMechanicsList.push(found);
+      selectedMechanicsList.push({ ...found });
       renderSelectedMechanics();
       selectEl.value = '';
 
@@ -1281,8 +1319,9 @@ function initTambahMekanikStep() {
     btnRefresh.addEventListener('click', () => {
       btnRefresh.classList.add('rotating');
       setTimeout(() => {
+        refreshMechanicStatus();
         btnRefresh.classList.remove('rotating');
-        showToast('Daftar status dan ketersediaan mekanik berhasil diperbarui', 'info');
+        showToast('Status mekanik berhasil diperbarui. Daftar pilihan mekanik telah direset.', 'info');
       }, 500);
     });
   }
@@ -1546,6 +1585,7 @@ function showCreateWizard(isEdit = false, editId = null) {
   // Reset Selected Mechanics Table
   selectedMechanicsList = [];
   renderSelectedMechanics();
+  renderMechanicSelectOptions();
 
   // Reset to Step 1
   goToStep(1);
