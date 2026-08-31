@@ -1,0 +1,177 @@
+# 2️⃣ Master Canvasing
+
+Modul **Master Canvasing** digunakan untuk mendaftarkan dan mengelola data master kegiatan canvasing (service kunjung / service keliling AHASS), meliputi informasi kegiatan & wilayah, daftar part yang dibawa, serta mekanik yang ditugaskan.
+
+Modul ini dijalankan di dalam **iframe** pada layout shell portal (`index.html`) dengan hash navigasi `#master-canvasing` dan sumber `Master Canvasing/index.html`. Saat berjalan di dalam iframe, header standalone modul disembunyikan (class `in-iframe`) dan breadcrumb dikirim ke parent shell melalui `postMessage` bertipe `UPDATE_CRUMB`.
+
+**Alur besar modul:**
+
+`Tabel Master Canvasing` → `Create / Edit` → `Step 1 Informasi Canvasing` → `Step 2 Part Dibawa` → `Step 3 Pilih Mekanik` → `Step 4 Summary` → `Simpan` → kembali ke `Tabel Master Canvasing`
+
+---
+
+# Tampilan Awal — Tabel Master Canvasing
+
+ ![Tampilan awal tabel Master Canvasing](attachments/master-canvasing-01-table-view.png " =1680x904")
+
+| Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
+|--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
+|              |                |          |                 |           |     |                   |        |            |            |
+| LABEL-Judul Halaman | LABEL | Menampilkan judul halaman "Master Canvasing" | Statis, tidak dapat diubah user | | | | | | |
+| BUTTON-Create | BUTTON | Membuka wizard pendaftaran Master Canvasing baru | Saat diklik akan menyembunyikan `masterTableView` dan menampilkan `createMasterView` dalam mode **Create**<br><br>Kode Canvasing baru di-generate otomatis melalui `generateNextKodeCanvasing()`<br><br>Seluruh state wizard direset: daftar part dibawa dikosongkan, daftar mekanik dikosongkan, wizard kembali ke Step 1<br><br>Mengirim `postMessage` `UPDATE_CRUMB` dengan sub-crumb **"Create New"** ke parent shell | | | Step 1 — Informasi Canvasing | | | |
+| LOV-Search Field | LOV / DROPDOWN | Menampilkan pilihan kolom yang dijadikan acuan pencarian pada Search Box | Pilihan yang tersedia: **Kode Canvasing** (default), **Nama Canvasing**, **Lokasi**, **Provinsi**, **Kota**, **Kecamatan**, **Kelurahan**<br><br>Saat salah satu dipilih: label tombol berubah, placeholder Search Box berubah menjadi `Search by <label>`, fokus otomatis ke Search Box, dan filter tabel langsung dijalankan ulang<br><br>Dropdown otomatis tertutup saat user klik di luar area dropdown | | | | | | |
+| TXTBOX-Search | TXTBOX | Input kata kunci pencarian data Master Canvasing | Pencarian dijalankan **realtime** pada event `input` (tanpa tombol cari)<br><br>Pencarian hanya diterapkan pada kolom yang dipilih di LOV-Search Field<br><br>Sifat pencarian: **case-insensitive** dan **partial match** (`includes`)<br><br>Hasil pencarian digabungkan (AND) dengan filter per kolom pada baris subheader | No | | | | | |
+| BUTTON-Equalizer (Toggle Filter) | BUTTON | Menampilkan / menyembunyikan baris filter per kolom pada header tabel | Bersifat toggle. Saat aktif, baris `filterRow` ditampilkan dan muncul toast **"Kolom filter aktif"**<br><br>Saat non-aktif, baris filter disembunyikan dan muncul toast **"Kolom filter disembunyikan"**<br><br>Nilai filter yang sudah diketik **tidak direset** saat baris filter disembunyikan | | | | | | |
+| TABLE-Master Canvasing | TABLE | Menampilkan daftar data Master Canvasing | Kolom yang ditampilkan berurutan: **Aksi**, **Kode Canvasing**, **Nama Canvasing**, **Lokasi**, **Provinsi**, **Kota**, **Kecamatan**, **Kelurahan**<br><br>Baris tabel di-render dinamis oleh `renderTable()` dari sumber data `masterCanvasingData`<br><br>Jika hasil filter kosong, tampil empty state: **"Data Canvasing tidak ditemukan"** dengan keterangan *"Sesuaikan kata kunci pencarian atau filter kolom."* | | | | | | |
+| HEADER-Kolom (Sorting) | TABLE HEADER | Mengurutkan data berdasarkan kolom yang diklik | Klik pada judul kolom (yang memiliki ikon corong) akan mengurutkan data secara **ascending**; klik kedua pada kolom yang sama membalik menjadi **descending**<br><br>Pengurutan dilakukan sebagai **string comparison** (case-insensitive)<br><br>Kolom yang mendukung sorting: Kode Canvasing, Nama Canvasing, Lokasi, Provinsi, Kota, Kecamatan, Kelurahan<br><br>Setelah sorting, filter aktif tetap diterapkan ulang | | | | | | |
+| TXTBOX-Filter Kolom | TXTBOX | Filter data per kolom pada baris subheader tabel | Tersedia 1 input filter untuk setiap kolom: Kode Canvasing, Nama Canvasing, Lokasi, Provinsi, Kota, Kecamatan, Kelurahan<br><br>Filter berjalan **realtime**, **case-insensitive**, **partial match**<br><br>Beberapa filter kolom dapat aktif bersamaan dan digabungkan dengan logika **AND**, serta digabungkan pula dengan kata kunci pada Search Box | No | | | | | |
+| BUTTON-Aksi (Lihat Detail) | BUTTON | Menampilkan pop-up detail data Master Canvasing pada baris terpilih | Ikon mata pada kolom Aksi. Saat diklik menjalankan `viewCanvasingDetail(id)` dan membuka **Modal Detail Master Canvasing** | | | Modal Detail Master Canvasing | | | |
+| LABEL-Table Info | LABEL | Menampilkan informasi jumlah data yang tampil | Format: `Showing 1 to <jumlah hasil filter> of <jumlah hasil filter> entries`<br><br>Jika hasil filter kosong, format menjadi `Showing 0 to 0 of <total data> entries` | | | | | | |
+| BUTTON-Pagination | BUTTON | Navigasi halaman tabel (Previous / Nomor Halaman / Next) | Saat ini seluruh data ditampilkan dalam satu halaman; tombol **Prev** berstatus disabled dan tombol **Prev/Next** belum memiliki aksi<br><br>**Catatan pengembangan:** perlu implementasi paging (server-side / client-side) beserta perhitungan ulang label Table Info | | | | | | |
+| BUTTON-Draft PKB (Floating) | BUTTON | Menampilkan indikator jumlah draft PKB yang tersimpan | Menampilkan badge jumlah draft (contoh: **3**)<br><br>Saat diklik menampilkan toast **"3 draft PKB tersimpan siap diterbitkan"**<br><br>**Catatan pengembangan:** jumlah badge masih statis, perlu di-binding ke data draft PKB yang sebenarnya | | | | | | |
+
+---
+
+# Modal Detail Master Canvasing
+
+ ![Modal detail data Master Canvasing](attachments/master-canvasing-02-detail-modal.png " =1440x900")
+
+| Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
+|--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
+|              |                |          |                 |           |     |                   |        |            |            |
+| LABEL-Detail Master Canvasing | LABEL | Menampilkan detail data Master Canvasing pada baris yang dipilih | Field yang ditampilkan: <br> * **Kode Canvasing** <br> * **Nama Canvasing** <br> * **Lokasi** <br> * **Provinsi** <br> * **Kota / Kabupaten** <br> * **Kecamatan** <br> * **Kelurahan** <br> * **Periode Tanggal** (format `<dari> s/d <sampai>`) <br> * **Mekanik / Petugas** (daftar nama dipisah koma)<br><br>Seluruh field bersifat **read-only** | | | | | | |
+| BUTTON-Close (X) | BUTTON | Menutup modal detail | Modal juga tertutup saat user mengklik area backdrop di luar kartu modal | | | | | | |
+| BUTTON-Tutup | BUTTON | Menutup modal detail | Sama dengan tombol Close (X) | | | | | | |
+
+---
+
+# Tampilan Step 1 — Informasi Canvasing
+
+ ![Step 1 Informasi Canvasing](attachments/master-canvasing-03-step1.png " =1440x1261")
+
+**Stepper Wizard** terdiri dari 4 step: **Informasi Canvasing** → **Part Dibawa** → **Pilih Mekanik** → **Summary**.
+
+| Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
+|--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
+|              |                |          |                 |           |     |                   |        |            |            |
+| STEPPER-Node | STEPPER | Menampilkan posisi step aktif dan progres pengisian wizard | Node step aktif ditandai class `active`, step yang sudah dilewati ditandai `completed`, garis penghubung antar step ikut berubah status<br><br>Node step **dapat diklik langsung** untuk berpindah ke step manapun<br><br>**Catatan pengembangan:** perpindahan melalui klik node **melewati validasi** Step 1 (berbeda dengan tombol Next yang memvalidasi). Perlu dikonfirmasi apakah node step harus dikunci sampai step sebelumnya valid | | | Step 1 / 2 / 3 / 4 | | | |
+| TXTBOX-Kode Canvasing | TXTBOX | Menampilkan nomor Kode Canvasing | Field bersifat **readonly & disabled** (background abu-abu), tidak dapat diinput manual<br><br>Format kode: `051-CNVS-<TAHUN>-DMS<10 digit sequence>`, contoh: `051-CNVS-2026-DMS0000000021`<br><br>Nomor di-generate otomatis dari sequence tertinggi yang sudah ada (`generateNextKodeCanvasing()`)<br><br>Pada mode **Edit**, field terisi Kode Canvasing dari data yang dipilih<br><br>**Catatan pengembangan:** generate nomor perlu dipindahkan ke server agar unik lintas user / lintas sesi | No (auto) | | | | | |
+| TXTBOX-Nama Canvasing | TXTBOX | Input nama kegiatan canvasing | Placeholder: *"Masukkan nama canvasing"*<br><br>Wajib diisi. Jika kosong dan user menekan **Next**, muncul toast **"Harap isi nama canvasing"** dan fokus kembali ke field ini<br><br>Ditandai indikator wajib (bar merah + tanda `*`) | Yes | | | | | |
+| TXTBOX-Lokasi Canvasing | TXTBOX | Input lokasi / titik pelaksanaan canvasing | Placeholder: *"Masukkan lokasi canvasing"*<br><br>Wajib diisi. Jika kosong dan user menekan **Next**, muncul toast **"Harap isi lokasi canvasing"** dan fokus kembali ke field ini<br><br>Ditandai indikator wajib (bar merah + tanda `*`) | Yes | | | | | |
+| DATEPICKER-Dari | DATE PICKER | Input tanggal mulai periode canvasing | Format tampilan: `DD-MM-YYYY`<br><br>Terdapat tombol ikon kalender di sisi kanan field<br><br>**Catatan pengembangan:** belum ada komponen date picker yang aktif dan belum ada validasi bahwa tanggal **Dari** tidak boleh lebih besar dari tanggal **Sampai**, serta belum ada validasi mandatory di sisi script | Yes | | | | | |
+| DATEPICKER-Sampai | DATE PICKER | Input tanggal selesai periode canvasing | Format tampilan: `DD-MM-YYYY`<br><br>Terdapat tombol ikon kalender di sisi kanan field<br><br>**Catatan pengembangan:** sama dengan **DATEPICKER-Dari**, perlu validasi rentang tanggal dan validasi mandatory | Yes | | | | | |
+| LOV-Provinsi | LIST OF VIEW | Menampilkan daftar Provinsi lokasi canvasing | Ditandai wajib (`*`) pada label<br><br>**Catatan pengembangan:** isi dropdown masih hardcode (JAWA TIMUR, JAWA TENGAH, JAWA BARAT, DKI JAKARTA, BALI). Perlu di-binding ke master wilayah dan belum ada validasi mandatory di sisi script | Yes | | | | | |
+| LOV-Kabupaten/Kota | LIST OF VIEW | Menampilkan daftar Kabupaten/Kota lokasi canvasing | Ditandai wajib (`*`) pada label<br><br>**Catatan pengembangan:** isi dropdown masih hardcode dan **belum ter-cascade** dengan pilihan Provinsi. Perlu di-binding ke master wilayah dengan filter berdasarkan Provinsi terpilih | Yes | | | | | |
+| LOV-Kecamatan | LIST OF VIEW | Menampilkan daftar Kecamatan lokasi canvasing | Ditandai wajib (`*`) pada label<br><br>**Catatan pengembangan:** isi dropdown masih hardcode dan belum ter-cascade dengan pilihan Kabupaten/Kota | Yes | | | | | |
+| LOV-Kelurahan | LIST OF VIEW | Menampilkan daftar Kelurahan lokasi canvasing | **Tidak wajib** (tidak ada tanda `*` dan tanpa indikator bar wajib)<br><br>**Catatan pengembangan:** isi dropdown masih hardcode dan belum ter-cascade dengan pilihan Kecamatan | No | | | | | |
+| BUTTON-Kembali ke Tabel | BUTTON | Kembali dari wizard ke tampilan tabel Master Canvasing | Pada Step 1, label tombol adalah **"Kembali ke Tabel"** dan mengembalikan tampilan ke `masterTableView`<br><br>Mengirim `postMessage` `UPDATE_CRUMB` dengan sub-crumb `null` untuk mereset breadcrumb di parent shell<br><br>**Catatan pengembangan:** belum ada konfirmasi jika terdapat data yang sudah diisi (risiko kehilangan input) | | | Tabel Master Canvasing | | | |
+| BUTTON-Next | BUTTON | Lanjut ke Step 2 (Part Dibawa) | Sebelum berpindah, dijalankan validasi **Nama Canvasing** dan **Lokasi Canvasing** wajib terisi<br><br>Jika validasi gagal, perpindahan step dibatalkan dan muncul toast peringatan | | | Step 2 — Part Dibawa | | | |
+
+---
+
+# Tampilan Step 2 — Part Dibawa
+
+ ![Step 2 Daftar Part Dibawa](attachments/master-canvasing-04-step2.png " =1440x904")
+
+| Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
+|--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
+|              |                |          |                 |           |     |                   |        |            |            |
+| TABLE-Daftar Part Dibawa | TABLE | Menampilkan daftar part yang akan dibawa pada kegiatan canvasing | Kolom: **Kode Part**, **Nama Part**, **Qty** (ditampilkan bersama satuan), **Harga**, **Aksi**<br><br>Jika belum ada data, tampil baris **"No records found"**<br><br>Data bersifat sementara di memori (`partsDibawa`) dan **direset setiap kali wizard dibuka ulang** | | | | | | |
+| BUTTON-Tambah | BUTTON | Membuka pop-up **Tambah Part** untuk menambahkan part satu per satu | Membuka modal `tambahPartModal` dengan kondisi awal: part pertama pada katalog terpilih, Qty = 1, dan field Satuan/Harga/Diskon/Available Stock terisi otomatis | | | Modal Tambah Part | | | |
+| BUTTON-Upload Part | BUTTON | Membuka pop-up **Upload Part Canvasing** untuk menambahkan banyak part sekaligus dari file | Membuka modal `uploadPartModal` dan mereset seluruh state upload sebelumnya (file, ringkasan validasi, tabel preview, tombol import) | | | Modal Upload Part Canvasing | | | |
+| BUTTON-Hapus Part (Ikon Trash) | BUTTON | Menghapus satu baris part dari daftar part dibawa | Saat diklik, baris dihapus dari daftar dan muncul toast **"Part `<nama part>` dihapus dari daftar bawaan"**<br><br>**Catatan pengembangan:** penghapusan langsung dieksekusi tanpa dialog konfirmasi | | | | | | |
+| BUTTON-Kembali | BUTTON | Kembali ke Step 1 (Informasi Canvasing) | Label tombol pada Step 2 berubah menjadi **"Kembali"** | | | Step 1 — Informasi Canvasing | | | |
+| BUTTON-Next | BUTTON | Lanjut ke Step 3 (Pilih Mekanik) | Tidak ada validasi pada Step 2 — daftar part **boleh kosong**<br><br>**Catatan pengembangan:** perlu dikonfirmasi apakah minimal 1 part wajib diisi, atau cukup ditampilkan peringatan bila kosong | No | | Step 3 — Pilih Mekanik | | | |
+
+## Pop-up "Tambah Part"
+
+ ![Pop-up Tambah Part](attachments/master-canvasing-05-modal-tambah-part.png " =1440x900")
+
+| Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
+|--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
+|              |                |          |                 |           |     |                   |        |            |            |
+| TXTBOX-Part (Autocomplete) | TXTBOX + SUGGEST | Input pencarian part yang akan ditambahkan | Placeholder: *"Insert part name"*<br><br>Saat diketik, muncul daftar suggest hasil pencarian pada katalog part berdasarkan **Kode Part** atau **Nama Part** (case-insensitive, partial match)<br><br>Format tiap baris suggest: `<Kode Part> - <Nama Part> (Stok: <jumlah> <satuan>)`<br><br>Saat suggest dipilih, field Part terisi nama part dan field **Satuan**, **Harga**, **Diskon**, **Available Stock** terisi otomatis mengikuti part terpilih<br><br>Daftar suggest tertutup otomatis saat user klik di luar area input/suggest | Yes | | | | | |
+| TXTBOX-Qty | TXTBOX (NUMBER) | Input jumlah part yang dibawa | Nilai default **1**, minimal **1**<br><br>Validasi saat Simpan: <br> * Jika Qty ≤ 0 → toast **"Qty harus berupa angka lebih besar dari 0"** <br> * Jika Qty > Available Stock → toast **"Qty (`<qty>`) melebihi stok yang tersedia (`<stok> <satuan>`)"** dan fokus kembali ke field Qty | Yes | | | | | |
+| TXTBOX-Satuan | TXTBOX | Menampilkan satuan part terpilih (contoh: BOTOL, SET, PCS) | **Readonly & disabled**, terisi otomatis dari katalog part | No (auto) | | | | | |
+| TXTBOX-Harga | TXTBOX | Menampilkan harga satuan part terpilih | **Readonly & disabled**, terisi otomatis dari katalog part, format `Rp <nominal>` | No (auto) | | | | | |
+| TXTBOX-Diskon | TXTBOX | Menampilkan nominal diskon part terpilih | **Readonly & disabled**, terisi otomatis dari katalog part | No (auto) | | | | | |
+| TXTBOX-Available Stock | TXTBOX | Menampilkan jumlah stok yang tersedia untuk part terpilih | **Readonly & disabled**, terisi otomatis dari katalog part, dipakai sebagai acuan validasi Qty | No (auto) | | | | | |
+| BUTTON-Simpan | BUTTON | Menyimpan part ke tabel Daftar Part Dibawa | Urutan validasi: <br> 1. Nama part wajib terisi → jika kosong, toast **"Harap pilih atau masukkan nama part"** <br> 2. Qty harus > 0 <br> 3. Qty tidak boleh melebihi Available Stock<br><br>Jika **Kode Part sudah ada** di daftar, Qty **diakumulasikan** dengan baris yang ada, dan akumulasi tersebut divalidasi ulang terhadap stok: jika melebihi, muncul toast **"Total Qty (`<total>`) melebihi stok tersedia (`<stok>`)"** dan penyimpanan dibatalkan<br><br>Jika berhasil, modal tertutup dan muncul toast **"Part `<nama>` (`<qty> <satuan>`) berhasil ditambahkan"** | | | | | | |
+| BUTTON-Kembali | BUTTON | Menutup pop-up Tambah Part tanpa menyimpan | Modal juga tertutup melalui tombol Close (X) atau klik pada area backdrop | | | | | | |
+
+## Pop-up "Upload Part Canvasing"
+
+ ![Pop-up Upload Part Canvasing](attachments/master-canvasing-06-modal-upload-part.png " =1440x900")
+
+ ![Hasil pemeriksaan ketersediaan stok setelah file diunggah](attachments/master-canvasing-06b-upload-validasi.png " =1440x900")
+
+| Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
+|--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
+|              |                |          |                 |           |     |                   |        |            |            |
+| LABEL-Format File | LABEL | Menampilkan informasi format file yang diterima | Menampilkan keterangan bahwa file wajib memuat kolom **Kode Part** dan **Qty**, serta imbauan menggunakan template resmi agar pengecekan stok otomatis berjalan | | | | | | |
+| BUTTON-Unduh Template Excel | BUTTON | Mengunduh template file upload part | Menghasilkan file **`Template_Upload_Part_Canvasing.xlsx`** dengan kolom **Kode Part** dan **Qty** beserta contoh baris data<br><br>Jika library XLSX tidak tersedia, sistem melakukan fallback ke format **`.csv`**<br><br>Setelah berhasil muncul toast **"Template file Excel berhasil diunduh"** | | | | | | |
+| DROPZONE-Upload File | FILE UPLOAD | Area untuk memilih atau men-drag file part yang akan diunggah | Mendukung **drag & drop** file maupun pemilihan file melalui tombol **Pilih File**<br><br>Ekstensi yang diterima: **`.xlsx`**, **`.xls`**, **`.csv`**<br><br>Setelah file dipilih, nama file ditampilkan dalam bentuk chip dan proses parsing + validasi langsung dijalankan<br><br>File Excel diproses menggunakan library **SheetJS (XLSX)**; jika library tidak tersedia, sistem melakukan fallback parsing CSV sederhana | Yes | | | | | |
+| BUTTON-Hapus File (X) | BUTTON | Membatalkan file yang sudah dipilih | Mereset seluruh state upload: file, ringkasan validasi, tabel preview, dan menonaktifkan kembali tombol import | | | | | | |
+| PROCESS-Pembacaan Kolom File | PROCESS | Mengidentifikasi kolom Kode Part dan Qty pada file yang diunggah | Baris pertama file diperlakukan sebagai **header**<br><br>Kolom **Kode Part** dideteksi dari nama header yang mengandung kata: `kode`, `part`, `item`, atau `sku`<br><br>Kolom **Qty** dideteksi dari nama header yang mengandung kata: `qty`, `jumlah`, `kuantitas`, `banyak`, atau `count`<br><br>Jika tidak terdeteksi, sistem menggunakan **kolom ke-1** sebagai Kode Part dan **kolom ke-2** sebagai Qty<br><br>Baris kosong diabaikan. Jika file tidak memiliki baris data, muncul toast **"File tidak memiliki data baris atau format kosong"** | | | | | | |
+| PROCESS-Validasi Ketersediaan Stok | PROCESS | Memvalidasi setiap baris part hasil upload terhadap katalog dan stok | Pencocokan Kode Part dilakukan dengan normalisasi (mengabaikan spasi, tanda hubung, underscore) serta pencocokan terhadap Nama Part<br><br>Status hasil validasi per baris: <br> * **Part Tidak Terdaftar** → kode part tidak ditemukan pada katalog → ❌ *"Part Tidak Terdaftar di Sistem"* <br> * **Qty Tidak Valid** → Qty bukan angka atau ≤ 0 → ❌ *"Qty Tidak Valid (> 0)"* <br> * **Melebihi Stok** → Qty > stok tersedia → ❌ *"Melebihi Stok (Tersedia: `<stok> <satuan>`)"* <br> * **Valid** → ✅ *"Lolos Validasi (Tersedia: `<stok> <satuan>`)"*<br><br>Baris yang tidak valid ditandai dengan penanda baris error pada tabel preview | | | | | | |
+| LABEL-Ringkasan Validasi | LABEL / STAT CARD | Menampilkan ringkasan hasil pemeriksaan file | Terdiri dari 3 kartu: <br> * **Total Baris Part** <br> * **✅ Stok Cukup (Valid)** <br> * **❌ Stok Kurang / Invalid** | | | | | | |
+| TABLE-Preview Hasil Pemeriksaan | TABLE | Menampilkan hasil pemeriksaan ketersediaan stok per baris | Kolom: **No**, **Kode Part**, **Nama Part**, **Qty Req**, **Avail Stock**, **Status / Validasi**<br><br>Di atas tabel ditampilkan jumlah data terdeteksi: `<jumlah> data baris terdeteksi` | | | | | | |
+| BUTTON-Import Valid Saja | BUTTON | Mengimpor hanya baris part yang lolos validasi | Tombol **hanya muncul** jika hasil pemeriksaan mengandung **campuran** baris valid dan baris bermasalah<br><br>Menampilkan jumlah baris valid yang akan diimpor | | | | | | |
+| BUTTON-Simpan ke Daftar Part | BUTTON | Mengimpor part hasil upload ke tabel Daftar Part Dibawa | Aturan status tombol: <br> * Seluruh baris valid → tombol **enable**, label `Simpan ke Daftar Part (<jumlah valid>)` <br> * Terdapat baris bermasalah → tombol **disable** dengan tooltip *"Perbaiki baris yang bermasalah atau pilih Import Valid Saja"* <br> * Tidak ada baris valid → tombol **disable**, label `Simpan ke Daftar Part (0)`<br><br>Saat import dijalankan, part dengan Kode Part yang sudah ada pada daftar akan **diakumulasikan Qty-nya**<br><br>Setelah berhasil, modal tertutup dan muncul toast **"Berhasil menambahkan `<jumlah>` part ke daftar bawaan canvasing"** | | | | | | |
+| BUTTON-Batal | BUTTON | Menutup pop-up Upload Part tanpa mengimpor data | Seluruh state upload direset. Modal juga tertutup melalui tombol Close (X) atau klik pada area backdrop | | | | | | |
+
+---
+
+# Tampilan Step 3 — Pilih Mekanik
+
+ ![Step 3 Tambah Mekanik](attachments/master-canvasing-07-step3.png " =1440x909")
+
+| Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
+|--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
+|              |                |          |                 |           |     |                   |        |            |            |
+| LOV-Mekanik | LIST OF VIEW | Menampilkan daftar mekanik beserta status penugasannya | Nilai awal: **"Pilih Mekanik..."**<br><br>Format pilihan mekanik: <br> * Mekanik sedang bekerja → `<Nama> (<Stall> - Sedang Mengerjakan PKB <No. PKB>)` <br> * Mekanik tersedia → `<Nama> (<Stall> - Available / Siap Ditugaskan)`<br><br>**Catatan pengembangan:** daftar mekanik dan statusnya masih hardcode, perlu di-binding ke master mekanik dan status PKB berjalan | Yes | | | | | |
+| BUTTON-Refresh Mekanik | BUTTON | Memperbarui status ketersediaan mekanik | Saat diklik, ikon berputar (animasi loading) lalu status seluruh mekanik dimuat ulang<br><br>Daftar mekanik yang sudah dipilih **direset menjadi kosong**<br><br>Setelah selesai muncul toast **"Status mekanik berhasil diperbarui. Daftar pilihan mekanik telah direset."**<br><br>**Catatan pengembangan:** saat ini status mekanik masih di-generate acak untuk kebutuhan simulasi; perlu diganti dengan pemanggilan API status mekanik. Perlu dikonfirmasi pula apakah reset daftar mekanik terpilih memang perilaku yang diinginkan | | | | | | |
+| BUTTON-Simpan Mekanik | BUTTON | Menambahkan mekanik terpilih ke tabel List Mekanik | Validasi: <br> * Jika belum ada mekanik yang dipilih → toast **"Harap pilih mekanik terlebih dahulu"** <br> * Jika mekanik sudah ada di daftar → toast **"Mekanik `<nama>` sudah ada dalam daftar"** (tidak ditambahkan ganda)<br><br>Mekanik yang berstatus **sedang mengerjakan PKB lain tetap dapat ditambahkan**, namun muncul toast peringatan: **"⚠️ Peringatan: Mekanik `<nama>` sedang mengerjakan PKB (`<no. PKB>`), namun tetap berhasil ditambahkan ke daftar."**<br><br>Jika mekanik tersedia, muncul toast **"Mekanik `<nama>` berhasil ditambahkan ke daftar"**<br><br>Setelah tersimpan, pilihan pada LOV-Mekanik direset ke kondisi awal | | | | | | |
+| TABLE-List Mekanik | TABLE | Menampilkan daftar mekanik yang ditugaskan pada kegiatan canvasing | Kolom: **List Mekanik**, **Aksi**<br><br>Format nama: `<Nama> (<Stall>)`<br><br>Mekanik yang sedang mengerjakan PKB lain diberi penanda peringatan: **"Sedang Mengerjakan PKB Lain (`<no. PKB>`)"**<br><br>Jika belum ada data, tampil baris **"No records found"** | | | | | | |
+| BUTTON-Hapus Mekanik (Ikon Trash) | BUTTON | Menghapus mekanik dari daftar yang ditugaskan | Saat diklik, baris dihapus dan muncul toast **"Mekanik `<nama>` dihapus dari daftar"**<br><br>**Catatan pengembangan:** penghapusan langsung dieksekusi tanpa dialog konfirmasi | | | | | | |
+| BUTTON-Kembali | BUTTON | Kembali ke Step 2 (Part Dibawa) | | | | Step 2 — Part Dibawa | | | |
+| BUTTON-Next | BUTTON | Lanjut ke Step 4 (Summary) | Tidak ada validasi pada Step 3 — daftar mekanik **boleh kosong**<br><br>**Catatan pengembangan:** perlu dikonfirmasi apakah minimal 1 mekanik wajib ditugaskan. Saat data disimpan tanpa mekanik, sistem saat ini mengisi petugas dengan nilai default | No | | Step 4 — Summary | | | |
+
+---
+
+# Tampilan Step 4 — Summary
+
+ ![Step 4 Summary Master Canvasing](attachments/master-canvasing-08-step4.png " =1440x1200")
+
+| Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
+|--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
+|              |                |          |                 |           |     |                   |        |            |            |
+| LABEL-Informasi Master Canvasing | LABEL | Menampilkan ringkasan data kegiatan canvasing hasil input Step 1 | Field yang ditampilkan: <br> * **Nama Canvasing** → dari `TXTBOX-Nama Canvasing` <br> * **Lokasi Canvasing** → dari `TXTBOX-Lokasi Canvasing` <br> * **Periode Canvasing** → format `<Dari> s/d <Sampai>` <br> * **Wilayah / Daerah** → gabungan `<Kelurahan>, <Kecamatan>, <Kabupaten/Kota>, <Provinsi>`<br><br>Data disinkronkan ulang setiap kali user masuk ke Step 4 | | | | | | |
+| TABLE-Daftar Part Dibawa (Summary) | TABLE | Menampilkan ringkasan part yang akan dibawa | Kolom: **Kode Part**, **Nama Part**, **Qty**, **Harga** (tanpa kolom Aksi, bersifat **read-only**)<br><br>Jika belum ada part, tampil keterangan **"Belum ada part yang ditambahkan"** | | | | | | |
+| LABEL-Mekanik yang Ditugaskan | LABEL / BADGE | Menampilkan ringkasan mekanik yang ditugaskan | Setiap mekanik ditampilkan dalam bentuk badge berisi `<Nama> (<Stall>)`<br><br>Mekanik yang sedang mengerjakan PKB lain diberi penanda **"(⚠️ Sedang PKB Lain: `<no. PKB>`)"**<br><br>Jika belum ada mekanik, tampil keterangan **"Belum ada mekanik yang dipilih"** | | | | | | |
+| BUTTON-Kembali | BUTTON | Kembali ke Step 3 (Pilih Mekanik) | | | | Step 3 — Pilih Mekanik | | | |
+| BUTTON-Simpan Master Canvasing | BUTTON | Menyimpan data Master Canvasing baru | Label tombol pada Step 4 berubah menjadi **"Simpan Master Canvasing"** (mode Create) atau **"Perbarui Master Canvasing"** (mode Edit), disertai perubahan ikon menjadi ikon simpan<br><br>Data yang disimpan: Kode Canvasing, Nama Canvasing, Lokasi, Provinsi, Kota, Kecamatan, Kelurahan, Tanggal Dari, Tanggal Sampai, dan daftar Mekanik (digabung dengan pemisah koma)<br><br>Data baru ditambahkan pada **urutan teratas** tabel Master Canvasing<br><br>Setelah tersimpan, muncul toast **"Master Canvasing baru `<kode>` berhasil disimpan!"** dan tampilan kembali ke tabel Master Canvasing<br><br>**Catatan pengembangan:** daftar **Part Dibawa** saat ini **belum ikut tersimpan** pada data Master Canvasing — perlu ditentukan struktur tabel penyimpanan detail part | | | Tabel Master Canvasing | | | |
+
+---
+
+# Mode Edit Master Canvasing
+
+| Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
+|--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
+|              |                |          |                 |           |     |                   |        |            |            |
+| PROCESS-Buka Wizard Mode Edit | PROCESS | Membuka wizard dengan data Master Canvasing yang sudah ada | Wizard dibuka pada Step 1 dengan field terisi otomatis: Kode Canvasing, Nama Canvasing, Lokasi Canvasing, Tanggal Dari, Tanggal Sampai, Provinsi, Kabupaten/Kota, Kecamatan, Kelurahan<br><br>Sub-breadcrumb pada parent shell berubah menjadi **"Edit Master Canvasing"**<br><br>**Catatan pengembangan:** daftar **Part Dibawa** dan **Mekanik** tetap direset kosong saat mode Edit — perlu dilengkapi pemuatan data detail part & mekanik dari data tersimpan | | | Step 1 — Informasi Canvasing | | | |
+| BUTTON-Perbarui Master Canvasing | BUTTON | Menyimpan perubahan data Master Canvasing | Memperbarui data pada baris terpilih tanpa mengubah Kode Canvasing<br><br>Setelah tersimpan muncul toast **"Master Canvasing `<kode>` berhasil diperbarui"** dan tampilan kembali ke tabel Master Canvasing | | | Tabel Master Canvasing | | | |
+
+---
+
+# Komponen Umum & Catatan Teknis
+
+| Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
+|--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
+|              |                |          |                 |           |     |                   |        |            |            |
+| TOAST-Notifikasi | TOAST | Menampilkan notifikasi hasil aksi user | Tipe notifikasi: **success**, **info**, dan **warning**<br><br>Notifikasi tampil di container toast dan hilang otomatis setelah **3 detik** dengan animasi fade-out | | | | | | |
+| HEADER-Breadcrumb & User Profile | HEADER | Menampilkan breadcrumb `Reception / Master Canvasing`, pengalih bahasa (ID / EN), dan informasi user yang login | Header standalone **disembunyikan** saat modul dijalankan di dalam iframe portal (class `in-iframe`)<br><br>**Catatan pengembangan:** tombol pengalih bahasa (ID/EN) dan data user masih statis, belum terhubung ke mekanisme multi-bahasa dan sesi login | | | | | | |
+| PROCESS-Sinkronisasi Breadcrumb Parent | PROCESS | Menyinkronkan sub-breadcrumb modul ke layout shell portal | Modul mengirim `postMessage` bertipe **`UPDATE_CRUMB`** ke parent window dengan nilai `subCrumb`: <br> * **"Create New"** saat membuka wizard mode Create <br> * **"Edit Master Canvasing"** saat membuka wizard mode Edit <br> * **`null`** saat kembali ke tampilan tabel | | | | | | |
+| MENU-Kebab Aksi Baris | CONTEXT MENU | Menu aksi baris tabel (Lihat Detail, Edit PKB, Ubah Status, Cetak Dokumen PKB) | **Catatan pengembangan:** komponen sudah tersedia pada halaman namun **belum terpasang tombol pemicunya** pada baris tabel — saat ini kolom Aksi hanya menampilkan tombol **Lihat Detail** (ikon mata). Perlu dikonfirmasi aksi apa saja yang akan ditampilkan pada baris tabel Master Canvasing | | | | | | |
+| MODAL-Create/Edit PKB (Legacy) | MODAL | Form modal Create/Edit dengan field PKB (Transaction No, Status, Customer Name, Police Number, dsb.) | **Catatan pengembangan:** modal ini merupakan sisa implementasi awal dan **sudah tidak digunakan** — proses Create/Edit Master Canvasing telah digantikan oleh **Stepper Wizard 4 langkah**. Disarankan untuk dihapus agar tidak menimbulkan kerancuan | | | | | | |
+| PROCESS-Sumber Data Modul | PROCESS | Sumber data yang digunakan modul saat ini | Seluruh data modul masih berupa **data statis di sisi front-end** (in-memory), meliputi: data Master Canvasing, katalog Part beserta stok, dan katalog Mekanik<br><br>Perubahan data **tidak persisten** dan akan hilang saat halaman di-refresh<br><br>**Catatan pengembangan:** perlu penentuan endpoint API dan struktur tabel untuk: Master Canvasing (header), Detail Part Canvasing, dan Detail Mekanik Canvasing | | | | | | |
