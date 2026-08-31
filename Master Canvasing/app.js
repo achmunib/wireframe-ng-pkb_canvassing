@@ -156,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initEqualizerToggle();
   initStepperWizard();
   initTambahPartModal();
+  initUploadPartModal();
   initTambahMekanikStep();
 
   // Listen for reset command from parent portal (sidebar re-click while in wizard)
@@ -1565,7 +1566,7 @@ function showCreateWizard(isEdit = false, editId = null) {
       bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${newKode}</span> • Pendaftaran Master Canvasing Baru`;
     }
 
-    if (document.getElementById('wizKodeCanvasing')) document.getElementById('wizKodeCanvasing').value = '';
+    if (document.getElementById('wizKodeCanvasing')) document.getElementById('wizKodeCanvasing').value = newKode;
     if (document.getElementById('wizNamaCanvasing')) document.getElementById('wizNamaCanvasing').value = 'AHASS Service Kunjung PT Maspion I';
     if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = 'Area Parkir PT Maspion I Gedangan';
     if (document.getElementById('wizDari')) document.getElementById('wizDari').value = '26-08-2026';

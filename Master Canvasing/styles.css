@@ -2705,6 +2705,9 @@ body {
 }
 
 .btn-secondary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   height: 38px;
   padding: 0 16px;
   background: #e0f2fe;
