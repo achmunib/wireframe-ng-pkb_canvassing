@@ -35,9 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function initIframeCommunication() {
   window.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'UPDATE_CRUMB') {
+      const frame = document.getElementById('moduleFrame');
+      // Ignore messages from a previous iframe that was swapped out mid-flight
+      if (!frame || event.source !== frame.contentWindow) return;
+
       const crumbActive = document.getElementById('crumbActive');
       if (!crumbActive) return;
 
+      // Stale message from an iframe that was swapped out mid-navigation
+      if (event.data.module && event.data.module !== currentModule) return;
       const moduleName = currentModule === 'master' ? 'Master Canvasing' : 'List Canvasing';
       if (event.data.subCrumb) {
         crumbActive.innerHTML = `${moduleName} <span style="color:#cbd5e1;margin:0 4px;">/</span> <span style="color:#ea580c;font-weight:700;">${event.data.subCrumb}</span>`;
@@ -151,7 +157,7 @@ function switchModule(moduleKey, updateHash = true) {
   // Update iframe destination
   if (frame && frame.getAttribute('src') !== targetModule.path) {
     frame.src = targetModule.path;
-  } else if (moduleKey === 'list' && frame && frame.contentWindow) {
+  } else if (frame && frame.contentWindow) {
     frame.contentWindow.postMessage({ type: 'RESET_VIEW' }, '*');
   }
 

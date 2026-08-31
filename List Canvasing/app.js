@@ -243,7 +243,7 @@ function showMethodSelection() {
 
   // Notify parent shell
   if (window.parent && window.parent !== window) {
-    window.parent.postMessage({ type: 'UPDATE_CRUMB', subCrumb: 'Pilih Metode' }, '*');
+    window.parent.postMessage({ type: 'UPDATE_CRUMB', module: 'list', subCrumb: 'Pilih Metode' }, '*');
   }
 }
 
@@ -294,7 +294,7 @@ function selectBookingMethod(method, bookingData = null) {
     }
 
     if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'UPDATE_CRUMB', subCrumb: 'Booking' }, '*');
+      window.parent.postMessage({ type: 'UPDATE_CRUMB', module: 'list', subCrumb: 'Booking' }, '*');
     }
   } else {
     // Non-Booking
@@ -304,7 +304,7 @@ function selectBookingMethod(method, bookingData = null) {
     if (summaryQueueType) summaryQueueType.value = 'Regular';
 
     if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'UPDATE_CRUMB', subCrumb: 'Non-Booking' }, '*');
+      window.parent.postMessage({ type: 'UPDATE_CRUMB', module: 'list', subCrumb: 'Non-Booking' }, '*');
     }
   }
 

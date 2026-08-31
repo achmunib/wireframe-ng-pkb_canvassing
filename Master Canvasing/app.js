@@ -156,8 +156,17 @@ document.addEventListener('DOMContentLoaded', () => {
   initEqualizerToggle();
   initStepperWizard();
   initTambahPartModal();
-  initUploadPartModal();
   initTambahMekanikStep();
+
+  // Listen for reset command from parent portal (sidebar re-click while in wizard)
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'RESET_VIEW') {
+      const wizardView = document.getElementById('createMasterView');
+      if (wizardView && wizardView.style.display !== 'none') {
+        showTableView();
+      }
+    }
+  });
 });
 
 // Render Table Rows matching the Reference Screenshot
@@ -1584,6 +1593,7 @@ function showCreateWizard(isEdit = false, editId = null) {
   if (window.parent && window.parent !== window) {
     window.parent.postMessage({
       type: 'UPDATE_CRUMB',
+      module: 'master',
       subCrumb: isEdit ? 'Edit Master Canvasing' : 'Create New'
     }, '*');
   }
@@ -1603,6 +1613,7 @@ function showTableView() {
   if (window.parent && window.parent !== window) {
     window.parent.postMessage({
       type: 'UPDATE_CRUMB',
+      module: 'master',
       subCrumb: null
     }, '*');
   }
