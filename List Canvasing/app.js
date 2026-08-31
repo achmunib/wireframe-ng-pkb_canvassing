@@ -480,7 +480,7 @@ function initVehicleScanner() {
     if (document.getElementById('dispEngine')) document.getElementById('dispEngine').textContent = vehicle.engine;
     if (document.getElementById('dispFrame')) document.getElementById('dispFrame').textContent = vehicle.frame;
     if (document.getElementById('dispColor')) document.getElementById('dispColor').textContent = vehicle.color || 'BLACK';
-    if (document.getElementById('dispYear')) document.getElementById('dispYear').textContent = vehicle.year;
+    if (document.getElementById('dispYear')) document.getElementById('dispYear').textContent = vehicle.year || '2024';
     if (document.getElementById('dispPurchaseDate')) document.getElementById('dispPurchaseDate').textContent = vehicle.purchaseDate || '03-05-2024';
     if (document.getElementById('dispDealer')) document.getElementById('dispDealer').textContent = vehicle.dealer || 'MPM Motor Jombang';
     if (document.getElementById('dispLastKm')) document.getElementById('dispLastKm').textContent = vehicle.lastKm || '1000';
