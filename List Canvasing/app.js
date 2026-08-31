@@ -126,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function initMethodSelection() {
   const btnBooking = document.getElementById('btnChooseBooking');
   const btnNonBooking = document.getElementById('btnChooseNonBooking');
-  const btnSwitchMethod = document.getElementById('btnSwitchMethod');
   const bookingModal = document.getElementById('bookingSelectModal');
   const btnCloseModal = document.getElementById('btnBookingModalClose');
   const btnConfirmBooking = document.getElementById('btnConfirmBookingChoice');
@@ -154,12 +153,6 @@ function initMethodSelection() {
     });
   }
 
-  // Switch Method button from top banner
-  if (btnSwitchMethod) {
-    btnSwitchMethod.addEventListener('click', () => {
-      showMethodSelection();
-    });
-  }
 
   // Modal Close Button
   if (btnCloseModal && bookingModal) {
@@ -253,9 +246,6 @@ function selectBookingMethod(method, bookingData = null) {
 
   const methodView = document.getElementById('methodSelectionView');
   const wizardView = document.getElementById('wizardContentView');
-  const chip = document.getElementById('methodChip');
-  const chipText = document.getElementById('methodChipText');
-  const detailText = document.getElementById('methodBannerDetail');
   const summaryQueueType = document.getElementById('summaryQueueType');
 
   if (methodView) methodView.style.display = 'none';
@@ -265,13 +255,6 @@ function selectBookingMethod(method, bookingData = null) {
   }
 
   if (method === 'booking') {
-    if (chip) chip.className = 'method-chip booking';
-    if (chipText) chipText.textContent = 'Metode: Booking';
-    if (detailText) {
-      detailText.textContent = bookingData
-        ? `Jadwal: ${bookingData.id} • ${bookingData.plate} (${bookingData.customer}) • ${bookingData.time}`
-        : 'Pendaftaran PKB Mode Booking Service (Manual)';
-    }
     if (summaryQueueType) summaryQueueType.value = 'Booking';
 
     if (bookingData) {
@@ -297,10 +280,6 @@ function selectBookingMethod(method, bookingData = null) {
       window.parent.postMessage({ type: 'UPDATE_CRUMB', module: 'list', subCrumb: 'Booking' }, '*');
     }
   } else {
-    // Non-Booking
-    if (chip) chip.className = 'method-chip non-booking';
-    if (chipText) chipText.textContent = 'Metode: Non-Booking';
-    if (detailText) detailText.textContent = 'Pendaftaran PKB Reguler / Walk-In Canvasing';
     if (summaryQueueType) summaryQueueType.value = 'Regular';
 
     if (window.parent && window.parent !== window) {

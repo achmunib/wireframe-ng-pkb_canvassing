@@ -1129,60 +1129,6 @@ body {
   animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Selected Method Context Banner */
-.selected-method-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #ffffff;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 14px 22px;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: var(--transition);
-}
-
-.method-banner-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-.method-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-}
-
-.method-chip.booking {
-  background: #fff7ed;
-  color: var(--primary);
-  border: 1px solid var(--primary-border);
-}
-
-.method-chip-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--primary);
-}
-
-.method-banner-detail {
-  font-size: 13px;
-  color: #64748b;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 
 .trans-id-pill {
   background: #f1f5f9;
@@ -1193,28 +1139,6 @@ body {
   font-family: monospace;
   font-size: 12px;
   font-weight: 700;
-}
-
-.btn-switch-method {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
-  border: 1px solid #e2e8f0;
-  background: #ffffff;
-  color: #475569;
-  border-radius: var(--radius-md);
-  font-size: 12.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  font-family: inherit;
-}
-
-.btn-switch-method:hover {
-  background: #f8fafc;
-  color: var(--primary);
-  border-color: var(--primary-border);
 }
 
 /* Stepper Wizard */
