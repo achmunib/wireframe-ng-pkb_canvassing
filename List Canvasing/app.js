@@ -240,6 +240,21 @@ function openPkbWizard(entry) {
     if (carrierFirst) carrierFirst.value = names[0] || '';
     if (carrierLast) carrierLast.value = names.slice(1).join(' ') || '';
     showToast(`Data PKB ${entry.id} dimuat (${entry.plate})`);
+  } else {
+    const scanInput = document.getElementById('scanVehicleInput');
+    if (scanInput) scanInput.value = '';
+    if (window.resetVehicleData) {
+      window.resetVehicleData();
+    }
+    const carrierPhone = document.getElementById('carrierInputPhone');
+    const carrierFirst = document.getElementById('carrierFirstName');
+    const carrierLast = document.getElementById('carrierLastName');
+    const searchPhone = document.getElementById('carrierSearchPhone');
+    if (carrierPhone) carrierPhone.value = '';
+    if (searchPhone) searchPhone.value = '';
+    if (carrierFirst) carrierFirst.value = '';
+    if (carrierLast) carrierLast.value = '';
+    showToast('Mode PKB Baru dimulai');
   }
 
   if (window.parent && window.parent !== window) {
@@ -349,7 +364,7 @@ function initStepper() {
       btnKembali.style.opacity = '1';
       btnKembali.style.pointerEvents = 'auto';
       const kembaliText = btnKembali.querySelector('span');
-      if (kembaliText) kembaliText.textContent = 'Pilih Metode';
+      if (kembaliText) kembaliText.textContent = 'List PKB';
     } else {
       btnKembali.style.opacity = '1';
       btnKembali.style.pointerEvents = 'auto';
@@ -498,8 +513,9 @@ function initVehicleScanner() {
     if (emptyState) emptyState.style.display = 'flex';
   }
 
-  // Export helper for modal
+  // Export helpers for modal & dashboard
   window.loadCustomVehicle = loadVehicleData;
+  window.resetVehicleData = resetVehicleData;
 }
 
 // Carrier Step Interactive Handlers
