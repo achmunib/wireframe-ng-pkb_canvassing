@@ -74,6 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
   initLangSwitcher();
   initHistoryShowMore();
+
+  // Deep links from the parent portal (kept for compatibility)
+  if (window.location.hash === '#new') {
+    openPkbWizard(null);
+  }
 });
 
 // PKB Dashboard (Landing Page Logic: grid of PKB entries)
@@ -125,14 +130,6 @@ function initPkbDashboard() {
   }
 
   renderPkbGrid();
-
-  // Deep links from the parent portal (kept for compatibility)
-  const hash = window.location.hash;
-  if (hash === '#new') {
-    openPkbWizard(null);
-  } else {
-    showPkbDashboard();
-  }
 
   // Listen for reset command from parent portal
   window.addEventListener('message', (e) => {
