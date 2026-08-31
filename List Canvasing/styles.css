@@ -3171,384 +3171,300 @@ body {
   }
 }
 
-/* ==========================================================================
-   Method Selection Screen (Booking vs Non-Booking)
-   ========================================================================== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.method-selection-section {
+/* ===================== PKB Dashboard (Grid View Landing) ===================== */
+.pkb-dashboard-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  flex: 1;
-  width: 100%;
-  min-height: calc(100vh - var(--header-height) - 100px);
-  padding: clamp(32px, 5vh, 60px) clamp(20px, 3vw, 40px);
-  box-sizing: border-box;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 100vh;
+  padding: 40px 24px;
 }
 
-.in-iframe .method-selection-section {
+.in-iframe .pkb-dashboard-section {
   min-height: calc(100vh - 100px);
-  padding: clamp(32px, 5vh, 60px) clamp(20px, 3vw, 40px);
+  padding: clamp(24px, 4vh, 48px) clamp(20px, 3vw, 40px);
 }
 
-.method-selection-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  max-width: 680px;
+.pkb-dashboard-container {
   width: 100%;
-  margin: auto;
+  max-width: 1200px;
 }
 
-/* Brand Header */
-.method-header {
+.pkb-page-header {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: clamp(18px, 3.5vh, 36px);
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.mpm-brand-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: clamp(8px, 1.5vh, 16px);
-  transition: transform 0.25s ease;
-}
-
-.mpm-brand-logo svg {
-  width: clamp(100px, 9vw, 135px);
-  height: auto;
-}
-
-.mpm-brand-logo:hover {
-  transform: scale(1.04);
-}
-
-.method-title {
-  font-size: clamp(14px, 1.3vw, 18px);
-  font-weight: 700;
-  color: #334155;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin: 0;
-  font-family: inherit;
-}
-
-/* Two Big Action Cards */
-.method-cards-grid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(18px, 3.2vw, 36px);
-  width: 100%;
-}
-
-.method-card {
-  width: clamp(160px, 18vw, 230px);
-  height: clamp(160px, 18vw, 230px);
-  border-radius: clamp(18px, 2.2vw, 28px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(10px, 1.6vw, 20px);
-  cursor: pointer;
-  border: none;
-  outline: none;
-  font-family: inherit;
-  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  flex-shrink: 0;
-}
-
-/* Orange Booking Card */
-.card-booking {
-  background: #f15a24;
-  color: #ffffff;
-  box-shadow: 0 14px 30px -4px rgba(241, 90, 36, 0.38), 0 4px 12px rgba(241, 90, 36, 0.2);
-}
-
-.card-booking:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 20px 38px -4px rgba(241, 90, 36, 0.48), 0 8px 18px rgba(241, 90, 36, 0.25);
-}
-
-.card-booking:active {
-  transform: translateY(-2px) scale(0.99);
-}
-
-/* White Non-Booking Card */
-.card-non-booking {
-  background: #ffffff;
-  color: #1e293b;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 12px 30px -4px rgba(15, 23, 42, 0.07), 0 4px 12px rgba(15, 23, 42, 0.03);
-}
-
-.card-non-booking:hover {
-  transform: translateY(-6px) scale(1.02);
-  border-color: #cbd5e1;
-  box-shadow: 0 20px 38px -4px rgba(15, 23, 42, 0.13), 0 8px 18px rgba(15, 23, 42, 0.06);
-}
-
-.card-non-booking:active {
-  transform: translateY(-2px) scale(0.99);
-}
-
-/* Card Icons */
-.method-card-icon-box {
-  width: clamp(50px, 5.5vw, 72px);
-  height: clamp(50px, 5.5vw, 72px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.method-card-icon {
-  width: clamp(44px, 5vw, 64px);
-  height: clamp(44px, 5vw, 64px);
-  transition: transform 0.25s ease;
-}
-
-.method-card:hover .method-card-icon {
-  transform: scale(1.06);
-}
-
-/* Card Labels */
-.method-card-label {
-  font-size: clamp(13px, 1.2vw, 16px);
+.pkb-page-title {
+  font-size: clamp(22px, 2.4vw, 30px);
   font-weight: 800;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
+  color: var(--text-main);
+  letter-spacing: -0.3px;
 }
 
-/* Booking Modal Dialog Styles */
-.booking-modal-card {
-  max-width: 680px;
-  width: 92%;
+.pkb-page-subtitle {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--text-muted);
 }
 
-.modal-header-info {
-  display: flex;
+.btn-new-pkb {
+  display: inline-flex;
   align-items: center;
-  gap: 14px;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
 }
 
-.modal-icon-badge {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: #fff7ed;
-  color: #ea580c;
+.btn-new-pkb:hover {
+  background: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.pkb-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.pkb-stat-chip {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 14px 18px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
 }
 
-.modal-subtitle {
+.pkb-stat-chip:hover {
+  border-color: var(--primary-border);
+  box-shadow: var(--shadow-md);
+}
+
+.pkb-stat-chip.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.pkb-stat-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.pkb-stat-label {
   font-size: 12px;
-  color: #64748b;
-  margin-top: 2px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.2px;
 }
 
-.booking-search-bar {
-  margin-bottom: 16px;
-}
-
-.booking-search-input-wrap {
-  position: relative;
+.pkb-toolbar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
-.booking-search-input-wrap svg {
+.pkb-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+  max-width: 420px;
+}
+
+.pkb-search-wrap svg {
   position: absolute;
   left: 14px;
-  color: #94a3b8;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
   pointer-events: none;
 }
 
-.booking-search-input-wrap input {
-  padding-left: 42px;
+.pkb-search-wrap .form-input {
   width: 100%;
+  padding-left: 42px;
 }
 
-.booking-list-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 10px;
+.pkb-filter-pills {
+  display: flex;
+  gap: 8px;
 }
 
-.booking-cards-list {
+.pkb-pill {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.pkb-pill:hover {
+  border-color: var(--primary-border);
+  color: var(--text-main);
+}
+
+.pkb-pill.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.pkb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.pkb-card {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 290px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.booking-item-card {
-  border: 1.5px solid #e2e8f0;
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
+  padding: 18px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
   cursor: pointer;
   transition: var(--transition);
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  text-align: left;
+  font-family: inherit;
 }
 
-.booking-item-card:hover {
+.pkb-card:hover {
+  transform: translateY(-3px);
   border-color: var(--primary-border);
-  background: #fffdfa;
+  box-shadow: var(--shadow-lg);
 }
 
-.booking-item-card.active {
-  border-color: #ea580c;
-  background: #fff7ed;
-  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.15);
-}
-
-.booking-item-top {
+.pkb-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 
-.booking-code-pill {
+.pkb-code-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--primary-light);
+  border: 1px solid var(--primary-border);
+  color: var(--primary-hover);
   font-size: 11px;
   font-weight: 700;
-  padding: 2px 8px;
+  letter-spacing: 0.3px;
+}
+
+.pkb-status-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.pkb-card.status-pending .pkb-status-badge {
   background: #f1f5f9;
-  color: #334155;
-  border-radius: 4px;
-}
-
-.booking-item-card.active .booking-code-pill {
-  background: #ffedd5;
-  color: #c2410c;
-}
-
-.booking-time-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 600;
   color: #64748b;
 }
 
-.booking-item-main {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
+.pkb-card.status-progress .pkb-status-badge {
+  background: #dbeafe;
+  color: #1d4ed8;
 }
 
-.booking-plate-num {
-  font-size: 15px;
+.pkb-card.status-done .pkb-status-badge {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.pkb-plate {
+  font-size: 20px;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-main);
+  letter-spacing: 0.5px;
 }
 
-.booking-model-name {
+.pkb-model {
   font-size: 13px;
-  color: #475569;
-  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: -6px;
 }
 
-.booking-item-meta {
+.pkb-meta {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 12px;
-  color: #64748b;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-color);
 }
 
-.booking-modal-actions {
+.pkb-meta-row {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  width: 100%;
-  gap: 16px;
-  margin-top: 24px;
-  padding-top: 4px;
+  gap: 12px;
+  font-size: 12.5px;
+  color: var(--text-muted);
 }
 
-.btn-manual-booking {
-  background: #f8fafc;
-  border: 1px dashed #cbd5e1;
-  color: #475569;
-  padding: 10px 18px;
-  border-radius: var(--radius-md);
-  font-size: 13px;
+.pkb-meta-row strong {
+  color: var(--text-main);
   font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  font-family: inherit;
-  white-space: nowrap;
 }
 
-.btn-manual-booking:hover {
-  border-color: #ea580c;
-  color: #ea580c;
-  background: #fff7ed;
+.pkb-meta-row .pkb-progress-hint {
+  color: var(--primary-hover);
+  font-weight: 700;
 }
 
-.booking-modal-actions .btn-primary-modal {
-  white-space: nowrap;
-  padding: 10px 22px;
+.pkb-empty {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
 }
 
-/* Responsive adjustment for small screens */
-@media (max-width: 640px) {
-  .method-cards-grid {
+@media (max-width: 720px) {
+  .pkb-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pkb-page-header {
     flex-direction: column;
-    gap: 20px;
+    align-items: stretch;
   }
 
-  .method-card {
-    width: 200px;
-    height: 200px;
-  }
-
-  .booking-modal-actions {
-    flex-direction: column-reverse;
-  }
-
-  .btn-manual-booking,
-  .btn-primary-modal {
-    width: 100%;
+  .btn-new-pkb {
     justify-content: center;
   }
 }
-
-
 
