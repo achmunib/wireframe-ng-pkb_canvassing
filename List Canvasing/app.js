@@ -2,62 +2,16 @@
 let currentStep = 1;
 const totalSteps = 5;
 let currentFuelLevel = 4; // Default full/sample level
-let currentMethod = null; // 'booking' | 'non-booking'
-let activeBooking = null;
-
-// Sample Booking Appointments for simulation
-const sampleBookings = [
-  {
-    id: 'BK-20240826-001',
-    plate: 'AG 1000 ELM',
-    customer: 'Achmad Munib',
-    phone: '081234567890',
-    model: 'VG - VARIO 125 CBS ISS',
-    engine: 'JB91E1260677',
-    frame: 'MH1J891158K260',
-    color: 'BLACK',
-    year: '2024',
-    dealer: 'MPM Motor Jombang',
-    lastKm: '1000',
-    currentKm: '233',
-    reason: 'Inisiatif Sendiri',
-    time: '09:30 WIB',
-    service: 'Servis Berkala & Ganti Oli MPX2'
-  },
-  {
-    id: 'BK-20240826-002',
-    plate: 'B 4592 KLR',
-    customer: 'Budi Santoso',
-    phone: '085712345678',
-    model: 'VG - VARIO 160 ABS',
-    engine: 'KF11E1084920',
-    frame: 'MH1KF1118PK092144',
-    color: 'MATTE RED',
-    year: '2023',
-    dealer: 'MPM Motor Surabaya',
-    lastKm: '12450',
-    currentKm: '12500',
-    reason: 'Servis Berkala',
-    time: '10:45 WIB',
-    service: 'Cek CVT & Kampas Rem'
-  },
-  {
-    id: 'BK-20240826-003',
-    plate: 'L 2831 AB',
-    customer: 'Siti Rahmawati',
-    phone: '087898765432',
-    model: 'VG - SCOOPY PRESTIGE',
-    engine: 'JM31E2948102',
-    frame: 'MH1JM3116PK748291',
-    color: 'WHITE',
-    year: '2024',
-    dealer: 'MPM Motor Malang',
-    lastKm: '5400',
-    currentKm: '5450',
-    reason: 'Ganti Oli',
-    time: '13:15 WIB',
-    service: 'Ganti Busi & Oli MPX2'
-  }
+// PKB Canvasing entries for simulation (status: 'pending' | 'progress' | 'done')
+const samplePkbList = [
+  { id: 'PKB-20240826-001', plate: 'AG 1000 ELM', model: 'VG - VARIO 125 CBS ISS', customer: 'Achmad Munib', engine: 'JB91E1260677', frame: 'MH1J891158K260', phone: '081234567890', service: 'Servis Berkala & Ganti Oli MPX2', time: '09:30', mechanic: 'Andi', status: 'progress', step: 3 },
+  { id: 'PKB-20240826-002', plate: 'B 4592 KLR', model: 'VG - VARIO 160 ABS', customer: 'Budi Santoso', engine: 'KF11E1084920', frame: 'MH1KF1118PK092144', phone: '085712345678', service: 'Cek CVT & Kampas Rem', time: '10:45', mechanic: 'Rudi', status: 'pending', step: 0 },
+  { id: 'PKB-20240826-003', plate: 'L 2831 AB', model: 'VG - SCOOPY PRESTIGE', customer: 'Siti Rahmawati', engine: 'JM31E2948102', frame: 'MH1JM3116PK748291', phone: '087898765432', service: 'Ganti Busi & Oli MPX2', time: '13:15', mechanic: 'Andi', status: 'pending', step: 0 },
+  { id: 'PKB-20240826-004', plate: 'AB 1234 CD', model: 'VG - NMAX 155 CONNECTED', customer: 'Dewi Lestari', engine: 'B6NE1123456', frame: 'MH1B6NE11PK123456', phone: '081122334455', service: 'Servis Besar 10.000 km', time: '08:00', mechanic: 'Joko', status: 'pending', step: 0 },
+  { id: 'PKB-20240826-005', plate: 'B 6789 XYZ', model: 'VG - BEAT SPORTY CBS', customer: 'Eko Prasetyo', engine: 'K1FJ2233445', frame: 'MH1K1FJ22PK223344', phone: '085566778899', service: 'Ganti Oli & Tune Up', time: '11:20', mechanic: 'Rudi', status: 'progress', step: 4 },
+  { id: 'PKB-20240826-006', plate: 'D 4321 EF', model: 'VG - PCX 160 ABS', customer: 'Fitri Handayani', engine: 'JKE1EE556677', frame: 'MH1JKE11PK556677', phone: '081900112233', service: 'Cek Aki & Rem Depan', time: '14:00', mechanic: 'Joko', status: 'progress', step: 2 },
+  { id: 'PKB-20240826-007', plate: 'H 9876 GH', model: 'VG - LEXI 125 KEYLESS', customer: 'Gunawan Wibowo', engine: 'F4SE1198877', frame: 'MH1F4SE11PK119887', phone: '082133445566', service: 'Servis Berkala & Ganti Oli MPX2', time: '09:00', mechanic: 'Andi', status: 'done', step: 5 },
+  { id: 'PKB-20240826-008', plate: 'N 5555 IJ', model: 'VG - VARIO 125 CBS', customer: 'Hendra Saputra', engine: 'JB9NE2244668', frame: 'MH1JB9NEPK224466', phone: '083899887766', service: 'Ganti Roller & V-Belt', time: '15:30', mechanic: 'Rudi', status: 'done', step: 5 },
 ];
 
 // Sample Vehicle Database for scanning simulation
@@ -107,7 +61,7 @@ const sampleVehicles = [
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
-  initMethodSelection();
+  initPkbDashboard();
   initStepper();
   initCollapsibleCard();
   initFuelIndicator();
@@ -122,169 +76,174 @@ document.addEventListener('DOMContentLoaded', () => {
   initHistoryShowMore();
 });
 
-// Method Selection (Landing Page Logic: Booking vs Non-Booking)
-function initMethodSelection() {
-  const btnBooking = document.getElementById('btnChooseBooking');
-  const btnNonBooking = document.getElementById('btnChooseNonBooking');
-  const bookingModal = document.getElementById('bookingSelectModal');
-  const btnCloseModal = document.getElementById('btnBookingModalClose');
-  const btnConfirmBooking = document.getElementById('btnConfirmBookingChoice');
-  const btnManualBooking = document.getElementById('btnManualBooking');
-  const inputSearch = document.getElementById('inputSearchBooking');
-  const bookingCards = document.querySelectorAll('.booking-item-card');
+// PKB Dashboard (Landing Page Logic: grid of PKB entries)
+const PKB_STATUS_LABEL = {
+  pending: 'Belum Dijalankan',
+  progress: 'Sedang Dijalankan',
+  done: 'Sudah Dijalankan',
+};
 
-  // Choose Booking -> Open selection modal
-  if (btnBooking && bookingModal) {
-    btnBooking.addEventListener('click', () => {
-      bookingModal.style.display = 'flex';
-      if (inputSearch) {
-        inputSearch.value = '';
-        inputSearch.focus();
-        bookingCards.forEach(c => c.style.display = 'flex');
-      }
+const PKB_STEP_NAMES = ['Vehicle', 'Carrier Data', 'Cek Aja Dulu', 'Service & Parts', 'Summary'];
+
+let pkbFilter = 'all';
+let pkbQuery = '';
+
+function initPkbDashboard() {
+  const btnNew = document.getElementById('btnNewPkb');
+  const searchInput = document.getElementById('pkbSearchInput');
+  const chips = document.querySelectorAll('.pkb-stat-chip');
+  const pills = document.querySelectorAll('.pkb-pill');
+
+  if (btnNew) {
+    btnNew.addEventListener('click', () => {
+      openPkbWizard(null);
+      showToast('Canvasing baru dimulai (form kosong)');
     });
   }
 
-  // Choose Non-Booking -> Proceed to form directly
-  if (btnNonBooking) {
-    btnNonBooking.addEventListener('click', () => {
-      selectBookingMethod('non-booking');
-      showToast('Masuk ke mode Non-Booking (Walk-in Canvasing)');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      pkbQuery = e.target.value.toLowerCase().trim();
+      renderPkbGrid();
     });
   }
 
+  const setFilter = (f) => {
+    pkbFilter = f;
+    chips.forEach(c => c.classList.toggle('active', c.dataset.filter === f));
+    pills.forEach(p => p.classList.toggle('active', p.dataset.filter === f));
+    renderPkbGrid();
+  };
 
-  // Modal Close Button
-  if (btnCloseModal && bookingModal) {
-    btnCloseModal.addEventListener('click', () => {
-      bookingModal.style.display = 'none';
-    });
+  chips.forEach(c => c.addEventListener('click', () => setFilter(c.dataset.filter)));
+  pills.forEach(p => p.addEventListener('click', () => setFilter(p.dataset.filter)));
+
+  // Initial date label
+  const dateEl = document.getElementById('pkbDate');
+  if (dateEl) {
+    dateEl.textContent = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   }
 
-  // Close modal when clicking outside card
-  if (bookingModal) {
-    bookingModal.addEventListener('click', (e) => {
-      if (e.target === bookingModal) {
-        bookingModal.style.display = 'none';
-      }
-    });
-  }
+  renderPkbGrid();
 
-  // Search in booking modal
-  if (inputSearch) {
-    inputSearch.addEventListener('input', (e) => {
-      const q = e.target.value.toLowerCase().trim();
-      bookingCards.forEach(card => {
-        const text = card.textContent.toLowerCase();
-        card.style.display = text.includes(q) ? 'flex' : 'none';
-      });
-    });
-  }
-
-  // Select card in modal
-  let selectedBookingId = 'BK-20240826-001';
-  bookingCards.forEach(card => {
-    card.addEventListener('click', () => {
-      bookingCards.forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      selectedBookingId = card.dataset.bookingId;
-    });
-  });
-
-  // Confirm booking selection
-  if (btnConfirmBooking) {
-    btnConfirmBooking.addEventListener('click', () => {
-      const found = sampleBookings.find(b => b.id === selectedBookingId) || sampleBookings[0];
-      if (bookingModal) bookingModal.style.display = 'none';
-      selectBookingMethod('booking', found);
-      showToast(`Data Booking ${found.id} dimuat (${found.plate})`);
-    });
-  }
-
-  // Manual booking (without pre-filled appointment)
-  if (btnManualBooking) {
-    btnManualBooking.addEventListener('click', () => {
-      if (bookingModal) bookingModal.style.display = 'none';
-      selectBookingMethod('booking', null);
-      showToast('Masuk ke mode Booking (Input Manual)');
-    });
-  }
-
-  // Check URL hash on initial load
+  // Deep links from the parent portal (kept for compatibility)
   const hash = window.location.hash;
-  if (hash === '#booking') {
-    selectBookingMethod('booking', sampleBookings[0]);
-  } else if (hash === '#non-booking') {
-    selectBookingMethod('non-booking');
+  if (hash === '#new') {
+    openPkbWizard(null);
   } else {
-    showMethodSelection();
+    showPkbDashboard();
   }
 
   // Listen for reset command from parent portal
   window.addEventListener('message', (e) => {
     if (e.data && e.data.type === 'RESET_VIEW') {
-      showMethodSelection();
+      showPkbDashboard();
     }
   });
 }
 
-function showMethodSelection() {
-  const methodView = document.getElementById('methodSelectionView');
+function showPkbDashboard() {
+  const dashView = document.getElementById('pkbDashboardView');
   const wizardView = document.getElementById('wizardContentView');
-  if (methodView) methodView.style.display = 'flex';
+  if (dashView) dashView.style.display = 'flex';
   if (wizardView) wizardView.style.display = 'none';
 
-  // Notify parent shell
   if (window.parent && window.parent !== window) {
-    window.parent.postMessage({ type: 'UPDATE_CRUMB', module: 'list', subCrumb: 'Pilih Metode' }, '*');
+    window.parent.postMessage({ type: 'UPDATE_CRUMB', module: 'list', subCrumb: 'List PKB' }, '*');
   }
 }
 
-function selectBookingMethod(method, bookingData = null) {
-  currentMethod = method;
-  activeBooking = bookingData;
+function renderPkbGrid() {
+  const grid = document.getElementById('pkbGrid');
+  const empty = document.getElementById('pkbEmpty');
+  if (!grid) return;
 
-  const methodView = document.getElementById('methodSelectionView');
+  const filtered = samplePkbList.filter(p => {
+    const matchStatus = pkbFilter === 'all' || p.status === pkbFilter;
+    const hay = `${p.plate} ${p.id} ${p.customer} ${p.model}`.toLowerCase();
+    const matchQuery = !pkbQuery || hay.includes(pkbQuery);
+    return matchStatus && matchQuery;
+  });
+
+  // Stats always reflect the full list
+  const counts = {
+    all: samplePkbList.length,
+    pending: samplePkbList.filter(p => p.status === 'pending').length,
+    progress: samplePkbList.filter(p => p.status === 'progress').length,
+    done: samplePkbList.filter(p => p.status === 'done').length,
+  };
+  const setNum = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  setNum('pkbStatTotalNum', counts.all);
+  setNum('pkbStatPendingNum', counts.pending);
+  setNum('pkbStatProgressNum', counts.progress);
+  setNum('pkbStatDoneNum', counts.done);
+
+  grid.innerHTML = filtered.map(p => {
+    const stepHint = p.status === 'done'
+      ? 'Selesai'
+      : p.step > 0
+        ? `Step ${p.step}/5 · ${PKB_STEP_NAMES[p.step - 1]}`
+        : 'Belum mulai';
+    return `
+      <button type="button" class="pkb-card status-${p.status}" data-pkb-id="${p.id}">
+        <div class="pkb-card-top">
+          <span class="pkb-code-pill">${p.id}</span>
+          <span class="pkb-status-badge">${PKB_STATUS_LABEL[p.status]}</span>
+        </div>
+        <div class="pkb-plate">${p.plate}</div>
+        <div class="pkb-model">${p.model}</div>
+        <div class="pkb-meta">
+          <div class="pkb-meta-row"><span>Pelanggan</span><strong>${p.customer}</strong></div>
+          <div class="pkb-meta-row"><span>Layanan</span><strong>${p.service}</strong></div>
+          <div class="pkb-meta-row"><span>Jam</span><strong>${p.time} WIB</strong></div>
+          <div class="pkb-meta-row"><span>Mekanik</span><strong>${p.mechanic}</strong></div>
+          <div class="pkb-meta-row"><span>Progres</span><span class="pkb-progress-hint">${stepHint}</span></div>
+        </div>
+      </button>`;
+  }).join('');
+
+  if (empty) empty.style.display = filtered.length === 0 ? 'block' : 'none';
+
+  grid.querySelectorAll('.pkb-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const entry = samplePkbList.find(p => p.id === card.dataset.pkbId);
+      if (entry) openPkbWizard(entry);
+    });
+  });
+}
+
+function openPkbWizard(entry) {
+  const dashView = document.getElementById('pkbDashboardView');
   const wizardView = document.getElementById('wizardContentView');
-  const summaryQueueType = document.getElementById('summaryQueueType');
 
-  if (methodView) methodView.style.display = 'none';
+  if (dashView) dashView.style.display = 'none';
   if (wizardView) {
     wizardView.style.display = 'block';
     wizardView.style.animation = 'fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
   }
 
-  if (method === 'booking') {
-    if (summaryQueueType) summaryQueueType.value = 'Booking';
-
-    if (bookingData) {
-      // Auto fill vehicle
-      const scanInput = document.getElementById('scanVehicleInput');
-      if (scanInput) scanInput.value = bookingData.engine;
-      if (window.loadCustomVehicle) {
-        window.loadCustomVehicle(bookingData);
-      }
-      // Auto fill carrier
-      const carrierPhone = document.getElementById('carrierInputPhone');
-      const carrierFirst = document.getElementById('carrierFirstName');
-      const carrierLast = document.getElementById('carrierLastName');
-      const searchPhone = document.getElementById('carrierSearchPhone');
-      if (carrierPhone) carrierPhone.value = bookingData.phone;
-      if (searchPhone) searchPhone.value = bookingData.phone;
-      const names = bookingData.customer.split(' ');
-      if (carrierFirst) carrierFirst.value = names[0] || '';
-      if (carrierLast) carrierLast.value = names.slice(1).join(' ') || '';
+  if (entry) {
+    // Auto fill vehicle
+    const scanInput = document.getElementById('scanVehicleInput');
+    if (scanInput) scanInput.value = entry.engine;
+    if (window.loadCustomVehicle) {
+      window.loadCustomVehicle(entry);
     }
+    // Auto fill carrier
+    const carrierPhone = document.getElementById('carrierInputPhone');
+    const carrierFirst = document.getElementById('carrierFirstName');
+    const carrierLast = document.getElementById('carrierLastName');
+    const searchPhone = document.getElementById('carrierSearchPhone');
+    if (carrierPhone) carrierPhone.value = entry.phone;
+    if (searchPhone) searchPhone.value = entry.phone;
+    const names = entry.customer.split(' ');
+    if (carrierFirst) carrierFirst.value = names[0] || '';
+    if (carrierLast) carrierLast.value = names.slice(1).join(' ') || '';
+    showToast(`Data PKB ${entry.id} dimuat (${entry.plate})`);
+  }
 
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'UPDATE_CRUMB', module: 'list', subCrumb: 'Booking' }, '*');
-    }
-  } else {
-    if (summaryQueueType) summaryQueueType.value = 'Regular';
-
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'UPDATE_CRUMB', module: 'list', subCrumb: 'Non-Booking' }, '*');
-    }
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'UPDATE_CRUMB', module: 'list', subCrumb: entry ? entry.plate : 'PKB Baru' }, '*');
   }
 
   // Reset to Step 1
@@ -344,7 +303,7 @@ function initStepper() {
     if (currentStep > 1) {
       goToStep(currentStep - 1);
     } else if (currentStep === 1) {
-      showMethodSelection();
+      showPkbDashboard();
     }
   });
 
