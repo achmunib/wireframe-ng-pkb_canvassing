@@ -153,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initSorting();
   initKebabMenu();
   initModals();
-  initDraftPill();
   initEqualizerToggle();
   initStepperWizard();
   initTambahPartModal();
@@ -560,15 +559,6 @@ function initModals() {
   }
 }
 
-// Floating Draft PKB Indicator
-function initDraftPill() {
-  const btn = document.getElementById('btnDraftPkb');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      showToast('3 draft PKB tersimpan siap diterbitkan', 'info');
-    });
-  }
-}
 
 // Toast Notification
 function showToast(message, type = 'info') {

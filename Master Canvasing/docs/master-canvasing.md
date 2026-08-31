@@ -28,7 +28,6 @@ Modul ini dijalankan di dalam **iframe** pada layout shell portal (`index.html`)
 | BUTTON-Aksi (Lihat Detail) | BUTTON | Menampilkan pop-up detail data Master Canvasing pada baris terpilih | Ikon mata pada kolom Aksi. Saat diklik menjalankan `viewCanvasingDetail(id)` dan membuka **Modal Detail Master Canvasing** | | | Modal Detail Master Canvasing | | | |
 | LABEL-Table Info | LABEL | Menampilkan informasi jumlah data yang tampil | Format: `Showing 1 to <jumlah hasil filter> of <jumlah hasil filter> entries`<br><br>Jika hasil filter kosong, format menjadi `Showing 0 to 0 of <total data> entries` | | | | | | |
 | BUTTON-Pagination | BUTTON | Navigasi halaman tabel (Previous / Nomor Halaman / Next) | Saat ini seluruh data ditampilkan dalam satu halaman; tombol **Prev** berstatus disabled dan tombol **Prev/Next** belum memiliki aksi<br><br>**Catatan pengembangan:** perlu implementasi paging (server-side / client-side) beserta perhitungan ulang label Table Info | | | | | | |
-| BUTTON-Draft PKB (Floating) | BUTTON | Menampilkan indikator jumlah draft PKB yang tersimpan | Menampilkan badge jumlah draft (contoh: **3**)<br><br>Saat diklik menampilkan toast **"3 draft PKB tersimpan siap diterbitkan"**<br><br>**Catatan pengembangan:** jumlah badge masih statis, perlu di-binding ke data draft PKB yang sebenarnya | | | | | | |
 
 ---
 
