@@ -379,7 +379,6 @@ function initEqualizerToggle() {
 function initKebabMenu() {
   const menu = document.getElementById('kebabMenu');
   const btnView = document.getElementById('kebabActionView');
-  const btnEdit = document.getElementById('kebabActionEdit');
   const btnPrint = document.getElementById('kebabActionPrint');
   const statusButtons = document.querySelectorAll('.kebab-item.status-sub');
 
@@ -396,13 +395,6 @@ function initKebabMenu() {
     btnView.addEventListener('click', () => {
       menu.classList.remove('show');
       if (activeSelectedId) viewCanvasingDetail(activeSelectedId);
-    });
-  }
-
-  if (btnEdit) {
-    btnEdit.addEventListener('click', () => {
-      menu.classList.remove('show');
-      if (activeSelectedId) editCanvasingItem(activeSelectedId);
     });
   }
 
@@ -477,11 +469,6 @@ function viewCanvasingDetail(id) {
   `;
 
   modal.classList.add('show');
-}
-
-// Edit Action - Opens Stepper Wizard in Edit Mode
-function editCanvasingItem(id) {
-  showCreateWizard(true, id);
 }
 
 // Create / Edit Modal Logic (For Detail Modal and Fallback)
@@ -601,7 +588,6 @@ function showToast(message, type = 'info') {
 
 let currentWizStep = 1;
 const totalWizSteps = 4;
-let editingPkbId = null;
 
 // Master Catalog Part Canvasing with realistic AHASS Honda Genuine Parts & Stock
 const partCatalog = [
@@ -1449,7 +1435,7 @@ function initStepperWizard() {
   // Open Create Wizard
   if (btnCreate) {
     btnCreate.addEventListener('click', () => {
-      showCreateWizard(false);
+      showCreateWizard();
     });
   }
 
@@ -1602,8 +1588,7 @@ function initStepperWizard() {
   }
 }
 
-function showCreateWizard(isEdit = false, editId = null) {
-  editingPkbId = isEdit ? editId : null;
+function showCreateWizard() {
   const tableView = document.getElementById('masterTableView');
   const wizardView = document.getElementById('createMasterView');
   const bannerDetail = document.getElementById('wizardBannerDetail');
@@ -1615,43 +1600,23 @@ function showCreateWizard(isEdit = false, editId = null) {
     wizardView.style.animation = 'fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
   }
 
-  if (isEdit && editId) {
-    const item = masterCanvasingData.find(d => d.id === editId);
-    if (item) {
-      if (transNoPill) transNoPill.textContent = item.kodeCanvasing;
-      if (bannerDetail) {
-        bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${item.kodeCanvasing}</span> • Edit Data Master Canvasing`;
-      }
-      if (document.getElementById('wizKodeCanvasing')) document.getElementById('wizKodeCanvasing').value = item.kodeCanvasing;
-      if (document.getElementById('wizNamaCanvasing')) document.getElementById('wizNamaCanvasing').value = item.namaCanvasing;
-      if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = item.lokasi;
-      if (document.getElementById('wizDari')) document.getElementById('wizDari').value = item.dari || '26-08-2026';
-      if (document.getElementById('wizSampai')) document.getElementById('wizSampai').value = item.sampai || '27-08-2026';
-      if (document.getElementById('wizProvinsi')) document.getElementById('wizProvinsi').value = item.provinsi || 'JAWA TIMUR';
-      if (document.getElementById('wizKabupaten')) document.getElementById('wizKabupaten').value = item.kota || 'KAB. SIDOARJO';
-      if (document.getElementById('wizKecamatan')) document.getElementById('wizKecamatan').value = item.kecamatan || 'GEDANGAN';
-      if (document.getElementById('wizKelurahan')) document.getElementById('wizKelurahan').value = item.kelurahan || 'GEDANGAN';
-      if (document.getElementById('wizTransNo')) document.getElementById('wizTransNo').value = item.kodeCanvasing;
-    }
-  } else {
-    // New Record
-    const newKode = generateNextKodeCanvasing();
-    if (transNoPill) transNoPill.textContent = newKode;
-    if (bannerDetail) {
-      bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${newKode}</span> • Pendaftaran Master Canvasing Baru`;
-    }
-
-    if (document.getElementById('wizKodeCanvasing')) document.getElementById('wizKodeCanvasing').value = newKode;
-    if (document.getElementById('wizNamaCanvasing')) document.getElementById('wizNamaCanvasing').value = 'AHASS Service Kunjung PT Maspion I';
-    if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = 'Area Parkir PT Maspion I Gedangan';
-    if (document.getElementById('wizDari')) document.getElementById('wizDari').value = '26-08-2026';
-    if (document.getElementById('wizSampai')) document.getElementById('wizSampai').value = '27-08-2026';
-    if (document.getElementById('wizProvinsi')) document.getElementById('wizProvinsi').value = 'JAWA TIMUR';
-    if (document.getElementById('wizKabupaten')) document.getElementById('wizKabupaten').value = 'KAB. SIDOARJO';
-    if (document.getElementById('wizKecamatan')) document.getElementById('wizKecamatan').value = 'GEDANGAN';
-    if (document.getElementById('wizKelurahan')) document.getElementById('wizKelurahan').value = 'SAWOTRATAP';
-    if (document.getElementById('wizTransNo')) document.getElementById('wizTransNo').value = newKode;
+  // New Record
+  const newKode = generateNextKodeCanvasing();
+  if (transNoPill) transNoPill.textContent = newKode;
+  if (bannerDetail) {
+    bannerDetail.innerHTML = `<span class="trans-id-pill" id="dispWizardTransNo">${newKode}</span> • Pendaftaran Master Canvasing Baru`;
   }
+
+  if (document.getElementById('wizKodeCanvasing')) document.getElementById('wizKodeCanvasing').value = newKode;
+  if (document.getElementById('wizNamaCanvasing')) document.getElementById('wizNamaCanvasing').value = 'AHASS Service Kunjung PT Maspion I';
+  if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = 'Area Parkir PT Maspion I Gedangan';
+  if (document.getElementById('wizDari')) document.getElementById('wizDari').value = '26-08-2026';
+  if (document.getElementById('wizSampai')) document.getElementById('wizSampai').value = '27-08-2026';
+  if (document.getElementById('wizProvinsi')) document.getElementById('wizProvinsi').value = 'JAWA TIMUR';
+  if (document.getElementById('wizKabupaten')) document.getElementById('wizKabupaten').value = 'KAB. SIDOARJO';
+  if (document.getElementById('wizKecamatan')) document.getElementById('wizKecamatan').value = 'GEDANGAN';
+  if (document.getElementById('wizKelurahan')) document.getElementById('wizKelurahan').value = 'SAWOTRATAP';
+  if (document.getElementById('wizTransNo')) document.getElementById('wizTransNo').value = newKode;
 
   // Reset Parts Dibawa Table
   partsDibawa = [];
@@ -1670,7 +1635,7 @@ function showCreateWizard(isEdit = false, editId = null) {
     window.parent.postMessage({
       type: 'UPDATE_CRUMB',
       module: 'master',
-      subCrumb: isEdit ? 'Edit Master Canvasing' : 'Create New'
+      subCrumb: 'Create New'
     }, '*');
   }
 }
@@ -1745,7 +1710,7 @@ function goToStep(step) {
   }
 
   if (nextText) {
-    nextText.textContent = step === totalWizSteps ? (editingPkbId ? 'Perbarui Master Canvasing' : 'Simpan Master Canvasing') : 'Next';
+    nextText.textContent = step === totalWizSteps ? 'Simpan Master Canvasing' : 'Next';
   }
 
   if (nextIcon) {
@@ -1849,37 +1814,21 @@ function submitWizardForm() {
   const newKode = document.getElementById('wizTransNo')?.value || generateNextKodeCanvasing();
   const mechNames = selectedMechanicsList.map(m => m.name).join(', ') || 'Kalvin';
 
-  if (editingPkbId) {
-    const existing = masterCanvasingData.find(d => d.id === editingPkbId);
-    if (existing) {
-      existing.namaCanvasing = namaCanvasing;
-      existing.lokasi = lokasiCanvasing;
-      existing.provinsi = provinsi;
-      existing.kota = kabupaten;
-      existing.kecamatan = kecamatan;
-      existing.kelurahan = kelurahan;
-      existing.dari = dari;
-      existing.sampai = sampai;
-      existing.petugas = mechNames;
-    }
-    showToast(`Master Canvasing ${existing.kodeCanvasing} berhasil diperbarui`, 'success');
-  } else {
-    const newItem = {
-      id: Date.now(),
-      kodeCanvasing: newKode,
-      namaCanvasing: namaCanvasing,
-      lokasi: lokasiCanvasing,
-      provinsi: provinsi,
-      kota: kabupaten,
-      kecamatan: kecamatan,
-      kelurahan: kelurahan,
-      dari: dari,
-      sampai: sampai,
-      petugas: mechNames
-    };
-    masterCanvasingData.unshift(newItem);
-    showToast(`Master Canvasing baru ${newKode} berhasil disimpan!`, 'success');
-  }
+  const newItem = {
+    id: Date.now(),
+    kodeCanvasing: newKode,
+    namaCanvasing: namaCanvasing,
+    lokasi: lokasiCanvasing,
+    provinsi: provinsi,
+    kota: kabupaten,
+    kecamatan: kecamatan,
+    kelurahan: kelurahan,
+    dari: dari,
+    sampai: sampai,
+    petugas: mechNames
+  };
+  masterCanvasingData.unshift(newItem);
+  showToast(`Master Canvasing baru ${newKode} berhasil disimpan!`, 'success');
 
   // Refresh Table & return to table view
   applyAllFilters();
