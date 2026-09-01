@@ -1239,7 +1239,7 @@ function renderMechanicSelectOptions() {
 
   selectEl.innerHTML = '<option value="">Pilih Mekanik...</option>' + mechanicCatalog.map(m => {
     if (m.isBusy) {
-      return `<option value="${m.name}" data-stall="${m.stall}" data-busy="true" data-pkb="${m.currentPkb}">${m.name} (${m.stall} - Sedang Mengerjakan PKB ${m.currentPkb})</option>`;
+      return `<option value="${m.name}" data-stall="${m.stall}" data-busy="true" data-pkb="${m.currentPkb}" class="option-mekanik-busy">${m.name} (${m.stall} - Sedang Mengerjakan PKB ${m.currentPkb})</option>`;
     } else {
       return `<option value="${m.name}" data-stall="${m.stall}" data-busy="false">${m.name} (${m.stall} - Available / Siap Ditugaskan)</option>`;
     }
