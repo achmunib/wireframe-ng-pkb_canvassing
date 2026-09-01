@@ -78,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Deep links from the parent portal (kept for compatibility)
   if (window.location.hash === '#new') {
     openPkbWizard(null);
+  } else {
+    showPkbDashboard();
   }
 });
 
