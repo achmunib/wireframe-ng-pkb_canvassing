@@ -1189,6 +1189,50 @@ let mechanicCatalog = [
 
 let selectedMechanicsList = [];
 
+function getStep3MechanicValidation() {
+  const selectEl = document.getElementById('selectMekanikCanvasing');
+  const val = selectEl ? selectEl.value : '';
+  const selectedCatalogItem = mechanicCatalog.find(m => m.name === val);
+  const isDropdownBusy = selectedCatalogItem ? selectedCatalogItem.isBusy : false;
+  const hasBusyInList = selectedMechanicsList.some(m => m.isBusy);
+  const isInvalid = isDropdownBusy || hasBusyInList;
+  return {
+    isInvalid,
+    isDropdownBusy,
+    hasBusyInList,
+    selectedCatalogItem
+  };
+}
+
+function updateStep3ValidationState() {
+  const btnNext = document.getElementById('btnWizNext');
+
+  // If not on Step 3, ensure Next button is enabled
+  if (currentWizStep !== 3) {
+    if (btnNext) {
+      btnNext.disabled = false;
+      btnNext.classList.remove('disabled');
+      btnNext.removeAttribute('title');
+    }
+    return;
+  }
+
+  const { isInvalid } = getStep3MechanicValidation();
+
+  // Next Button Enable / Disable State
+  if (btnNext) {
+    if (isInvalid) {
+      btnNext.disabled = true;
+      btnNext.classList.add('disabled');
+      btnNext.setAttribute('title', 'Tidak dapat lanjut: Terdapat mekanik yang sedang mengerjakan PKB lain.');
+    } else {
+      btnNext.disabled = false;
+      btnNext.classList.remove('disabled');
+      btnNext.removeAttribute('title');
+    }
+  }
+}
+
 function renderMechanicSelectOptions() {
   const selectEl = document.getElementById('selectMekanikCanvasing');
   if (!selectEl) return;
@@ -1201,6 +1245,7 @@ function renderMechanicSelectOptions() {
     }
   }).join('');
   selectEl.value = '';
+  updateStep3ValidationState();
 }
 
 function refreshMechanicStatus() {
@@ -1223,6 +1268,7 @@ function refreshMechanicStatus() {
   // Reset selected mechanics table to empty
   selectedMechanicsList = [];
   renderSelectedMechanics();
+  updateStep3ValidationState();
 }
 
 function renderSelectedMechanics() {
@@ -1235,6 +1281,7 @@ function renderSelectedMechanics() {
         <td colspan="2" class="text-no-records">No records found</td>
       </tr>
     `;
+    updateStep3ValidationState();
     return;
   }
 
@@ -1265,11 +1312,13 @@ function renderSelectedMechanics() {
       </td>
     </tr>
   `).join('');
+  updateStep3ValidationState();
 }
 
 function deleteSelectedMechanic(index) {
   const removed = selectedMechanicsList.splice(index, 1);
   renderSelectedMechanics();
+  updateStep3ValidationState();
   if (removed[0]) {
     showToast(`Mekanik ${removed[0].name} dihapus dari daftar`, 'info');
   }
@@ -1281,6 +1330,12 @@ function initTambahMekanikStep() {
   const btnRefresh = document.getElementById('btnRefreshMekanik');
 
   renderMechanicSelectOptions();
+
+  if (selectEl) {
+    selectEl.addEventListener('change', () => {
+      updateStep3ValidationState();
+    });
+  }
 
   if (btnAdd && selectEl) {
     btnAdd.addEventListener('click', () => {
@@ -1306,9 +1361,10 @@ function initTambahMekanikStep() {
       selectedMechanicsList.push({ ...found });
       renderSelectedMechanics();
       selectEl.value = '';
+      updateStep3ValidationState();
 
       if (found.isBusy) {
-        showToast(`⚠️ Peringatan: Mekanik ${found.name} sedang mengerjakan PKB (${found.currentPkb}), namun tetap berhasil ditambahkan ke daftar.`, 'warning');
+        showToast(`⚠️ Peringatan: Mekanik ${found.name} sedang mengerjakan PKB (${found.currentPkb}). Tombol Next dinonaktifkan hingga mekanik yang sibuk dihapus.`, 'warning');
       } else {
         showToast(`Mekanik ${found.name} berhasil ditambahkan ke daftar`, 'success');
       }
@@ -1377,6 +1433,14 @@ function initStepperWizard() {
     const node = document.getElementById(`stepNode${i}`);
     if (node) {
       node.addEventListener('click', () => {
+        // If navigating past Step 3, ensure Step 3 validation passes
+        if (i > 3) {
+          const { isInvalid, dropdownItem, isDropdownBusy, hasBusyInList } = getStep3MechanicValidation();
+          if (isInvalid) {
+            showToast('Tidak dapat lanjut ke Summary: Terdapat mekanik yang sedang mengerjakan PKB lain.', 'warning');
+            return;
+          }
+        }
         goToStep(i);
       });
     }
@@ -1411,7 +1475,7 @@ function initStepperWizard() {
   if (btnWizNext) {
     btnWizNext.addEventListener('click', () => {
       if (currentWizStep < totalWizSteps) {
-        // Validate required fields on Step 1 & 2
+        // Validate required fields on Step 1, 2, 3
         if (currentWizStep === 1) {
           const namaCanvasing = document.getElementById('wizNamaCanvasing')?.value.trim();
           const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value.trim();
@@ -1427,6 +1491,17 @@ function initStepperWizard() {
           }
         } else if (currentWizStep === 2) {
           // Step 2: Part Dibawa (optional or warning if empty)
+        } else if (currentWizStep === 3) {
+          // Step 3: Validasi Mekanik
+          const { isInvalid, dropdownItem, isDropdownBusy, hasBusyInList } = getStep3MechanicValidation();
+          if (isInvalid) {
+            if (isDropdownBusy && dropdownItem) {
+              showToast(`Tidak dapat lanjut: Mekanik ${dropdownItem.name} sedang mengerjakan PKB (${dropdownItem.currentPkb}). Pilih mekanik Available atau kosongkan pilihan.`, 'warning');
+            } else {
+              showToast('Tidak dapat lanjut: Terdapat mekanik yang sedang mengerjakan PKB lain dalam daftar penugasan.', 'warning');
+            }
+            return;
+          }
         }
         goToStep(currentWizStep + 1);
       } else {
@@ -1678,6 +1753,18 @@ function goToStep(step) {
       nextIcon.innerHTML = `<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline>`;
     } else {
       nextIcon.innerHTML = `<polyline points="9 18 15 12 9 6"></polyline>`;
+    }
+  }
+
+  // Update validation state for Next button on Step 3 or reset on other steps
+  if (step === 3) {
+    updateStep3ValidationState();
+  } else {
+    const btnNext = document.getElementById('btnWizNext');
+    if (btnNext) {
+      btnNext.disabled = false;
+      btnNext.classList.remove('disabled');
+      btnNext.removeAttribute('title');
     }
   }
 
