@@ -1744,6 +1744,11 @@ body {
   width: 100%;
 }
 
+.option-mekanik-busy {
+  color: var(--status-pause-text);
+  font-weight: 600;
+}
+
 .mechanic-busy-warning {
   display: inline-flex;
   align-items: center;
