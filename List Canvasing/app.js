@@ -94,12 +94,16 @@ const PKB_STEP_NAMES = ['Vehicle', 'Carrier Data', 'Cek Aja Dulu', 'Service & Pa
 
 let pkbFilter = 'all';
 let pkbQuery = '';
+let pkbCurrentPage = 1;
+const pkbPageSize = 5;
 
 function initPkbDashboard() {
   const btnNew = document.getElementById('btnNewPkb');
   const searchInput = document.getElementById('pkbSearchInput');
   const chips = document.querySelectorAll('.pkb-stat-chip');
   const pills = document.querySelectorAll('.pkb-pill');
+  const btnPrev = document.getElementById('pkbPrevPage');
+  const btnNext = document.getElementById('pkbNextPage');
 
   if (btnNew) {
     btnNew.addEventListener('click', () => {
@@ -111,12 +115,14 @@ function initPkbDashboard() {
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       pkbQuery = e.target.value.toLowerCase().trim();
+      pkbCurrentPage = 1;
       renderPkbGrid();
     });
   }
 
   const setFilter = (f) => {
     pkbFilter = f;
+    pkbCurrentPage = 1;
     chips.forEach(c => c.classList.toggle('active', c.dataset.filter === f));
     pills.forEach(p => p.classList.toggle('active', p.dataset.filter === f));
     renderPkbGrid();
@@ -124,6 +130,26 @@ function initPkbDashboard() {
 
   chips.forEach(c => c.addEventListener('click', () => setFilter(c.dataset.filter)));
   pills.forEach(p => p.addEventListener('click', () => setFilter(p.dataset.filter)));
+
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      if (pkbCurrentPage > 1) {
+        pkbCurrentPage--;
+        renderPkbGrid();
+      }
+    });
+  }
+
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      const filtered = getFilteredPkbList();
+      const totalPages = Math.ceil(filtered.length / pkbPageSize) || 1;
+      if (pkbCurrentPage < totalPages) {
+        pkbCurrentPage++;
+        renderPkbGrid();
+      }
+    });
+  }
 
   // Initial date label
   const dateEl = document.getElementById('pkbDate');
@@ -152,17 +178,21 @@ function showPkbDashboard() {
   }
 }
 
-function renderPkbGrid() {
-  const grid = document.getElementById('pkbGrid');
-  const empty = document.getElementById('pkbEmpty');
-  if (!grid) return;
-
-  const filtered = samplePkbList.filter(p => {
+function getFilteredPkbList() {
+  return samplePkbList.filter(p => {
     const matchStatus = pkbFilter === 'all' || p.status === pkbFilter;
     const hay = `${p.plate} ${p.id} ${p.customer} ${p.model}`.toLowerCase();
     const matchQuery = !pkbQuery || hay.includes(pkbQuery);
     return matchStatus && matchQuery;
   });
+}
+
+function renderPkbGrid() {
+  const grid = document.getElementById('pkbGrid');
+  const empty = document.getElementById('pkbEmpty');
+  if (!grid) return;
+
+  const filtered = getFilteredPkbList();
 
   // Stats always reflect the full list
   const counts = {
@@ -177,7 +207,17 @@ function renderPkbGrid() {
   setNum('pkbStatProgressNum', counts.progress);
   setNum('pkbStatDoneNum', counts.done);
 
-  grid.innerHTML = filtered.map(p => {
+  // Pagination calculation
+  const totalItems = filtered.length;
+  const totalPages = Math.ceil(totalItems / pkbPageSize) || 1;
+  if (pkbCurrentPage > totalPages) pkbCurrentPage = totalPages;
+  if (pkbCurrentPage < 1) pkbCurrentPage = 1;
+
+  const startIndex = (pkbCurrentPage - 1) * pkbPageSize;
+  const endIndex = Math.min(startIndex + pkbPageSize, totalItems);
+  const pagedItems = filtered.slice(startIndex, endIndex);
+
+  grid.innerHTML = pagedItems.map(p => {
     const stepHint = p.status === 'done'
       ? 'Selesai'
       : p.step > 0
@@ -185,23 +225,50 @@ function renderPkbGrid() {
         : 'Belum mulai';
     return `
       <button type="button" class="pkb-card status-${p.status}" data-pkb-id="${p.id}">
-        <div class="pkb-card-top">
-          <span class="pkb-code-pill">${p.id}</span>
-          <span class="pkb-status-badge">${PKB_STATUS_LABEL[p.status]}</span>
+        <div class="pkb-card-lead">
+          <div class="pkb-card-top">
+            <span class="pkb-code-pill">${p.id}</span>
+            <span class="pkb-status-badge">${PKB_STATUS_LABEL[p.status]}</span>
+          </div>
+          <div class="pkb-plate">${p.plate}</div>
+          <div class="pkb-model">${p.model}</div>
         </div>
-        <div class="pkb-plate">${p.plate}</div>
-        <div class="pkb-model">${p.model}</div>
+        <div class="pkb-card-divider"></div>
         <div class="pkb-meta">
-          <div class="pkb-meta-row"><span>Pelanggan</span><strong>${p.customer}</strong></div>
-          <div class="pkb-meta-row"><span>Layanan</span><strong>${p.service}</strong></div>
-          <div class="pkb-meta-row"><span>Jam</span><strong>${p.time} WIB</strong></div>
-          <div class="pkb-meta-row"><span>Mekanik</span><strong>${p.mechanic}</strong></div>
-          <div class="pkb-meta-row"><span>Progres</span><span class="pkb-progress-hint">${stepHint}</span></div>
+          <div class="pkb-meta-col">
+            <span class="pkb-meta-label">Pelanggan</span>
+            <strong class="pkb-meta-val">${p.customer}</strong>
+          </div>
+          <div class="pkb-meta-col">
+            <span class="pkb-meta-label">Layanan</span>
+            <strong class="pkb-meta-val" title="${p.service}">${p.service}</strong>
+          </div>
+          <div class="pkb-meta-col">
+            <span class="pkb-meta-label">Jam</span>
+            <strong class="pkb-meta-val">${p.time} WIB</strong>
+          </div>
+          <div class="pkb-meta-col">
+            <span class="pkb-meta-label">Mekanik</span>
+            <strong class="pkb-meta-val">${p.mechanic}</strong>
+          </div>
+          <div class="pkb-meta-col">
+            <span class="pkb-meta-label">Progres</span>
+            <span class="pkb-progress-hint">${stepHint}</span>
+          </div>
+        </div>
+        <div class="pkb-card-action">
+          <span class="pkb-card-arrow" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </span>
         </div>
       </button>`;
   }).join('');
 
   if (empty) empty.style.display = filtered.length === 0 ? 'block' : 'none';
+
+  renderPkbPagination(totalItems, totalPages, startIndex, endIndex);
 
   grid.querySelectorAll('.pkb-card').forEach(card => {
     card.addEventListener('click', () => {
@@ -209,6 +276,49 @@ function renderPkbGrid() {
       if (entry) openPkbWizard(entry);
     });
   });
+}
+
+function renderPkbPagination(totalItems, totalPages, startIndex, endIndex) {
+  const wrapper = document.getElementById('pkbPaginationWrapper');
+  const startEl = document.getElementById('pkbPageStart');
+  const endEl = document.getElementById('pkbPageEnd');
+  const totalEl = document.getElementById('pkbPageTotal');
+  const btnPrev = document.getElementById('pkbPrevPage');
+  const btnNext = document.getElementById('pkbNextPage');
+  const numbersContainer = document.getElementById('pkbPageNumbers');
+
+  if (!wrapper) return;
+
+  if (totalItems === 0) {
+    wrapper.style.display = 'none';
+    return;
+  }
+
+  wrapper.style.display = 'flex';
+  if (startEl) startEl.textContent = startIndex + 1;
+  if (endEl) endEl.textContent = endIndex;
+  if (totalEl) totalEl.textContent = totalItems;
+
+  if (btnPrev) btnPrev.disabled = (pkbCurrentPage <= 1);
+  if (btnNext) btnNext.disabled = (pkbCurrentPage >= totalPages);
+
+  if (numbersContainer) {
+    let html = '';
+    for (let i = 1; i <= totalPages; i++) {
+      html += `<button type="button" class="page-btn ${i === pkbCurrentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+    }
+    numbersContainer.innerHTML = html;
+
+    numbersContainer.querySelectorAll('.page-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const page = parseInt(btn.dataset.page, 10);
+        if (page && page !== pkbCurrentPage) {
+          pkbCurrentPage = page;
+          renderPkbGrid();
+        }
+      });
+    });
+  }
 }
 
 function openPkbWizard(entry) {

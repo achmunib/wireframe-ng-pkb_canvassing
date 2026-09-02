@@ -126,6 +126,20 @@
             <div class="pkb-empty" id="pkbEmpty" style="display: none;">
               <p>Tidak ada data PKB yang cocok.</p>
             </div>
+
+            <!-- Pagination Container -->
+            <div class="pkb-pagination-wrapper" id="pkbPaginationWrapper">
+              <div class="pkb-pagination-info" id="pkbPaginationInfo">
+                Menampilkan <span id="pkbPageStart">1</span> - <span id="pkbPageEnd">5</span> dari <span id="pkbPageTotal">8</span> data
+              </div>
+              <div class="pkb-pagination" id="pkbPagination">
+                <button type="button" class="page-btn" id="pkbPrevPage" title="Halaman Sebelumnya">&lt;</button>
+                <div class="pkb-page-numbers" id="pkbPageNumbers">
+                  <!-- Dynamic page numbers rendered by JS -->
+                </div>
+                <button type="button" class="page-btn" id="pkbNextPage" title="Halaman Selanjutnya">&gt;</button>
+              </div>
+            </div>
           </div>
         </section>
 
