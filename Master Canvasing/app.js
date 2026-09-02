@@ -1586,6 +1586,7 @@ function initStepperWizard() {
         if (currentWizStep === 1) {
           const namaCanvasing = document.getElementById('wizNamaCanvasing')?.value.trim();
           const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value.trim();
+          const kelurahan = document.getElementById('wizKelurahan')?.value.trim();
           if (!namaCanvasing) {
             showToast('Harap isi nama canvasing', 'info');
             document.getElementById('wizNamaCanvasing')?.focus();
@@ -1594,6 +1595,11 @@ function initStepperWizard() {
           if (!lokasiCanvasing) {
             showToast('Harap isi lokasi canvasing', 'info');
             document.getElementById('wizLokasiCanvasing')?.focus();
+            return;
+          }
+          if (!kelurahan) {
+            showToast('Harap pilih kelurahan', 'info');
+            document.getElementById('wizKelurahan')?.focus();
             return;
           }
         } else if (currentWizStep === 2) {
