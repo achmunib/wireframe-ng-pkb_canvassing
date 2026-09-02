@@ -141,7 +141,6 @@ function generateNextKodeCanvasing() {
   return `051-CNVS-${currentYear}-DMS${String(nextSeq).padStart(10, '0')}`;
 }
 
-let activeSearchField = 'kodeCanvasing';
 let activeSelectedId = null;
 let currentSortColumn = null;
 let currentSortAsc = true;
@@ -226,56 +225,9 @@ function renderTable(dataToRender = masterCanvasingData) {
   }
 }
 
-// Search & Dropdown Selection Logic
+// Search Logic
 function initSearchAndDropdown() {
-  const dropdownWrapper = document.getElementById('searchFieldDropdown');
-  const dropdownBtn = document.getElementById('btnSearchField');
-  const selectedFieldText = document.getElementById('selectedSearchField');
-  const dropdownItems = document.querySelectorAll('#searchFieldMenu .dropdown-item');
   const searchInput = document.getElementById('topSearchInput');
-
-  const fieldLabels = {
-    kodeCanvasing: 'Kode Canvasing',
-    namaCanvasing: 'Nama Canvasing',
-    lokasi: 'Lokasi',
-    provinsi: 'Provinsi',
-    kota: 'Kota',
-    kecamatan: 'Kecamatan',
-    kelurahan: 'Kelurahan'
-  };
-
-  // Toggle Dropdown Menu
-  if (dropdownBtn && dropdownWrapper) {
-    dropdownBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownWrapper.classList.toggle('open');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!dropdownWrapper.contains(e.target)) {
-        dropdownWrapper.classList.remove('open');
-      }
-    });
-  }
-
-  // Select Dropdown Item
-  dropdownItems.forEach((item) => {
-    item.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdownItems.forEach((btn) => btn.classList.remove('active'));
-      item.classList.add('active');
-
-      activeSearchField = item.getAttribute('data-field');
-      const label = fieldLabels[activeSearchField] || 'Kode Canvasing';
-      if (selectedFieldText) selectedFieldText.textContent = label;
-      if (searchInput) {
-        searchInput.placeholder = `Search by ${label}`;
-        searchInput.focus();
-      }
-      dropdownWrapper.classList.remove('open');
-      applyAllFilters();
-    });
-  });
 
   // Top Search Input Filter
   if (searchInput) {
@@ -306,10 +258,13 @@ function applyAllFilters() {
   });
 
   const filtered = masterCanvasingData.filter((item) => {
-    // 1. Check Top Search
+    // 1. Check Top Search (search across all columns)
     if (topSearch) {
-      const fieldVal = String(item[activeSearchField] || '').toLowerCase();
-      if (!fieldVal.includes(topSearch)) {
+      const searchFields = ['kodeCanvasing', 'namaCanvasing', 'lokasi', 'provinsi', 'kota', 'kecamatan', 'kelurahan', 'petugas'];
+      const matches = searchFields.some((field) =>
+        String(item[field] || '').toLowerCase().includes(topSearch)
+      );
+      if (!matches) {
         return false;
       }
     }
