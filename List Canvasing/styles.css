@@ -3310,33 +3310,97 @@ body {
   padding-left: 42px;
 }
 
-.pkb-filter-pills {
+.pkb-date-range {
   display: flex;
+  align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
-.pkb-pill {
-  padding: 8px 16px;
+.pkb-date-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.pkb-date-input {
+  width: 148px;
+  height: 42px;
+  padding: 0 34px 0 10px;
+  font-size: 13px;
+  cursor: text;
+}
+
+.pkb-date-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.pkb-date-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: color 0.15s ease;
+}
+
+.pkb-date-box:focus-within .pkb-date-icon {
+  color: var(--border-focus);
+}
+
+.pkb-date-native {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  width: 36px;
+  height: 100%;
+  opacity: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.pkb-date-native::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.pkb-date-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   border: 1px solid var(--border-color);
   border-radius: 999px;
   background: var(--bg-card);
   color: var(--text-muted);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
 }
 
-.pkb-pill:hover {
+.pkb-date-clear:hover:not(:disabled) {
   border-color: var(--primary-border);
   color: var(--text-main);
 }
 
-.pkb-pill.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #ffffff;
+.pkb-date-clear:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 .pkb-grid {
@@ -3637,6 +3701,15 @@ body {
 
   .btn-new-pkb {
     justify-content: center;
+  }
+
+  .pkb-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pkb-date-range {
+    flex-wrap: wrap;
   }
 
   .pkb-meta {

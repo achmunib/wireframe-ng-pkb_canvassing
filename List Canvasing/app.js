@@ -4,14 +4,14 @@ const totalSteps = 5;
 let currentFuelLevel = 4; // Default full/sample level
 // PKB Canvasing entries for simulation (status: 'pending' | 'progress' | 'done')
 const samplePkbList = [
-  { id: 'PKB-20240826-001', plate: 'AG 1000 ELM', model: 'VG - VARIO 125 CBS ISS', customer: 'Achmad Munib', engine: 'JB91E1260677', frame: 'MH1J891158K260', phone: '081234567890', service: 'Servis Berkala & Ganti Oli MPX2', time: '09:30', mechanic: 'Andi', status: 'progress', step: 3 },
-  { id: 'PKB-20240826-002', plate: 'B 4592 KLR', model: 'VG - VARIO 160 ABS', customer: 'Budi Santoso', engine: 'KF11E1084920', frame: 'MH1KF1118PK092144', phone: '085712345678', service: 'Cek CVT & Kampas Rem', time: '10:45', mechanic: 'Rudi', status: 'pending', step: 0 },
-  { id: 'PKB-20240826-003', plate: 'L 2831 AB', model: 'VG - SCOOPY PRESTIGE', customer: 'Siti Rahmawati', engine: 'JM31E2948102', frame: 'MH1JM3116PK748291', phone: '087898765432', service: 'Ganti Busi & Oli MPX2', time: '13:15', mechanic: 'Andi', status: 'pending', step: 0 },
-  { id: 'PKB-20240826-004', plate: 'AB 1234 CD', model: 'VG - NMAX 155 CONNECTED', customer: 'Dewi Lestari', engine: 'B6NE1123456', frame: 'MH1B6NE11PK123456', phone: '081122334455', service: 'Servis Besar 10.000 km', time: '08:00', mechanic: 'Joko', status: 'pending', step: 0 },
-  { id: 'PKB-20240826-005', plate: 'B 6789 XYZ', model: 'VG - BEAT SPORTY CBS', customer: 'Eko Prasetyo', engine: 'K1FJ2233445', frame: 'MH1K1FJ22PK223344', phone: '085566778899', service: 'Ganti Oli & Tune Up', time: '11:20', mechanic: 'Rudi', status: 'progress', step: 4 },
-  { id: 'PKB-20240826-006', plate: 'D 4321 EF', model: 'VG - PCX 160 ABS', customer: 'Fitri Handayani', engine: 'JKE1EE556677', frame: 'MH1JKE11PK556677', phone: '081900112233', service: 'Cek Aki & Rem Depan', time: '14:00', mechanic: 'Joko', status: 'progress', step: 2 },
-  { id: 'PKB-20240826-007', plate: 'H 9876 GH', model: 'VG - LEXI 125 KEYLESS', customer: 'Gunawan Wibowo', engine: 'F4SE1198877', frame: 'MH1F4SE11PK119887', phone: '082133445566', service: 'Servis Berkala & Ganti Oli MPX2', time: '09:00', mechanic: 'Andi', status: 'done', step: 5 },
-  { id: 'PKB-20240826-008', plate: 'N 5555 IJ', model: 'VG - VARIO 125 CBS', customer: 'Hendra Saputra', engine: 'JB9NE2244668', frame: 'MH1JB9NEPK224466', phone: '083899887766', service: 'Ganti Roller & V-Belt', time: '15:30', mechanic: 'Rudi', status: 'done', step: 5 },
+  { id: 'PKB-20240826-001', plate: 'AG 1000 ELM', model: 'VG - VARIO 125 CBS ISS', customer: 'Achmad Munib', engine: 'JB91E1260677', frame: 'MH1J891158K260', phone: '081234567890', service: 'Servis Berkala & Ganti Oli MPX2', time: '09:30', mechanic: 'Andi', status: 'progress', step: 3, date: '2024-08-26' },
+  { id: 'PKB-20240826-002', plate: 'B 4592 KLR', model: 'VG - VARIO 160 ABS', customer: 'Budi Santoso', engine: 'KF11E1084920', frame: 'MH1KF1118PK092144', phone: '085712345678', service: 'Cek CVT & Kampas Rem', time: '10:45', mechanic: 'Rudi', status: 'pending', step: 0, date: '2024-08-26' },
+  { id: 'PKB-20240826-003', plate: 'L 2831 AB', model: 'VG - SCOOPY PRESTIGE', customer: 'Siti Rahmawati', engine: 'JM31E2948102', frame: 'MH1JM3116PK748291', phone: '087898765432', service: 'Ganti Busi & Oli MPX2', time: '13:15', mechanic: 'Andi', status: 'pending', step: 0, date: '2024-08-25' },
+  { id: 'PKB-20240826-004', plate: 'AB 1234 CD', model: 'VG - NMAX 155 CONNECTED', customer: 'Dewi Lestari', engine: 'B6NE1123456', frame: 'MH1B6NE11PK123456', phone: '081122334455', service: 'Servis Besar 10.000 km', time: '08:00', mechanic: 'Joko', status: 'pending', step: 0, date: '2024-08-24' },
+  { id: 'PKB-20240826-005', plate: 'B 6789 XYZ', model: 'VG - BEAT SPORTY CBS', customer: 'Eko Prasetyo', engine: 'K1FJ2233445', frame: 'MH1K1FJ22PK223344', phone: '085566778899', service: 'Ganti Oli & Tune Up', time: '11:20', mechanic: 'Rudi', status: 'progress', step: 4, date: '2024-08-26' },
+  { id: 'PKB-20240826-006', plate: 'D 4321 EF', model: 'VG - PCX 160 ABS', customer: 'Fitri Handayani', engine: 'JKE1EE556677', frame: 'MH1JKE11PK556677', phone: '081900112233', service: 'Cek Aki & Rem Depan', time: '14:00', mechanic: 'Joko', status: 'progress', step: 2, date: '2024-08-23' },
+  { id: 'PKB-20240826-007', plate: 'H 9876 GH', model: 'VG - LEXI 125 KEYLESS', customer: 'Gunawan Wibowo', engine: 'F4SE1198877', frame: 'MH1F4SE11PK119887', phone: '082133445566', service: 'Servis Berkala & Ganti Oli MPX2', time: '09:00', mechanic: 'Andi', status: 'done', step: 5, date: '2024-08-25' },
+  { id: 'PKB-20240826-008', plate: 'N 5555 IJ', model: 'VG - VARIO 125 CBS', customer: 'Hendra Saputra', engine: 'JB9NE2244668', frame: 'MH1JB9NEPK224466', phone: '083899887766', service: 'Ganti Roller & V-Belt', time: '15:30', mechanic: 'Rudi', status: 'done', step: 5, date: '2024-08-23' },
 ];
 
 // Sample Vehicle Database for scanning simulation
@@ -94,6 +94,8 @@ const PKB_STEP_NAMES = ['Vehicle', 'Carrier Data', 'Cek Aja Dulu', 'Service & Pa
 
 let pkbFilter = 'all';
 let pkbQuery = '';
+let pkbDateFrom = '';
+let pkbDateTo = '';
 let pkbCurrentPage = 1;
 const pkbPageSize = 5;
 
@@ -101,7 +103,6 @@ function initPkbDashboard() {
   const btnNew = document.getElementById('btnNewPkb');
   const searchInput = document.getElementById('pkbSearchInput');
   const chips = document.querySelectorAll('.pkb-stat-chip');
-  const pills = document.querySelectorAll('.pkb-pill');
   const btnPrev = document.getElementById('pkbPrevPage');
   const btnNext = document.getElementById('pkbNextPage');
 
@@ -120,16 +121,180 @@ function initPkbDashboard() {
     });
   }
 
+  const dateFromInput = document.getElementById('pkbDateFrom');
+  const dateToInput = document.getElementById('pkbDateTo');
+  const dateFromDisplay = document.getElementById('pkbDateFromDisplay');
+  const dateToDisplay = document.getElementById('pkbDateToDisplay');
+  const dateClearBtn = document.getElementById('pkbDateClear');
+
+  const isoToDisplay = (iso) => {
+    if (!iso) return '';
+    const parts = iso.split('-');
+    if (parts.length !== 3) return '';
+    const [y, m, d] = parts;
+    return `${d}-${m}-${y}`;
+  };
+
+  const parseDisplayToIso = (str) => {
+    if (!str) return null;
+    const match = str.trim().match(/^(\d{2})-(\d{2})-(\d{4})$/);
+    if (!match) return null;
+    const day = parseInt(match[1], 10);
+    const month = parseInt(match[2], 10);
+    const year = parseInt(match[3], 10);
+    if (month < 1 || month > 12 || day < 1 || day > 31 || year < 1900 || year > 2100) return null;
+    const d = new Date(year, month - 1, day);
+    if (d.getFullYear() !== year || d.getMonth() !== month - 1 || d.getDate() !== day) return null;
+    const isoMonth = String(month).padStart(2, '0');
+    const isoDay = String(day).padStart(2, '0');
+    return `${year}-${isoMonth}-${isoDay}`;
+  };
+
+  const formatInputDate = (val) => {
+    const rawDigits = val.replace(/\D/g, '').slice(0, 8);
+    if (val.endsWith('-') && (val.length === 3 || val.length === 6) && (rawDigits.length === 2 || rawDigits.length === 4)) {
+      if (rawDigits.length === 2) return rawDigits + '-';
+      if (rawDigits.length === 4) return rawDigits.slice(0, 2) + '-' + rawDigits.slice(2, 4) + '-';
+    }
+    if (rawDigits.length > 4) {
+      return `${rawDigits.slice(0, 2)}-${rawDigits.slice(2, 4)}-${rawDigits.slice(4)}`;
+    } else if (rawDigits.length > 2) {
+      return `${rawDigits.slice(0, 2)}-${rawDigits.slice(2)}`;
+    }
+    return rawDigits;
+  };
+
+  const syncDateUi = () => {
+    if (dateFromDisplay) dateFromDisplay.value = isoToDisplay(pkbDateFrom);
+    if (dateToDisplay) dateToDisplay.value = isoToDisplay(pkbDateTo);
+    if (dateFromInput) dateFromInput.value = pkbDateFrom;
+    if (dateToInput) dateToInput.value = pkbDateTo;
+    if (dateClearBtn) dateClearBtn.disabled = !pkbDateFrom && !pkbDateTo;
+  };
+
+  const applyDateChange = () => {
+    pkbCurrentPage = 1;
+    syncDateUi();
+    renderPkbGrid();
+  };
+
+  const handleDisplayInput = (type) => {
+    const displayInput = type === 'from' ? dateFromDisplay : dateToDisplay;
+    const nativeInput = type === 'from' ? dateFromInput : dateToInput;
+    if (!displayInput) return;
+
+    const formatted = formatInputDate(displayInput.value);
+    displayInput.value = formatted;
+
+    if (!formatted) {
+      if (type === 'from') {
+        pkbDateFrom = '';
+        if (nativeInput) nativeInput.value = '';
+      } else {
+        pkbDateTo = '';
+        if (nativeInput) nativeInput.value = '';
+      }
+      applyDateChange();
+      return;
+    }
+
+    if (formatted.length === 10) {
+      const iso = parseDisplayToIso(formatted);
+      if (iso) {
+        if (type === 'from') {
+          pkbDateFrom = iso;
+          if (nativeInput) nativeInput.value = iso;
+          if (pkbDateTo && pkbDateFrom > pkbDateTo) {
+            pkbDateTo = pkbDateFrom;
+            if (dateToInput) dateToInput.value = pkbDateTo;
+            if (dateToDisplay) dateToDisplay.value = isoToDisplay(pkbDateTo);
+          }
+        } else {
+          pkbDateTo = iso;
+          if (nativeInput) nativeInput.value = iso;
+          if (pkbDateFrom && pkbDateTo < pkbDateFrom) {
+            pkbDateFrom = pkbDateTo;
+            if (dateFromInput) dateFromInput.value = pkbDateFrom;
+            if (dateFromDisplay) dateFromDisplay.value = isoToDisplay(pkbDateFrom);
+          }
+        }
+        applyDateChange();
+      }
+    }
+  };
+
+  const handleDisplayBlur = (type) => {
+    const displayInput = type === 'from' ? dateFromDisplay : dateToDisplay;
+    const currentIso = type === 'from' ? pkbDateFrom : pkbDateTo;
+    if (!displayInput) return;
+
+    if (!displayInput.value.trim()) {
+      if (currentIso) {
+        if (type === 'from') pkbDateFrom = '';
+        else pkbDateTo = '';
+        applyDateChange();
+      }
+      return;
+    }
+
+    const iso = parseDisplayToIso(displayInput.value);
+    if (!iso) {
+      displayInput.value = isoToDisplay(currentIso);
+    } else {
+      displayInput.value = isoToDisplay(iso);
+    }
+  };
+
+  if (dateFromDisplay) {
+    dateFromDisplay.addEventListener('input', () => handleDisplayInput('from'));
+    dateFromDisplay.addEventListener('blur', () => handleDisplayBlur('from'));
+    dateFromDisplay.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') e.target.blur();
+    });
+  }
+
+  if (dateToDisplay) {
+    dateToDisplay.addEventListener('input', () => handleDisplayInput('to'));
+    dateToDisplay.addEventListener('blur', () => handleDisplayBlur('to'));
+    dateToDisplay.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') e.target.blur();
+    });
+  }
+
+  if (dateFromInput) {
+    dateFromInput.addEventListener('change', () => {
+      pkbDateFrom = dateFromInput.value;
+      if (pkbDateTo && pkbDateFrom > pkbDateTo) pkbDateTo = pkbDateFrom;
+      applyDateChange();
+    });
+  }
+
+  if (dateToInput) {
+    dateToInput.addEventListener('change', () => {
+      pkbDateTo = dateToInput.value;
+      if (pkbDateFrom && pkbDateTo < pkbDateFrom) pkbDateFrom = pkbDateTo;
+      applyDateChange();
+    });
+  }
+
+  if (dateClearBtn) {
+    dateClearBtn.addEventListener('click', () => {
+      pkbDateFrom = '';
+      pkbDateTo = '';
+      if (dateFromDisplay) dateFromDisplay.value = '';
+      if (dateToDisplay) dateToDisplay.value = '';
+      applyDateChange();
+    });
+  }
+
   const setFilter = (f) => {
     pkbFilter = f;
     pkbCurrentPage = 1;
     chips.forEach(c => c.classList.toggle('active', c.dataset.filter === f));
-    pills.forEach(p => p.classList.toggle('active', p.dataset.filter === f));
     renderPkbGrid();
   };
 
   chips.forEach(c => c.addEventListener('click', () => setFilter(c.dataset.filter)));
-  pills.forEach(p => p.addEventListener('click', () => setFilter(p.dataset.filter)));
 
   if (btnPrev) {
     btnPrev.addEventListener('click', () => {
@@ -181,9 +346,10 @@ function showPkbDashboard() {
 function getFilteredPkbList() {
   return samplePkbList.filter(p => {
     const matchStatus = pkbFilter === 'all' || p.status === pkbFilter;
+    const matchDate = (!pkbDateFrom || p.date >= pkbDateFrom) && (!pkbDateTo || p.date <= pkbDateTo);
     const hay = `${p.plate} ${p.id} ${p.customer} ${p.model}`.toLowerCase();
     const matchQuery = !pkbQuery || hay.includes(pkbQuery);
-    return matchStatus && matchQuery;
+    return matchStatus && matchDate && matchQuery;
   });
 }
 
