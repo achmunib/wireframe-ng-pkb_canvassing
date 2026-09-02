@@ -1193,7 +1193,13 @@ input[type="checkbox"]:focus-visible + .custom-checkbox {
 }
 
 .modal-card.detail-card {
-  max-width: 600px;
+  max-width: 740px;
+  max-height: 94vh;
+  width: 95%;
+}
+
+.modal-card.detail-card .modal-body {
+  padding: 18px 24px;
 }
 
 .modal-header {
@@ -1329,13 +1335,13 @@ input[type="checkbox"]:focus-visible + .custom-checkbox {
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 10px 20px;
 }
 
 .detail-item {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
 }
 
 .detail-item.full-width {
@@ -1343,17 +1349,143 @@ input[type="checkbox"]:focus-visible + .custom-checkbox {
 }
 
 .detail-label {
-  font-size: 12px;
+  font-size: 11px;
   color: #94a3b8;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
 
 .detail-val {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   color: #0f172a;
+}
+
+/* Detail Modal Parts Section */
+.detail-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 14px 0 12px 0;
+}
+
+.detail-parts-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-parts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detail-parts-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.detail-parts-title svg {
+  color: var(--primary);
+}
+
+.detail-parts-pill-badge {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 20px;
+}
+
+.detail-parts-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.detail-parts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.detail-parts-table thead tr {
+  background-color: #cbd5e1;
+}
+
+.detail-parts-table th {
+  padding: 8px 10px;
+  color: #334155;
+  font-weight: 600;
+  font-size: 12px;
+  border-right: 1px solid #b7c3d0;
+  border-bottom: 1px solid #b7c3d0;
+}
+
+.detail-parts-table th:last-child {
+  border-right: none;
+}
+
+.detail-parts-table td {
+  padding: 8px 10px;
+  color: #1e293b;
+  border-bottom: 1px solid #e2e8f0;
+  border-right: 1px solid #f1f5f9;
+}
+
+.detail-parts-table td:last-child {
+  border-right: none;
+}
+
+.detail-parts-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.detail-parts-total-row {
+  background-color: #f1f5f9;
+  border-top: 2px solid #cbd5e1;
+}
+
+.detail-parts-total-row td {
+  padding: 8px 10px;
+}
+
+.badge-total-part {
+  display: inline-block;
+  background: #e2e8f0;
+  color: #1e293b;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.detail-parts-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.detail-parts-empty svg {
+  color: #94a3b8;
 }
 
 /* Toast Notifications */

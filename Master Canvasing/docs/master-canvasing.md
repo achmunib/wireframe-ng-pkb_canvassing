@@ -55,6 +55,7 @@ Modul ini dijalankan di dalam **iframe** pada layout shell portal (`index.html`)
 |--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
 |              |                |          |                 |           |     |                   |        |            |            |
 | LABEL-Detail Master Canvasing | LABEL | Menampilkan detail data Master Canvasing pada baris yang dipilih | Field yang ditampilkan: <br> * **Kode Canvasing** <br> * **Nama Canvasing** <br> * **Lokasi** <br> * **Provinsi** <br> * **Kota / Kabupaten** <br> * **Kecamatan** <br> * **Kelurahan** <br> * **Periode Tanggal** (format `<dari> s/d <sampai>`) <br> * **Mekanik / Petugas** (daftar nama dipisah koma)<br><br>Seluruh field bersifat **read-only** | | | | | | |
+| TABLE-Detail Part Dibawa | TABLE | Menampilkan informasi part apa saja yang sudah di-setup saat create canvasing | Kolom yang ditampilkan: <br> * **No** <br> * **Kode Part** <br> * **Nama Part** <br> * **Qty** (beserta satuan) <br> * **Harga Satuan** <br> * **Subtotal** (Qty × Harga)<br><br>Dilengkapi: <br> * Badge jumlah total macam part & total kuantitas item <br> * Baris total (Total macam part, Total Qty, dan Total estimasi nilai part) <br> * Empty state informatif bila belum ada part yang di-setup | | | | | | |
 | BUTTON-Close (X) | BUTTON | Menutup modal detail | Modal juga tertutup saat user mengklik area backdrop di luar kartu modal | | | | | | |
 | BUTTON-Tutup | BUTTON | Menutup modal detail | Sama dengan tombol Close (X) | | | | | | |
 

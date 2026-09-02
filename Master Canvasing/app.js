@@ -16,7 +16,13 @@ let masterCanvasingData = [
     kelurahan: 'WAGE',
     dari: '26-08-2026',
     sampai: '27-08-2026',
-    petugas: 'Kalvin, Rizal'
+    petugas: 'Kalvin, Rizal',
+    parts: [
+      { code: '08232-2MB-K0LN1', name: 'AHM OIL MPX2 0.8L', qty: 12, satuan: 'BOTOL', harga: 'Rp 54.000' },
+      { code: '06455-K59-A71', name: 'PAD SET FR (Kampas Rem Depan)', qty: 6, satuan: 'SET', harga: 'Rp 68.000' },
+      { code: '31916-KRM-841', name: 'SPARK PLUG CPR9EA-9 (Busi NGK)', qty: 10, satuan: 'PCS', harga: 'Rp 22.000' },
+      { code: '08293-999-011', name: 'OIL TRANSMISSION (Oli Gardan)', qty: 15, satuan: 'BOTOL', harga: 'Rp 16.000' }
+    ]
   },
   {
     id: 2,
@@ -29,7 +35,12 @@ let masterCanvasingData = [
     kelurahan: 'SUCOPANGEPOK',
     dari: '25-08-2026',
     sampai: '28-08-2026',
-    petugas: 'Agung, Hendri'
+    petugas: 'Agung, Hendri',
+    parts: [
+      { code: '08232-2MA-K0LN1', name: 'AHM OIL MPX1 0.8L (Bebek/Sport)', qty: 15, satuan: 'BOTOL', harga: 'Rp 52.000' },
+      { code: '43130-KZL-930', name: 'SHOE SET BRAKE (Kampas Rem Belakang)', qty: 8, satuan: 'SET', harga: 'Rp 52.000' },
+      { code: '17210-K59-A70', name: 'ELEMENT COMP AIR/C (Filter Udara)', qty: 6, satuan: 'PCS', harga: 'Rp 58.000' }
+    ]
   },
   {
     id: 3,
@@ -42,7 +53,12 @@ let masterCanvasingData = [
     kelurahan: 'NGAGEL',
     dari: '20-08-2026',
     sampai: '22-08-2026',
-    petugas: 'Robin, Ratna'
+    petugas: 'Robin, Ratna',
+    parts: [
+      { code: '08232-2MB-K0LN1', name: 'AHM OIL MPX2 0.8L', qty: 14, satuan: 'BOTOL', harga: 'Rp 54.000' },
+      { code: '23100-K44-V01', name: 'BELT DRIVE (V-Belt Beat/Scoopy)', qty: 5, satuan: 'PCS', harga: 'Rp 95.000' },
+      { code: '31916-KRM-841', name: 'SPARK PLUG CPR9EA-9 (Busi NGK)', qty: 12, satuan: 'PCS', harga: 'Rp 22.000' }
+    ]
   },
   {
     id: 4,
@@ -55,7 +71,11 @@ let masterCanvasingData = [
     kelurahan: 'WONOKROMO',
     dari: '18-08-2026',
     sampai: '19-08-2026',
-    petugas: 'Ratna'
+    petugas: 'Ratna',
+    parts: [
+      { code: '08232-2MB-K0LN1', name: 'AHM OIL MPX2 0.8L', qty: 8, satuan: 'BOTOL', harga: 'Rp 54.000' },
+      { code: '06455-K59-A71', name: 'PAD SET FR (Kampas Rem Depan)', qty: 4, satuan: 'SET', harga: 'Rp 68.000' }
+    ]
   },
   {
     id: 5,
@@ -68,7 +88,12 @@ let masterCanvasingData = [
     kelurahan: 'GAMPINGROWO',
     dari: '10-08-2026',
     sampai: '12-08-2026',
-    petugas: 'Kalvin'
+    petugas: 'Kalvin',
+    parts: [
+      { code: '08232-2MA-K0LN1', name: 'AHM OIL MPX1 0.8L (Bebek/Sport)', qty: 10, satuan: 'BOTOL', harga: 'Rp 52.000' },
+      { code: '43130-KZL-930', name: 'SHOE SET BRAKE (Kampas Rem Belakang)', qty: 5, satuan: 'SET', harga: 'Rp 52.000' },
+      { code: '08293-999-011', name: 'OIL TRANSMISSION (Oli Gardan)', qty: 10, satuan: 'BOTOL', harga: 'Rp 16.000' }
+    ]
   },
   {
     id: 6,
@@ -81,7 +106,12 @@ let masterCanvasingData = [
     kelurahan: 'BULUSIDOKARE',
     dari: '15-12-2025',
     sampai: '17-12-2025',
-    petugas: 'Rizal, Kalvin'
+    petugas: 'Rizal, Kalvin',
+    parts: [
+      { code: '08232-2MB-K0LN1', name: 'AHM OIL MPX2 0.8L', qty: 20, satuan: 'BOTOL', harga: 'Rp 54.000' },
+      { code: '08232-2MA-K0LN1', name: 'AHM OIL MPX1 0.8L (Bebek/Sport)', qty: 15, satuan: 'BOTOL', harga: 'Rp 52.000' },
+      { code: '31916-KRM-841', name: 'SPARK PLUG CPR9EA-9 (Busi NGK)', qty: 15, satuan: 'PCS', harga: 'Rp 22.000' }
+    ]
   },
   {
     id: 7,
@@ -94,7 +124,13 @@ let masterCanvasingData = [
     kelurahan: 'WONOKROMO',
     dari: '05-11-2025',
     sampai: '08-11-2025',
-    petugas: 'Agung'
+    petugas: 'Agung',
+    parts: [
+      { code: '08232-2MB-K0LN1', name: 'AHM OIL MPX2 0.8L', qty: 10, satuan: 'BOTOL', harga: 'Rp 54.000' },
+      { code: '43130-KZL-930', name: 'SHOE SET BRAKE (Kampas Rem Belakang)', qty: 5, satuan: 'SET', harga: 'Rp 52.000' },
+      { code: '31916-KRM-841', name: 'SPARK PLUG CPR9EA-9 (Busi NGK)', qty: 8, satuan: 'PCS', harga: 'Rp 22.000' },
+      { code: '17210-K59-A70', name: 'ELEMENT COMP AIR/C (Filter Udara)', qty: 4, satuan: 'PCS', harga: 'Rp 58.000' }
+    ]
   },
   {
     id: 8,
@@ -107,7 +143,12 @@ let masterCanvasingData = [
     kelurahan: 'GUBENG',
     dari: '22-10-2025',
     sampai: '24-10-2025',
-    petugas: 'Robin'
+    petugas: 'Robin',
+    parts: [
+      { code: '08232-2MB-K0LN1', name: 'AHM OIL MPX2 0.8L', qty: 10, satuan: 'BOTOL', harga: 'Rp 54.000' },
+      { code: '06455-K59-A71', name: 'PAD SET FR (Kampas Rem Depan)', qty: 5, satuan: 'SET', harga: 'Rp 68.000' },
+      { code: '08293-999-011', name: 'OIL TRANSMISSION (Oli Gardan)', qty: 10, satuan: 'BOTOL', harga: 'Rp 16.000' }
+    ]
   },
   {
     id: 9,
@@ -120,7 +161,11 @@ let masterCanvasingData = [
     kelurahan: 'NGAGEL',
     dari: '14-10-2025',
     sampai: '15-10-2025',
-    petugas: 'Kalvin'
+    petugas: 'Kalvin',
+    parts: [
+      { code: '08232-2MB-K0LN1', name: 'AHM OIL MPX2 0.8L', qty: 12, satuan: 'BOTOL', harga: 'Rp 54.000' },
+      { code: '31916-KRM-841', name: 'SPARK PLUG CPR9EA-9 (Busi NGK)', qty: 10, satuan: 'PCS', harga: 'Rp 22.000' }
+    ]
   }
 ];
 
@@ -548,6 +593,82 @@ function viewCanvasingDetail(id) {
   const body = document.getElementById('detailModalBody');
   if (!modal || !body) return;
 
+  const parts = Array.isArray(item.parts) ? item.parts : [];
+  const totalKinds = parts.length;
+  const totalQty = parts.reduce((acc, p) => acc + (parseInt(p.qty, 10) || 0), 0);
+  const totalNilai = parts.reduce((acc, p) => {
+    const rawPrice = parseInt(String(p.harga || '').replace(/[^\d]/g, ''), 10) || 0;
+    const qty = parseInt(p.qty, 10) || 0;
+    return acc + (rawPrice * qty);
+  }, 0);
+
+  const formatRupiah = (num) => 'Rp ' + Number(num || 0).toLocaleString('id-ID');
+
+  let partsContentHtml = '';
+  if (parts.length > 0) {
+    const rowsHtml = parts.map((p, idx) => {
+      const priceNum = parseInt(String(p.harga || '').replace(/[^\d]/g, ''), 10) || 0;
+      const subtotalNum = (parseInt(p.qty, 10) || 0) * priceNum;
+      return `
+        <tr>
+          <td style="text-align: center; color: #64748b; font-weight: 600;">${idx + 1}</td>
+          <td style="font-weight: 600; color: #1e293b; font-family: monospace; font-size: 13px;">${p.code}</td>
+          <td style="color: #334155; font-weight: 500;">${p.name}</td>
+          <td style="text-align: center; font-weight: 600; color: #0f172a;">${p.qty} <span style="font-size: 11px; color: #64748b; font-weight: normal;">${p.satuan || ''}</span></td>
+          <td style="text-align: right; font-weight: 600; color: #475569;">${p.harga}</td>
+          <td style="text-align: right; font-weight: 700; color: var(--primary);">${formatRupiah(subtotalNum)}</td>
+        </tr>
+      `;
+    }).join('');
+
+    partsContentHtml = `
+      <div class="detail-parts-table-wrapper">
+        <table class="detail-parts-table">
+          <thead>
+            <tr>
+              <th style="width: 5%; text-align: center;">No</th>
+              <th style="width: 25%; text-align: left;">Kode Part</th>
+              <th style="width: 33%; text-align: left;">Nama Part</th>
+              <th style="width: 13%; text-align: center;">Qty</th>
+              <th style="width: 12%; text-align: right;">Harga</th>
+              <th style="width: 12%; text-align: right;">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+          <tfoot>
+            <tr class="detail-parts-total-row">
+              <td colspan="3" style="text-align: left; font-weight: 700; color: #1e293b;">
+                Total: <span class="badge-total-part">${totalKinds} Macam Part</span>
+              </td>
+              <td style="text-align: center; font-weight: 700; color: #0f172a;">
+                ${totalQty}
+              </td>
+              <td style="text-align: right; font-size: 12px; color: #64748b; font-weight: 600;">
+                Total Nilai:
+              </td>
+              <td style="text-align: right; font-weight: 800; color: var(--primary); font-size: 13.5px;">
+                ${formatRupiah(totalNilai)}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    `;
+  } else {
+    partsContentHtml = `
+      <div class="detail-parts-empty">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+        <span>Belum ada part yang di-setup untuk kegiatan canvasing ini.</span>
+      </div>
+    `;
+  }
+
   body.innerHTML = `
     <div class="detail-grid">
       <div class="detail-item full-width" style="margin-bottom: 4px;">
@@ -586,6 +707,24 @@ function viewCanvasingDetail(id) {
         <span class="detail-label">Mekanik / Petugas</span>
         <span class="detail-val">${item.petugas || 'Kalvin, Rizal'}</span>
       </div>
+    </div>
+
+    <div class="detail-divider"></div>
+
+    <div class="detail-parts-section">
+      <div class="detail-parts-header">
+        <div class="detail-parts-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          <span>Daftar Part Dibawa</span>
+        </div>
+        ${totalKinds > 0 ? `<span class="detail-parts-pill-badge">${totalKinds} Part • ${totalQty} Total Qty</span>` : ''}
+      </div>
+
+      ${partsContentHtml}
     </div>
   `;
 
@@ -1952,7 +2091,8 @@ function submitWizardForm() {
     kelurahan: kelurahan,
     dari: dari,
     sampai: sampai,
-    petugas: mechNames
+    petugas: mechNames,
+    parts: partsDibawa.map(p => ({ ...p }))
   };
   masterCanvasingData.unshift(newItem);
   showToast(`Master Canvasing baru ${newKode} berhasil disimpan!`, 'success');
