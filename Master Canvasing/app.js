@@ -179,7 +179,7 @@ function renderTable(dataToRender = masterCanvasingData) {
 
   if (dataToRender.length === 0) {
     tbody.innerHTML = `
-      <tr>
+      <tr class="empty-state-row">
         <td colspan="8" style="text-align: center; padding: 48px 20px; color: #94a3b8;">
           <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #cbd5e1;">
@@ -247,6 +247,19 @@ function initColumnFilters() {
   });
 }
 
+// Searchable Columns Definition & Active State
+const ALL_SEARCHABLE_COLUMNS = [
+  { key: 'kodeCanvasing', label: 'Kode Canvasing' },
+  { key: 'namaCanvasing', label: 'Nama Canvasing' },
+  { key: 'lokasi', label: 'Lokasi' },
+  { key: 'provinsi', label: 'Provinsi' },
+  { key: 'kota', label: 'Kota' },
+  { key: 'kecamatan', label: 'Kecamatan' },
+  { key: 'kelurahan', label: 'Kelurahan' }
+];
+
+let activeSearchColumns = ALL_SEARCHABLE_COLUMNS.map((c) => c.key);
+
 // Combine all search and column filters
 function applyAllFilters() {
   const topSearch = (document.getElementById('topSearchInput')?.value || '').toLowerCase().trim();
@@ -258,10 +271,12 @@ function applyAllFilters() {
   });
 
   const filtered = masterCanvasingData.filter((item) => {
-    // 1. Check Top Search (search across all columns)
+    // 1. Check Top Search (search across active checked columns)
     if (topSearch) {
-      const searchFields = ['kodeCanvasing', 'namaCanvasing', 'lokasi', 'provinsi', 'kota', 'kecamatan', 'kelurahan', 'petugas'];
-      const matches = searchFields.some((field) =>
+      if (activeSearchColumns.length === 0) {
+        return false;
+      }
+      const matches = activeSearchColumns.some((field) =>
         String(item[field] || '').toLowerCase().includes(topSearch)
       );
       if (!matches) {
@@ -312,22 +327,173 @@ function initSorting() {
   });
 }
 
-// Equalizer/Filter Toggle Button
+// Equalizer/Column Filter Pop-up Modal Logic
 function initEqualizerToggle() {
   const btn = document.getElementById('btnToggleFilters');
-  const filterRow = document.getElementById('filterRow');
-  if (!btn || !filterRow) return;
+  const modal = document.getElementById('filterColumnModal');
+  const closeBtn = document.getElementById('btnCloseFilterModal');
+  const chkSelectAll = document.getElementById('chkSelectAllColumns');
+  const checkboxes = document.querySelectorAll('.col-filter-checkbox');
+  const counter = document.getElementById('filterSelectedCounter');
+  const countBadge = document.getElementById('filterCountBadge');
+  const btnReset = document.getElementById('btnResetColumnFilter');
+  const btnApply = document.getElementById('btnApplyColumnFilter');
+  const searchInput = document.getElementById('topSearchInput');
 
-  btn.addEventListener('click', () => {
-    btn.classList.toggle('active');
-    if (filterRow.style.display === 'none') {
-      filterRow.style.display = '';
-      showToast('Kolom filter aktif', 'info');
-    } else {
-      filterRow.style.display = 'none';
-      showToast('Kolom filter disembunyikan', 'info');
+  if (!btn || !modal) return;
+
+  function updateUIState() {
+    const total = ALL_SEARCHABLE_COLUMNS.length;
+    const selected = activeSearchColumns.length;
+
+    // Update checkboxes in modal
+    checkboxes.forEach((cb) => {
+      cb.checked = activeSearchColumns.includes(cb.value);
+    });
+
+    // Update Select All checkbox
+    if (chkSelectAll) {
+      chkSelectAll.checked = selected === total;
+      chkSelectAll.indeterminate = selected > 0 && selected < total;
+    }
+
+    // Update Counter badge inside modal
+    if (counter) {
+      counter.textContent = `${selected}/${total} dipilih`;
+    }
+
+    // Update Circular Equalizer Button Badge
+    if (countBadge) {
+      if (selected < total) {
+        countBadge.textContent = selected;
+        countBadge.style.display = 'flex';
+        btn.classList.add('active');
+        btn.title = `Filter Kolom (${selected} kolom aktif)`;
+      } else {
+        countBadge.style.display = 'none';
+        btn.classList.remove('active');
+        btn.title = 'Filter Kolom Pencarian';
+      }
+    }
+
+    // Update placeholder of search box to be informative
+    if (searchInput) {
+      if (selected === total) {
+        searchInput.placeholder = 'Search...';
+      } else if (selected === 0) {
+        searchInput.placeholder = 'Pilih minimal 1 kolom filter...';
+      } else if (selected <= 2) {
+        const names = ALL_SEARCHABLE_COLUMNS
+          .filter((c) => activeSearchColumns.includes(c.key))
+          .map((c) => c.label)
+          .join(', ');
+        searchInput.placeholder = `Search (${names})...`;
+      } else {
+        searchInput.placeholder = `Search (${selected} kolom aktif)...`;
+      }
+    }
+  }
+
+  // Toggle modal display
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isShowing = modal.classList.toggle('show');
+    btn.setAttribute('aria-expanded', isShowing);
+  });
+
+  // Close modal
+  function closeModal() {
+    modal.classList.remove('show');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeModal();
+    });
+  }
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!modal.contains(e.target) && !btn.contains(e.target)) {
+      closeModal();
     }
   });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) {
+      closeModal();
+    }
+  });
+
+  // Prevent closing when clicking inside modal
+  modal.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  // Select All change
+  if (chkSelectAll) {
+    chkSelectAll.addEventListener('change', () => {
+      if (chkSelectAll.checked) {
+        activeSearchColumns = ALL_SEARCHABLE_COLUMNS.map((c) => c.key);
+      } else {
+        activeSearchColumns = [];
+      }
+      updateUIState();
+      applyAllFilters();
+    });
+  }
+
+  // Individual checkbox change
+  checkboxes.forEach((cb) => {
+    cb.addEventListener('change', () => {
+      const val = cb.value;
+      if (cb.checked) {
+        if (!activeSearchColumns.includes(val)) activeSearchColumns.push(val);
+      } else {
+        activeSearchColumns = activeSearchColumns.filter((col) => col !== val);
+      }
+      updateUIState();
+      applyAllFilters();
+    });
+  });
+
+  // Reset Button
+  if (btnReset) {
+    btnReset.addEventListener('click', () => {
+      activeSearchColumns = ALL_SEARCHABLE_COLUMNS.map((c) => c.key);
+      updateUIState();
+      applyAllFilters();
+      showToast('Filter kolom di-reset ke semua kolom', 'info');
+    });
+  }
+
+  // Apply Button
+  if (btnApply) {
+    btnApply.addEventListener('click', () => {
+      // Re-read selected checkboxes
+      activeSearchColumns = Array.from(checkboxes)
+        .filter((cb) => cb.checked)
+        .map((cb) => cb.value);
+
+      updateUIState();
+      applyAllFilters();
+      closeModal();
+
+      if (activeSearchColumns.length === 0) {
+        showToast('Peringatan: Tidak ada kolom filter yang dipilih', 'warning');
+      } else if (activeSearchColumns.length === ALL_SEARCHABLE_COLUMNS.length) {
+        showToast('Pencarian mencakup semua kolom (7 kolom)', 'success');
+      } else {
+        showToast(`Filter diterapkan: ${activeSearchColumns.length} kolom aktif`, 'success');
+      }
+    });
+  }
+
+  // Initial state setup
+  updateUIState();
 }
 
 // Kebab Menu Handling

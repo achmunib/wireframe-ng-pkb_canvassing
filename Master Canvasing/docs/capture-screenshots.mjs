@@ -287,6 +287,13 @@ try {
   await openPage();
   await shot('master-canvasing-01-table-view', { fullPage: true });
 
+  // 01b — Pop-up Filter Kolom Pencarian (Checklist Kolom)
+  console.log('01b Pop-up Filter Kolom Pencarian');
+  await evaluate(`document.getElementById('btnToggleFilters').click()`);
+  await waitFor(`document.getElementById('filterColumnModal').classList.contains('show')`);
+  await shot('master-canvasing-01b-filter-column-modal');
+  await evaluate(`document.getElementById('btnCloseFilterModal').click()`);
+
   // 02 — Modal Detail Master Canvasing
   console.log('02 Modal Detail');
   await setViewport();

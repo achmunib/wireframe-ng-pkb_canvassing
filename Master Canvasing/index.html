@@ -76,21 +76,98 @@
               <input type="text" id="topSearchInput" placeholder="Search..." autocomplete="off">
             </div>
 
-            <!-- Circular Equalizer/Filter Button -->
-            <button class="btn-equalizer-circle" id="btnToggleFilters" title="Toggle Column Filters">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="4" y1="21" x2="4" y2="14"></line>
-                <line x1="4" y1="10" x2="4" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12" y2="3"></line>
-                <line x1="20" y1="21" x2="20" y2="16"></line>
-                <line x1="20" y1="12" x2="20" y2="3"></line>
-                <line x1="1" y1="14" x2="7" y2="14"></line>
-                <line x1="9" y1="8" x2="15" y2="8"></line>
-                <line x1="17" y1="16" x2="23" y2="16"></line>
-              </svg>
-            </button>
+            <!-- Circular Equalizer/Filter Button with Dropdown Container -->
+            <div class="filter-dropdown-container">
+              <button class="btn-equalizer-circle" id="btnToggleFilters" title="Filter Kolom Pencarian" aria-expanded="false" aria-haspopup="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="4" y1="21" x2="4" y2="14"></line>
+                  <line x1="4" y1="10" x2="4" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12" y2="3"></line>
+                  <line x1="20" y1="21" x2="20" y2="16"></line>
+                  <line x1="20" y1="12" x2="20" y2="3"></line>
+                  <line x1="1" y1="14" x2="7" y2="14"></line>
+                  <line x1="9" y1="8" x2="15" y2="8"></line>
+                  <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+                <span class="filter-count-badge" id="filterCountBadge" style="display: none;">7</span>
+              </button>
+
+              <!-- Modal / Pop-up Filter Kolom -->
+              <div class="filter-column-modal" id="filterColumnModal" role="dialog" aria-modal="true" aria-labelledby="filterModalTitle">
+                <div class="filter-modal-arrow"></div>
+                <div class="filter-modal-header">
+                  <div class="filter-modal-title-wrap">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    <span class="filter-modal-title" id="filterModalTitle">Filter Kolom Pencarian</span>
+                  </div>
+                  <button type="button" class="filter-modal-close" id="btnCloseFilterModal" title="Tutup">&times;</button>
+                </div>
+
+                <div class="filter-modal-subheader">
+                  <label class="filter-select-all-label">
+                    <input type="checkbox" id="chkSelectAllColumns" checked>
+                    <span class="custom-checkbox"></span>
+                    <span class="select-all-text">Pilih Semua</span>
+                  </label>
+                  <span class="filter-selected-counter" id="filterSelectedCounter">7/7 dipilih</span>
+                </div>
+
+                <div class="filter-modal-body">
+                  <div class="filter-column-list">
+                    <label class="filter-column-item">
+                      <input type="checkbox" class="col-filter-checkbox" value="kodeCanvasing" checked>
+                      <span class="custom-checkbox"></span>
+                      <span class="col-filter-name">Kode Canvasing</span>
+                    </label>
+
+                    <label class="filter-column-item">
+                      <input type="checkbox" class="col-filter-checkbox" value="namaCanvasing" checked>
+                      <span class="custom-checkbox"></span>
+                      <span class="col-filter-name">Nama Canvasing</span>
+                    </label>
+
+                    <label class="filter-column-item">
+                      <input type="checkbox" class="col-filter-checkbox" value="lokasi" checked>
+                      <span class="custom-checkbox"></span>
+                      <span class="col-filter-name">Lokasi</span>
+                    </label>
+
+                    <label class="filter-column-item">
+                      <input type="checkbox" class="col-filter-checkbox" value="provinsi" checked>
+                      <span class="custom-checkbox"></span>
+                      <span class="col-filter-name">Provinsi</span>
+                    </label>
+
+                    <label class="filter-column-item">
+                      <input type="checkbox" class="col-filter-checkbox" value="kota" checked>
+                      <span class="custom-checkbox"></span>
+                      <span class="col-filter-name">Kota</span>
+                    </label>
+
+                    <label class="filter-column-item">
+                      <input type="checkbox" class="col-filter-checkbox" value="kecamatan" checked>
+                      <span class="custom-checkbox"></span>
+                      <span class="col-filter-name">Kecamatan</span>
+                    </label>
+
+                    <label class="filter-column-item">
+                      <input type="checkbox" class="col-filter-checkbox" value="kelurahan" checked>
+                      <span class="custom-checkbox"></span>
+                      <span class="col-filter-name">Kelurahan</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="filter-modal-footer">
+                  <button type="button" class="btn-filter-reset" id="btnResetColumnFilter">Reset</button>
+                  <button type="button" class="btn-filter-apply" id="btnApplyColumnFilter">Terapkan</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
