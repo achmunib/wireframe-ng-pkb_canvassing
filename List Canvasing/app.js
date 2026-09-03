@@ -628,6 +628,12 @@ function initStepper() {
       bottomActions.style.display = currentStep === totalSteps ? 'none' : 'flex';
     }
 
+    // Save & Print PKB button only visible on Step 3 (Cek Aja Dulu)
+    const btnSavePrint = document.getElementById('btnSavePrint');
+    if (btnSavePrint) {
+      btnSavePrint.style.display = currentStep === 3 ? 'inline-flex' : 'none';
+    }
+
     if (currentStep === totalSteps) {
       nextBtnText.textContent = 'Save PKB';
     } else {
