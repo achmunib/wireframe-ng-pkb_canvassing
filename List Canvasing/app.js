@@ -796,13 +796,6 @@ function initVehicleScanner() {
           modalDate.value = displayDateToIso(dispDate.textContent) || '';
         }
 
-        const owner = document.getElementById('modalOwner');
-        const firstName = document.getElementById('carrierFirstName');
-        const lastName = document.getElementById('carrierLastName');
-        if (owner && !owner.value && firstName && lastName) {
-          owner.value = `${firstName.value} ${lastName.value}`.trim();
-        }
-
         if (window.openVehicleModal) {
           window.openVehicleModal('edit');
         } else {
@@ -1015,7 +1008,6 @@ function initModal() {
       model: document.getElementById('modalModel').value,
       engine: document.getElementById('modalEngine').value,
       frame: document.getElementById('modalFrame').value,
-      customer: document.getElementById('modalOwner').value,
       year: document.getElementById('modalYear').value,
       color: document.getElementById('modalColor').value,
       dealer: document.getElementById('modalDealer').value,
