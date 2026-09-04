@@ -713,6 +713,7 @@ function initVehicleScanner() {
   const kmInput = document.getElementById('kilometerInput');
   const btnEdit = document.getElementById('btnEditVehicle');
   const btnDelete = document.getElementById('btnDeleteVehicle');
+  const btnInvoiceDate = document.getElementById('btnGetInvoiceDate');
 
   btnScan.addEventListener('click', () => {
     const query = scanInput.value.trim().toLowerCase();
@@ -756,22 +757,64 @@ function initVehicleScanner() {
     });
   }
 
+  if (btnInvoiceDate) {
+    btnInvoiceDate.addEventListener('click', () => {
+      const engine = document.getElementById('dispEngine');
+      const vehicle = engine
+        ? sampleVehicles.find(v => v.engine === engine.textContent.trim())
+        : null;
+      const disp = document.getElementById('dispPurchaseDate');
+      if (disp && vehicle && vehicle.purchaseDate) {
+        disp.textContent = vehicle.purchaseDate;
+        showToast(`Purchase date from invoice: ${vehicle.purchaseDate}`);
+      } else {
+        showToast('Invoice date not found for this vehicle');
+      }
+    });
+  }
+
   if (btnEdit) {
     btnEdit.addEventListener('click', () => {
       const modal = document.getElementById('inputDataModal');
       if (modal) {
-        document.getElementById('modalPlate').value = document.getElementById('dispPlate').textContent;
-        document.getElementById('modalModel').value = document.getElementById('dispModel').textContent;
-        document.getElementById('modalEngine').value = document.getElementById('dispEngine').textContent;
-        document.getElementById('modalFrame').value = document.getElementById('dispFrame').textContent;
-        document.getElementById('modalYear').value = document.getElementById('dispYear').textContent;
-        modal.style.display = 'flex';
+        const copy = (modalId, dispId) => {
+          const field = document.getElementById(modalId);
+          const disp = document.getElementById(dispId);
+          if (field && disp) field.value = disp.textContent.trim();
+        };
+        copy('modalPlate', 'dispPlate');
+        copy('modalEngine', 'dispEngine');
+        copy('modalFrame', 'dispFrame');
+        copy('modalModel', 'dispModel');
+        copy('modalYear', 'dispYear');
+        copy('modalColor', 'dispColor');
+        copy('modalDealer', 'dispDealer');
+
+        const modalDate = document.getElementById('modalPurchaseDate');
+        const dispDate = document.getElementById('dispPurchaseDate');
+        if (modalDate && dispDate) {
+          modalDate.value = displayDateToIso(dispDate.textContent) || '';
+        }
+
+        const owner = document.getElementById('modalOwner');
+        const firstName = document.getElementById('carrierFirstName');
+        const lastName = document.getElementById('carrierLastName');
+        if (owner && !owner.value && firstName && lastName) {
+          owner.value = `${firstName.value} ${lastName.value}`.trim();
+        }
+
+        if (window.openVehicleModal) {
+          window.openVehicleModal('edit');
+        } else {
+          modal.style.display = 'flex';
+        }
       }
     });
   }
 
   function loadVehicleData(vehicle) {
     if (document.getElementById('dispPlate')) document.getElementById('dispPlate').textContent = vehicle.plate;
+    if (document.getElementById('dispPoliceNumber')) document.getElementById('dispPoliceNumber').textContent = vehicle.plate;
     if (document.getElementById('dispModel')) document.getElementById('dispModel').textContent = vehicle.model;
     if (document.getElementById('dispEngine')) document.getElementById('dispEngine').textContent = vehicle.engine;
     if (document.getElementById('dispFrame')) document.getElementById('dispFrame').textContent = vehicle.frame;
@@ -779,7 +822,6 @@ function initVehicleScanner() {
     if (document.getElementById('dispYear')) document.getElementById('dispYear').textContent = vehicle.year || '2024';
     if (document.getElementById('dispPurchaseDate')) document.getElementById('dispPurchaseDate').textContent = vehicle.purchaseDate || '03-05-2024';
     if (document.getElementById('dispDealer')) document.getElementById('dispDealer').textContent = vehicle.dealer || 'MPM Motor Jombang';
-    if (document.getElementById('dispLastKm')) document.getElementById('dispLastKm').textContent = vehicle.lastKm || '1000';
 
     if (kmInput && vehicle.currentKm) {
       kmInput.value = vehicle.currentKm;
@@ -898,6 +940,19 @@ function initHistoryShowMore() {
   });
 }
 
+// Date Helpers (display format DD-MM-YYYY <-> native input YYYY-MM-DD)
+function isoDateToDisplay(iso) {
+  const match = (iso || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return '';
+  return `${match[3]}-${match[2]}-${match[1]}`;
+}
+
+function displayDateToIso(display) {
+  const match = (display || '').trim().match(/^(\d{2})-(\d{2})-(\d{4})$/);
+  if (!match) return '';
+  return `${match[3]}-${match[2]}-${match[1]}`;
+}
+
 // Modal Handling
 function initModal() {
   const modal = document.getElementById('inputDataModal');
@@ -905,11 +960,24 @@ function initModal() {
   const btnClose = document.getElementById('btnModalClose');
   const btnCancel = document.getElementById('btnModalCancel');
   const form = document.getElementById('vehicleForm');
+  const modalTitle = document.getElementById('modalVehicleTitle');
+
+  // Shared opener: 'edit' keeps the fields already populated by the Edit button,
+  // 'create' starts from a blank form.
+  const openModal = (mode) => {
+    modal.dataset.mode = mode === 'edit' ? 'edit' : 'create';
+    if (modal.dataset.mode === 'create') form.reset();
+    if (modalTitle) {
+      modalTitle.textContent = modal.dataset.mode === 'edit'
+        ? 'Edit Vehicle Data'
+        : 'Input New Vehicle Data';
+    }
+    modal.style.display = 'flex';
+  };
+  window.openVehicleModal = openModal;
 
   if (btnOpen) {
-    btnOpen.addEventListener('click', () => {
-      modal.style.display = 'flex';
-    });
+    btnOpen.addEventListener('click', () => openModal('create'));
   }
 
   const closeModal = () => {
@@ -922,6 +990,24 @@ function initModal() {
     if (e.target === modal) closeModal();
   });
 
+  const btnModalInvoiceDate = document.getElementById('btnModalGetInvoiceDate');
+  if (btnModalInvoiceDate) {
+    btnModalInvoiceDate.addEventListener('click', () => {
+      const engine = document.getElementById('modalEngine');
+      const dateField = document.getElementById('modalPurchaseDate');
+      const vehicle = engine
+        ? sampleVehicles.find(v => v.engine === engine.value.trim())
+        : null;
+      const iso = vehicle ? displayDateToIso(vehicle.purchaseDate) : '';
+      if (dateField && iso) {
+        dateField.value = iso;
+        showToast(`Tanggal faktur: ${vehicle.purchaseDate}`);
+      } else {
+        showToast('Tanggal faktur tidak ditemukan untuk nomor mesin ini');
+      }
+    });
+  }
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const newVehicle = {
@@ -931,6 +1017,9 @@ function initModal() {
       frame: document.getElementById('modalFrame').value,
       customer: document.getElementById('modalOwner').value,
       year: document.getElementById('modalYear').value,
+      color: document.getElementById('modalColor').value,
+      dealer: document.getElementById('modalDealer').value,
+      purchaseDate: isoDateToDisplay(document.getElementById('modalPurchaseDate').value),
       km: '150',
       history: []
     };
@@ -940,9 +1029,11 @@ function initModal() {
       document.getElementById('scanVehicleInput').value = newVehicle.engine;
     }
 
+    const wasEdit = modal.dataset.mode === 'edit';
+
     closeModal();
     form.reset();
-    showToast('New vehicle registered successfully!');
+    showToast(wasEdit ? 'Vehicle data updated successfully!' : 'New vehicle registered successfully!');
   });
 }
 

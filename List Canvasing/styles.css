@@ -699,6 +699,36 @@ body {
   color: #1e293b;
 }
 
+.field-value-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.btn-get-invoice-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1.5px solid var(--border-color);
+  background: #ffffff;
+  color: #475569;
+  border-radius: 7px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-get-invoice-date:hover {
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+  background: var(--primary-light);
+}
+
 .info-field-actions {
   display: flex;
   align-items: center;
@@ -1497,6 +1527,8 @@ body {
 
 .modal-body {
   padding: 24px;
+  max-height: calc(90vh - 61px);
+  overflow-y: auto;
 }
 
 .form-row {
@@ -1504,6 +1536,12 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-bottom: 16px;
+}
+
+.modal-field-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .modal-actions {
