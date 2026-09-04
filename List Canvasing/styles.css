@@ -1617,6 +1617,7 @@ body {
 }
 
 .carrier-search-input-pill-container {
+  position: relative;
   flex: 1;
   display: flex;
   align-items: center;
@@ -1664,6 +1665,90 @@ body {
 .btn-carrier-search:hover {
   background: #cbd5e1;
   color: #1e293b;
+}
+
+
+/* Saved Phone Number Suggestions Dropdown */
+.carrier-phone-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  padding: 6px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.carrier-phone-dropdown.open {
+  display: block;
+}
+
+.carrier-phone-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+.carrier-phone-option:hover,
+.carrier-phone-option.active {
+  background: var(--primary-light);
+}
+
+.carrier-phone-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.carrier-phone-number {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.carrier-phone-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.carrier-phone-plate {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--accent-orange);
+  background: var(--primary-light);
+  border-radius: 20px;
+  padding: 3px 10px;
+  white-space: nowrap;
+}
+
+.carrier-phone-option:hover .carrier-phone-plate,
+.carrier-phone-option.active .carrier-phone-plate {
+  background: #ffffff;
+}
+
+.carrier-phone-empty {
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #94a3b8;
+  text-align: center;
 }
 
 .btn-carrier-trash {
@@ -1774,6 +1859,7 @@ body {
 .carrier-form-inner {
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
 .carrier-pill-input {
@@ -1810,7 +1896,7 @@ body {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-top: 18px;
+  margin-top: 4px;
 }
 
 .carrier-view-detail-link {

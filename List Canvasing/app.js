@@ -60,6 +60,91 @@ const sampleVehicles = [
   }
 ];
 
+const sampleCarriers = [
+  {
+    phone: '085732255998',
+    firstName: 'Achmad',
+    lastName: 'Munib',
+    stnkOwner: 'Achmad Munib',
+    stnkPlate: 'AG 1000 ELM',
+    stnkAddress: 'Jl. Merdeka No. 45, Jombang'
+  },
+  {
+    phone: '081234567890',
+    firstName: 'Achmad',
+    lastName: 'Munib',
+    stnkOwner: 'Achmad Munib',
+    stnkPlate: 'AG 1000 ELM',
+    stnkAddress: 'Jl. Merdeka No. 45, Jombang'
+  },
+  {
+    phone: '085712345678',
+    firstName: 'Budi',
+    lastName: 'Santoso',
+    stnkOwner: 'Budi Santoso',
+    stnkPlate: 'B 4592 KLR',
+    stnkAddress: 'Jl. Raya Darmo No. 112, Surabaya'
+  },
+  {
+    phone: '087898765432',
+    firstName: 'Siti',
+    lastName: 'Rahmawati',
+    stnkOwner: 'Siti Rahmawati',
+    stnkPlate: 'L 2831 AB',
+    stnkAddress: 'Jl. Soekarno Hatta No. 78, Malang'
+  },
+  {
+    phone: '081122334455',
+    firstName: 'Dewi',
+    lastName: 'Lestari',
+    stnkOwner: 'Dewi Lestari',
+    stnkPlate: 'AB 1234 CD',
+    stnkAddress: 'Jl. Kaliurang KM 5 No. 21, Yogyakarta'
+  },
+  {
+    phone: '085566778899',
+    firstName: 'Eko',
+    lastName: 'Prasetyo',
+    stnkOwner: 'Eko Prasetyo',
+    stnkPlate: 'B 6789 XYZ',
+    stnkAddress: 'Jl. Kebon Jeruk Raya No. 9, Jakarta Barat'
+  },
+  {
+    phone: '081900112233',
+    firstName: 'Fitri',
+    lastName: 'Handayani',
+    stnkOwner: 'Fitri Handayani',
+    stnkPlate: 'D 4321 EF',
+    stnkAddress: 'Jl. Asia Afrika No. 130, Bandung'
+  },
+  {
+    phone: '082133445566',
+    firstName: 'Gunawan',
+    lastName: 'Wibowo',
+    stnkOwner: 'Gunawan Wibowo',
+    stnkPlate: 'H 9876 GH',
+    stnkAddress: 'Jl. Pandanaran No. 56, Semarang'
+  },
+  {
+    phone: '083899887766',
+    firstName: 'Hendra',
+    lastName: 'Saputra',
+    stnkOwner: 'Hendra Saputra',
+    stnkPlate: 'N 5555 IJ',
+    stnkAddress: 'Jl. Basuki Rahmat No. 88, Kediri'
+  }
+];
+
+function findCarrier(query) {
+  const key = (query || '').trim().toLowerCase().replace(/[\s-]/g, '');
+  if (!key) return null;
+  return sampleCarriers.find(c =>
+    c.phone.includes(key) ||
+    `${c.firstName}${c.lastName}`.toLowerCase().includes(key) ||
+    c.stnkPlate.toLowerCase().replace(/\s/g, '').includes(key)
+  ) || null;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initPkbDashboard();
   initStepper();
@@ -504,16 +589,17 @@ function openPkbWizard(entry) {
     if (window.loadCustomVehicle) {
       window.loadCustomVehicle(entry);
     }
-    // Auto fill carrier
-    const carrierPhone = document.getElementById('carrierInputPhone');
-    const carrierFirst = document.getElementById('carrierFirstName');
-    const carrierLast = document.getElementById('carrierLastName');
-    const searchPhone = document.getElementById('carrierSearchPhone');
-    if (carrierPhone) carrierPhone.value = entry.phone;
-    if (searchPhone) searchPhone.value = entry.phone;
+    // Auto fill carrier (dummy dataset, fallback to PKB entry data)
     const names = entry.customer.split(' ');
-    if (carrierFirst) carrierFirst.value = names[0] || '';
-    if (carrierLast) carrierLast.value = names.slice(1).join(' ') || '';
+    const carrier = findCarrier(entry.phone) || {
+      phone: entry.phone,
+      firstName: names[0] || '',
+      lastName: names.slice(1).join(' ') || '',
+      stnkOwner: entry.customer,
+      stnkPlate: entry.plate,
+      stnkAddress: '-'
+    };
+    if (window.loadCarrierData) window.loadCarrierData(carrier);
     showToast(`Data PKB ${entry.id} dimuat (${entry.plate})`);
   } else {
     const scanInput = document.getElementById('scanVehicleInput');
@@ -521,14 +607,10 @@ function openPkbWizard(entry) {
     if (window.resetVehicleData) {
       window.resetVehicleData();
     }
-    const carrierPhone = document.getElementById('carrierInputPhone');
-    const carrierFirst = document.getElementById('carrierFirstName');
-    const carrierLast = document.getElementById('carrierLastName');
-    const searchPhone = document.getElementById('carrierSearchPhone');
-    if (carrierPhone) carrierPhone.value = '';
-    if (searchPhone) searchPhone.value = '';
-    if (carrierFirst) carrierFirst.value = '';
-    if (carrierLast) carrierLast.value = '';
+    // Dummy carrier data for the new PKB draft
+    if (window.loadCarrierData) {
+      window.loadCarrierData(sampleCarriers[0]);
+    }
     showToast('Mode PKB Baru dimulai');
   }
 
@@ -863,22 +945,125 @@ function initCarrierStep() {
   const btnSearch = document.getElementById('btnSearchCarrier');
   const btnClearSearch = document.getElementById('btnClearCarrierSearch');
   const btnAddCarrier = document.getElementById('btnAddCarrier');
+  const promptBox = document.getElementById('carrierPromptBox');
   const carrierPhone = document.getElementById('carrierInputPhone');
   const carrierFirst = document.getElementById('carrierFirstName');
   const carrierLast = document.getElementById('carrierLastName');
+  const stnkOwner = document.getElementById('stnkOwnerName');
+  const stnkPlate = document.getElementById('stnkPlate');
+  const stnkAddress = document.getElementById('stnkAddress');
   const btnViewDetail = document.getElementById('btnViewDetailCarrier');
+
+  function loadCarrierData(carrier) {
+    if (!carrier) return;
+    if (searchInput) searchInput.value = carrier.phone;
+    if (carrierPhone) carrierPhone.value = carrier.phone;
+    if (carrierFirst) carrierFirst.value = carrier.firstName;
+    if (carrierLast) carrierLast.value = carrier.lastName;
+    if (stnkOwner) stnkOwner.value = carrier.stnkOwner;
+    if (stnkPlate) stnkPlate.value = carrier.stnkPlate;
+    if (stnkAddress) stnkAddress.value = carrier.stnkAddress;
+    if (promptBox) promptBox.style.display = 'none';
+  }
+
+  function resetCarrierData(keepSearch) {
+    if (searchInput && !keepSearch) searchInput.value = '';
+    [carrierPhone, carrierFirst, carrierLast, stnkOwner, stnkPlate, stnkAddress].forEach(field => {
+      if (field) field.value = '';
+    });
+    if (promptBox) promptBox.style.display = 'flex';
+  }
+
+  // Default dummy carrier so the card is never empty on first open
+  loadCarrierData(sampleCarriers[0]);
+
+  // Saved Phone Number Suggestions
+  const phoneDropdown = document.getElementById('carrierPhoneDropdown');
+
+  function renderPhoneOptions(filter) {
+    if (!phoneDropdown) return;
+    const key = (filter || '').trim().toLowerCase().replace(/[\s-]/g, '');
+    const list = key
+      ? sampleCarriers.filter(c =>
+        c.phone.includes(key) ||
+        `${c.firstName}${c.lastName}`.toLowerCase().includes(key) ||
+        c.stnkPlate.toLowerCase().replace(/\s/g, '').includes(key))
+      : sampleCarriers;
+
+    if (!list.length) {
+      phoneDropdown.innerHTML = '<div class="carrier-phone-empty">No saved phone number matched</div>';
+      return;
+    }
+
+    const currentPhone = carrierPhone ? carrierPhone.value.trim() : '';
+    phoneDropdown.innerHTML = list.map(c => `
+      <button type="button" class="carrier-phone-option ${c.phone === currentPhone ? 'active' : ''}" data-phone="${c.phone}">
+        <span class="carrier-phone-main">
+          <span class="carrier-phone-number">${c.phone}</span>
+          <span class="carrier-phone-name">${c.firstName} ${c.lastName}</span>
+        </span>
+        <span class="carrier-phone-plate">${c.stnkPlate}</span>
+      </button>
+    `).join('');
+  }
+
+  function openPhoneDropdown() {
+    if (!phoneDropdown) return;
+    renderPhoneOptions(searchInput ? searchInput.value : '');
+    phoneDropdown.classList.add('open');
+  }
+
+  function closePhoneDropdown() {
+    if (phoneDropdown) phoneDropdown.classList.remove('open');
+  }
+
+  if (phoneDropdown && searchInput) {
+    searchInput.addEventListener('focus', openPhoneDropdown);
+    searchInput.addEventListener('click', openPhoneDropdown);
+    searchInput.addEventListener('input', () => {
+      renderPhoneOptions(searchInput.value);
+      phoneDropdown.classList.add('open');
+    });
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closePhoneDropdown();
+    });
+
+    phoneDropdown.addEventListener('click', (e) => {
+      const option = e.target.closest('.carrier-phone-option');
+      if (!option) return;
+      const carrier = sampleCarriers.find(c => c.phone === option.dataset.phone);
+      if (!carrier) return;
+      loadCarrierData(carrier);
+      closePhoneDropdown();
+      showToast(`Carrier selected: ${carrier.firstName} ${carrier.lastName} (${carrier.phone})`);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.carrier-search-input-pill-container')) {
+        closePhoneDropdown();
+      }
+    });
+  }
 
   if (btnSearch && searchInput) {
     const doSearch = () => {
+      closePhoneDropdown();
       const query = searchInput.value.trim();
       if (!query) {
         showToast('Please enter a phone number to search.');
         return;
       }
-      if (carrierPhone) carrierPhone.value = query;
-      if (carrierFirst) carrierFirst.value = 'Achmad';
-      if (carrierLast) carrierLast.value = 'Munib';
-      showToast(`Carrier found for phone: ${query}`);
+
+      const carrier = findCarrier(query);
+      if (!carrier) {
+        resetCarrierData(true);
+        if (carrierPhone) carrierPhone.value = query;
+        showToast(`No carrier data found for: ${query}`);
+        return;
+      }
+
+      loadCarrierData(carrier);
+      showToast(`Carrier found: ${carrier.firstName} ${carrier.lastName} (${carrier.phone})`);
     };
 
     btnSearch.addEventListener('click', doSearch);
@@ -892,35 +1077,37 @@ function initCarrierStep() {
 
   if (btnClearSearch && searchInput) {
     btnClearSearch.addEventListener('click', () => {
-      searchInput.value = '';
-      if (carrierPhone) carrierPhone.value = '';
-      if (carrierFirst) carrierFirst.value = '';
-      if (carrierLast) carrierLast.value = '';
+      closePhoneDropdown();
+      resetCarrierData();
       showToast('Carrier search input cleared');
     });
   }
 
   if (btnAddCarrier) {
     btnAddCarrier.addEventListener('click', () => {
+      closePhoneDropdown();
+      resetCarrierData(true);
       if (carrierPhone && searchInput) {
-        carrierPhone.value = searchInput.value;
+        carrierPhone.value = searchInput.value.trim();
       }
-      if (carrierFirst) {
-        carrierFirst.value = '';
-        carrierFirst.focus();
-      }
-      if (carrierLast) carrierLast.value = '';
+      if (promptBox) promptBox.style.display = 'none';
+      if (carrierFirst) carrierFirst.focus();
       showToast('Ready to input new carrier data');
     });
   }
 
   if (btnViewDetail) {
     btnViewDetail.addEventListener('click', () => {
-      const name = `${carrierFirst?.value || 'Achmad'} ${carrierLast?.value || 'Munib'}`.trim();
-      const phone = carrierPhone?.value || '085732255998';
-      showToast(`Viewing details for: ${name} (${phone})`);
+      const name = `${carrierFirst?.value || ''} ${carrierLast?.value || ''}`.trim() || 'Carrier baru';
+      const phone = carrierPhone?.value || '-';
+      const plate = stnkPlate?.value || '-';
+      showToast(`Detail carrier: ${name} - ${phone} - STNK ${plate}`);
     });
   }
+
+  // Export helpers for the PKB wizard
+  window.loadCarrierData = loadCarrierData;
+  window.resetCarrierData = resetCarrierData;
 }
 
 // History Show More Action

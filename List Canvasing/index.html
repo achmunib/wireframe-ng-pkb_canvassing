@@ -711,6 +711,8 @@
                       <div class="carrier-search-input-pill-container">
                         <input type="text" id="carrierSearchPhone" class="carrier-search-input" value="085732255998" placeholder="Enter phone number">
                         <button class="btn-carrier-search" id="btnSearchCarrier" type="button">Cari</button>
+                        <!-- Saved Phone Number Suggestions -->
+                        <div class="carrier-phone-dropdown" id="carrierPhoneDropdown"></div>
                       </div>
                       <button class="btn-carrier-trash" id="btnClearCarrierSearch" type="button" title="Delete / Clear">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -723,7 +725,7 @@
                   </div>
 
                   <!-- Empty State / Add Prompt -->
-                  <div class="carrier-prompt-box">
+                  <div class="carrier-prompt-box" id="carrierPromptBox">
                     <p class="carrier-prompt-text">No Carrier Data Found</p>
                     <button class="btn-carrier-add" id="btnAddCarrier" type="button">
                       <span class="plus-icon">+</span> Add New
@@ -745,7 +747,7 @@
                   <div class="carrier-tab-content active" id="tabContentCarrier">
                     <div class="carrier-form-inner">
                       <!-- Row 1: Phone Number -->
-                      <div class="form-group mb-3">
+                      <div class="form-group">
                         <label class="form-label" for="carrierInputPhone">Phone Number</label>
                         <input type="text" id="carrierInputPhone" class="carrier-pill-input" placeholder="085732255998" value="085732255998">
                       </div>
@@ -777,7 +779,7 @@
                   <!-- Tab Body: STNK Information (Secondary tab) -->
                   <div class="carrier-tab-content" id="tabContentStnk" style="display: none;">
                     <div class="carrier-form-inner">
-                      <div class="carrier-form-grid-2 mb-3">
+                      <div class="carrier-form-grid-2">
                         <div class="form-group">
                           <label class="form-label">STNK Owner Name</label>
                           <input type="text" id="stnkOwnerName" class="carrier-pill-input" placeholder="STNK Name" value="Achmad Munib">
