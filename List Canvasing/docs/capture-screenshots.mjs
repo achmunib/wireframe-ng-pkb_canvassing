@@ -315,8 +315,29 @@ try {
   await waitFor(`document.getElementById('vehicleEmptyState').style.display === 'flex'`);
   await shot('list-canvasing-02b-step1-empty-vehicle', { fullPage: true });
 
-  // 03 — Pop-up Input New Vehicle Data
+  // 02c — Step 1: validasi Kilometer tidak lebih besar dari Kilometer Sebelumnya
+  console.log('02c Step 1 — Validasi Kilometer');
+  await openPage();
+  await evaluate(OPEN_FIRST_PKB);
+  await waitFor(`document.getElementById('stepPane1').style.display === 'block'`);
+  await evaluate(`
+    (function () {
+      var i = document.getElementById('kilometerInput');
+      i.value = '800';
+      i.dispatchEvent(new Event('input', { bubbles: true }));
+      return true;
+    })()
+  `);
+  await waitFor(`document.getElementById('kilometerError').classList.contains('show')`);
+  await shot('list-canvasing-02c-step1-kilometer-invalid', { fullPage: true });
+
+  // 03 — Pop-up Input New Vehicle Data (dibuka dari empty state kendaraan)
   console.log('03 Pop-up Input New Vehicle Data');
+  await openPage();
+  await evaluate(OPEN_FIRST_PKB);
+  await waitFor(`document.getElementById('stepPane1').style.display === 'block'`);
+  await evaluate(`document.getElementById('btnClearScan').click()`);
+  await waitFor(`document.getElementById('vehicleEmptyState').style.display === 'flex'`);
   await evaluate(`document.getElementById('btnInputNewData').click()`);
   await waitFor(`document.getElementById('inputDataModal').style.display === 'flex'`);
   await scrollTop();

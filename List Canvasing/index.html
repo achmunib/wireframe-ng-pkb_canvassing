@@ -739,8 +739,23 @@
                   <!-- Left column: Kilometer & Service Reason -->
                   <div class="pre-inspection-left">
                     <div class="form-group mb-4">
+                      <label class="form-label" for="prevKilometerInput">Kilometer Sebelumnya</label>
+                      <input type="text" id="prevKilometerInput" class="form-input-pill" value="1000" readonly>
+                    </div>
+
+                    <div class="form-group mb-4">
                       <label class="form-label" for="kilometerInput">Kilometer</label>
-                      <input type="text" id="kilometerInput" class="form-input-pill" value="233">
+                      <input type="text" id="kilometerInput" class="form-input-pill" value="1233" inputmode="numeric"
+                        autocomplete="off">
+                      <p class="form-error-text" id="kilometerError">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="8" x2="12" y2="12"></line>
+                          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <span id="kilometerErrorText">Kilometer harus lebih besar dari Kilometer Sebelumnya</span>
+                      </p>
                     </div>
 
                     <div class="form-group">

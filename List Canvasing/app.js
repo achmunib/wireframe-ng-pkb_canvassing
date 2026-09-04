@@ -27,7 +27,7 @@ const sampleVehicles = [
     dealer: 'MPM Motor Jombang',
     lastKm: '1000',
     customer: 'Achmad Munib',
-    currentKm: '233',
+    currentKm: '1233',
     reason: 'Inisiatif Sendiri'
   },
   {
@@ -234,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initStepper();
   initCollapsibleCard();
   initFuelIndicator();
+  initKilometerValidation();
   initVehicleScanner();
   initCarrierStep();
   initCekAjaDuluStep();
@@ -748,6 +749,13 @@ function initStepper() {
   });
 
   btnNext.addEventListener('click', () => {
+    if (currentStep === 1 && window.validateKilometer && !window.validateKilometer()) {
+      showToast(window.kilometerLimitMessage ? window.kilometerLimitMessage() : 'Kilometer tidak valid');
+      const kmInput = document.getElementById('kilometerInput');
+      if (kmInput) kmInput.focus();
+      return;
+    }
+
     if (currentStep < totalSteps) {
       goToStep(currentStep + 1);
     } else {
@@ -869,6 +877,62 @@ function initFuelIndicator() {
   }
 }
 
+// Kilometer Validation (card Pre-Inspection Data)
+// Aturan: nilai Kilometer harus lebih besar dari nilai Kilometer Sebelumnya.
+function initKilometerValidation() {
+  const kmInput = document.getElementById('kilometerInput');
+  const prevInput = document.getElementById('prevKilometerInput');
+  const errorBox = document.getElementById('kilometerError');
+  const errorText = document.getElementById('kilometerErrorText');
+  if (!kmInput) return;
+
+  function parseKm(value) {
+    const digits = String(value == null ? '' : value).replace(/[^0-9]/g, '');
+    return digits === '' ? null : parseInt(digits, 10);
+  }
+
+  function previousKm() {
+    return prevInput ? parseKm(prevInput.value) : null;
+  }
+
+  function limitMessage(previous) {
+    return `Kilometer harus lebih besar dari Kilometer Sebelumnya (${previous.toLocaleString('id-ID')} km)`;
+  }
+
+  function validate() {
+    const current = parseKm(kmInput.value);
+    const previous = previousKm();
+    const invalid = current !== null && previous !== null && current <= previous;
+
+    kmInput.classList.toggle('is-invalid', invalid);
+    if (errorBox) errorBox.classList.toggle('show', invalid);
+    if (errorText && invalid) errorText.textContent = limitMessage(previous);
+
+    return !invalid;
+  }
+
+  // Field hanya menerima angka
+  kmInput.addEventListener('input', () => {
+    const digitsOnly = kmInput.value.replace(/[^0-9]/g, '');
+    if (digitsOnly !== kmInput.value) {
+      const caret = kmInput.selectionStart || 0;
+      const removed = kmInput.value.length - digitsOnly.length;
+      kmInput.value = digitsOnly;
+      const next = Math.max(0, caret - removed);
+      kmInput.setSelectionRange(next, next);
+    }
+    validate();
+  });
+
+  window.validateKilometer = validate;
+  window.kilometerLimitMessage = () => {
+    const previous = previousKm();
+    return previous === null ? '' : limitMessage(previous);
+  };
+
+  validate();
+}
+
 // Vehicle Scanner & Data Populator
 function initVehicleScanner() {
   const scanInput = document.getElementById('scanVehicleInput');
@@ -877,6 +941,7 @@ function initVehicleScanner() {
   const vehicleBox = document.getElementById('vehicleInfoCard');
   const emptyState = document.getElementById('vehicleEmptyState');
   const kmInput = document.getElementById('kilometerInput');
+  const prevKmInput = document.getElementById('prevKilometerInput');
   const btnEdit = document.getElementById('btnEditVehicle');
   const btnDelete = document.getElementById('btnDeleteVehicle');
   const btnInvoiceDate = document.getElementById('btnGetInvoiceDate');
@@ -1055,9 +1120,16 @@ function initVehicleScanner() {
     if (document.getElementById('dispPurchaseDate')) document.getElementById('dispPurchaseDate').textContent = vehicle.purchaseDate || '03-05-2024';
     if (document.getElementById('dispDealer')) document.getElementById('dispDealer').textContent = vehicle.dealer || 'MPM Motor Jombang';
 
+    if (prevKmInput) {
+      const catalog = sampleVehicles.find(v => v.engine === vehicle.engine);
+      prevKmInput.value = vehicle.lastKm || (catalog && catalog.lastKm) || '';
+    }
+
     if (kmInput && vehicle.currentKm) {
       kmInput.value = vehicle.currentKm;
     }
+
+    if (window.validateKilometer) window.validateKilometer();
 
     if (vehicleBox) vehicleBox.style.display = 'block';
     if (emptyState) emptyState.style.display = 'none';
