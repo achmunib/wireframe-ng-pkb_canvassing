@@ -187,7 +187,7 @@ async function shot(name, { fullPage = false } = {}) {
   // atribut ukuran pada markdown.
   const w = buf.readUInt32BE(16);
   const h = buf.readUInt32BE(20);
-  console.log(`  ✔ ${name}.png  (markdown: " =${w / SCALE}x${h / SCALE}")`);
+  console.log(`  ✓ ${name}.png  (markdown: " =${w / SCALE}x${h / SCALE}")`);
 }
 
 // ---------------------------------------------------------------------------
