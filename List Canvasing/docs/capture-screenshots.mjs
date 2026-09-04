@@ -284,6 +284,23 @@ try {
   await waitFor(`document.getElementById('pkbEmpty').style.display === 'block'`);
   await shot('list-canvasing-01b-dashboard-empty', { fullPage: true });
 
+  // 01c — Dashboard: filter rentang tanggal aktif
+  console.log('01c Dashboard — filter rentang tanggal');
+  await openPage();
+  await evaluate(`
+    (function () {
+      var from = document.getElementById('pkbDateFromDisplay');
+      var to = document.getElementById('pkbDateToDisplay');
+      from.value = '25-08-2024';
+      from.dispatchEvent(new Event('input', { bubbles: true }));
+      to.value = '26-08-2024';
+      to.dispatchEvent(new Event('input', { bubbles: true }));
+      return true;
+    })()
+  `);
+  await waitFor(`document.getElementById('pkbDateClear').disabled === false`);
+  await shot('list-canvasing-01c-dashboard-date-filter', { fullPage: true });
+
   // 02 — Step 1: Vehicle (dibuka dari kartu PKB pertama)
   console.log('02 Step 1 — Vehicle');
   await openPage();
@@ -305,6 +322,16 @@ try {
   await scrollTop();
   await shot('list-canvasing-03-modal-input-vehicle');
 
+  // 03b — Pop-up Edit Vehicle Data (dibuka dari tombol Edit pada box kendaraan)
+  console.log('03b Pop-up Edit Vehicle Data');
+  await openPage();
+  await evaluate(OPEN_FIRST_PKB);
+  await waitFor(`document.getElementById('stepPane1').style.display === 'block'`);
+  await evaluate(`document.getElementById('btnEditVehicle').click()`);
+  await waitFor(`document.getElementById('inputDataModal').style.display === 'flex'`);
+  await scrollTop();
+  await shot('list-canvasing-03b-modal-edit-vehicle');
+
   // 04 — Step 2: Carrier Data
   console.log('04 Step 2 — Carrier Data');
   await openPage();
@@ -319,6 +346,23 @@ try {
   await evaluate(`document.getElementById('tabStnkInfo').click()`);
   await waitFor(`document.getElementById('tabContentStnk').style.display === 'block'`);
   await shot('list-canvasing-04b-step2-stnk', { fullPage: true });
+
+  // 04c — Step 2: dropdown nomor telepon tersimpan
+  console.log('04c Step 2 — Dropdown Saved Phone Number');
+  await evaluate(`document.getElementById('tabCarrierInfo').click()`);
+  await waitFor(`document.getElementById('tabContentCarrier').style.display === 'block'`);
+  await evaluate(`
+    (function () {
+      var i = document.getElementById('carrierSearchPhone');
+      i.scrollIntoView({ block: 'center' });
+      // kosongkan kata kunci agar seluruh nomor tersimpan ikut terlihat
+      i.value = '';
+      i.dispatchEvent(new Event('input', { bubbles: true }));
+      return true;
+    })()
+  `);
+  await waitFor(`document.getElementById('carrierPhoneDropdown').classList.contains('open')`);
+  await shot('list-canvasing-04c-step2-phone-dropdown');
 
   // 05 — Step 3: Cek Aja Dulu
   console.log('05 Step 3 — Cek Aja Dulu');
