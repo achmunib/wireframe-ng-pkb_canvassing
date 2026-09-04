@@ -277,8 +277,12 @@
                   </div>
 
                   <div class="search-input-wrapper">
-                    <input type="text" id="scanVehicleInput" class="form-input scan-input" value="JB91E1260677"
-                      placeholder="Enter machine or frame number">
+                    <div class="scan-input-container">
+                      <input type="text" id="scanVehicleInput" class="form-input scan-input" value="JB91E1260677"
+                        placeholder="Enter machine or frame number" autocomplete="off">
+                      <!-- Machine Number Suggestions -->
+                      <div class="scan-vehicle-dropdown" id="scanVehicleDropdown"></div>
+                    </div>
                     <button class="btn-scan-outline" id="btnScanVehicle" type="button">Scan Vehicle</button>
                     <button class="btn-trash-outline" id="btnClearScan" type="button" title="Clear / Delete input">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

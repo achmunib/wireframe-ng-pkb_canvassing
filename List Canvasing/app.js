@@ -57,6 +57,90 @@ const sampleVehicles = [
     customer: 'Siti Rahmawati',
     currentKm: '5450',
     reason: 'Ganti Oli'
+  },
+  {
+    plate: 'AG 5567 QW',
+    model: 'VG - BEAT DELUXE CBS',
+    engine: 'JM81E1102345',
+    frame: 'MH1JM8115MK102345',
+    color: 'MATTE BLUE',
+    year: '2022',
+    purchaseDate: '22-09-2022',
+    dealer: 'MPM Motor Kediri',
+    lastKm: '18200',
+    customer: 'Dwi Prasetyo',
+    currentKm: '18350',
+    reason: 'Servis Berkala'
+  },
+  {
+    plate: 'N 7781 KH',
+    model: 'VG - PCX 160 ABS',
+    engine: 'KF41E2210984',
+    frame: 'MH1KF4113PK210984',
+    color: 'WONDERFUL WHITE',
+    year: '2023',
+    purchaseDate: '05-02-2023',
+    dealer: 'MPM Motor Malang',
+    lastKm: '9800',
+    customer: 'Rizky Ramadhan',
+    currentKm: '9925',
+    reason: 'Klaim Garansi'
+  },
+  {
+    plate: 'W 3312 ZC',
+    model: 'VG - VARIO 160 CBS',
+    engine: 'KF12E1330771',
+    frame: 'MH1KF1214RK330771',
+    color: 'ADVANCE MATTE BLACK',
+    year: '2024',
+    purchaseDate: '18-06-2024',
+    dealer: 'MPM Motor Sidoarjo',
+    lastKm: '2100',
+    customer: 'Lina Marlina',
+    currentKm: '2240',
+    reason: 'Inisiatif Sendiri'
+  },
+  {
+    plate: 'S 9024 TR',
+    model: 'VG - GENIO CBS ISS',
+    engine: 'JM51E1875220',
+    frame: 'MH1JM5112NK875220',
+    color: 'GLAM RED',
+    year: '2022',
+    purchaseDate: '30-11-2022',
+    dealer: 'MPM Motor Tuban',
+    lastKm: '24600',
+    customer: 'Bagus Firmansyah',
+    currentKm: '24780',
+    reason: 'Servis Berkala'
+  },
+  {
+    plate: 'AE 4408 UD',
+    model: 'VG - SUPRA X 125 FI',
+    engine: 'JBK1E1449902',
+    frame: 'MH1JBK112LK449902',
+    color: 'BLACK SILVER',
+    year: '2021',
+    purchaseDate: '14-03-2021',
+    dealer: 'MPM Motor Madiun',
+    lastKm: '41200',
+    customer: 'Hendra Wijaya',
+    currentKm: '41455',
+    reason: 'Ganti Oli'
+  },
+  {
+    plate: 'AG 2276 BN',
+    model: 'VG - STYLO 160 ABS',
+    engine: 'KF71E1005513',
+    frame: 'MH1KF7118RK005513',
+    color: 'ROYAL MATTE GREEN',
+    year: '2024',
+    purchaseDate: '09-07-2024',
+    dealer: 'MPM Motor Jombang',
+    lastKm: '800',
+    customer: 'Nadia Safitri',
+    currentKm: '940',
+    reason: 'Servis Berkala'
   }
 ];
 
@@ -797,7 +881,79 @@ function initVehicleScanner() {
   const btnDelete = document.getElementById('btnDeleteVehicle');
   const btnInvoiceDate = document.getElementById('btnGetInvoiceDate');
 
+  // Machine Number Suggestions
+  const scanDropdown = document.getElementById('scanVehicleDropdown');
+
+  function renderScanOptions(filter) {
+    if (!scanDropdown) return;
+    const key = (filter || '').trim().toLowerCase().replace(/s/g, '');
+    const list = key
+      ? sampleVehicles.filter(v =>
+        v.engine.toLowerCase().includes(key) ||
+        v.frame.toLowerCase().includes(key) ||
+        v.plate.toLowerCase().replace(/s/g, '').includes(key) ||
+        v.model.toLowerCase().replace(/s/g, '').includes(key))
+      : sampleVehicles;
+
+    if (!list.length) {
+      scanDropdown.innerHTML = '<div class="scan-vehicle-empty">No machine number matched</div>';
+      return;
+    }
+
+    const dispEngine = document.getElementById('dispEngine');
+    const currentEngine = dispEngine ? dispEngine.textContent.trim() : '';
+    scanDropdown.innerHTML = list.map(v => `
+      <button type="button" class="scan-vehicle-option ${v.engine === currentEngine ? 'active' : ''}" data-engine="${v.engine}">
+        <span class="scan-vehicle-main">
+          <span class="scan-vehicle-engine">${v.engine}</span>
+          <span class="scan-vehicle-model">${v.model} &middot; ${v.frame}</span>
+        </span>
+        <span class="scan-vehicle-plate">${v.plate}</span>
+      </button>
+    `).join('');
+  }
+
+  function openScanDropdown() {
+    if (!scanDropdown) return;
+    renderScanOptions(scanInput ? scanInput.value : '');
+    scanDropdown.classList.add('open');
+  }
+
+  function closeScanDropdown() {
+    if (scanDropdown) scanDropdown.classList.remove('open');
+  }
+
+  if (scanDropdown && scanInput) {
+    scanInput.addEventListener('focus', openScanDropdown);
+    scanInput.addEventListener('click', openScanDropdown);
+    scanInput.addEventListener('input', () => {
+      renderScanOptions(scanInput.value);
+      scanDropdown.classList.add('open');
+    });
+    scanInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeScanDropdown();
+    });
+
+    scanDropdown.addEventListener('click', (e) => {
+      const option = e.target.closest('.scan-vehicle-option');
+      if (!option) return;
+      const vehicle = sampleVehicles.find(v => v.engine === option.dataset.engine);
+      if (!vehicle) return;
+      scanInput.value = vehicle.engine;
+      loadVehicleData(vehicle);
+      closeScanDropdown();
+      showToast(`Vehicle data loaded: ${vehicle.plate} (${vehicle.model})`);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.scan-input-container')) {
+        closeScanDropdown();
+      }
+    });
+  }
+
   btnScan.addEventListener('click', () => {
+    closeScanDropdown();
     const query = scanInput.value.trim().toLowerCase();
     let vehicle = null;
 
@@ -828,6 +984,7 @@ function initVehicleScanner() {
 
   btnClear.addEventListener('click', () => {
     scanInput.value = '';
+    closeScanDropdown();
     resetVehicleData();
     showToast('Vehicle input cleared');
   });
