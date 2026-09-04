@@ -36,9 +36,9 @@ Modul ini dijalankan di dalam **iframe** pada layout shell portal (`index.html`)
 
 # Tampilan Step 1 — Vehicle
 
- ![Step 1 Vehicle](attachments/list-canvasing-02-step1-vehicle.png " =1440x1579")
+ ![Step 1 Vehicle](attachments/list-canvasing-02-step1-vehicle.png " =1440x1754")
 
- ![Empty state saat data kendaraan dihapus](attachments/list-canvasing-02b-step1-empty-vehicle.png " =1440x1441")
+ ![Empty state saat data kendaraan dihapus](attachments/list-canvasing-02b-step1-empty-vehicle.png " =1440x1616")
 
 **Stepper Wizard** terdiri dari 5 step: **Vehicle** → **Carrier Data** → **Cek Aja Dulu** → **Service & Parts** → **Summary**.
 
@@ -56,7 +56,7 @@ Modul ini dijalankan di dalam **iframe** pada layout shell portal (`index.html`)
 | BUTTON-Hapus Kendaraan (Ikon Trash) | BUTTON | Menghapus data kendaraan yang sedang tampil | Box detail kendaraan disembunyikan, empty state ditampilkan, dan muncul toast **"Vehicle data removed"**<br><br>**Catatan pengembangan:** penghapusan langsung dieksekusi tanpa dialog konfirmasi, dan isi field Scan Vehicle **tidak ikut dikosongkan** | | | | | | |
 | LABEL-Empty State Kendaraan | LABEL | Menampilkan keterangan saat belum ada data kendaraan | Teks: **"No Vehicle Data yet"** disertai tombol **Input New Data** | | | | | | |
 | BUTTON-Input New Data | BUTTON | Membuka pop-up input data kendaraan baru | Membuka modal `inputDataModal` dalam **mode Create**: judul modal **"Input New Vehicle Data"** dan seluruh field direset kosong | | | Modal Input / Edit Vehicle Data | | | |
-| LIST-History Service | LIST | Menampilkan riwayat servis kendaraan terpilih | Tiap item menampilkan: **Nama Paket Servis**, **Daftar Part** beserta qty, serta badge **Kilometer**, **Tanggal Servis**, dan **Dealer/Bengkel**<br><br>**Catatan pengembangan:** isi riwayat masih **hardcode di HTML** (2 item identik) dan tidak berubah saat kendaraan lain di-scan. Perlu di-binding ke API riwayat servis per kendaraan | | | | | | |
+| LIST-History Service | LIST | Menampilkan riwayat servis kendaraan terpilih | Tiap item disusun **2 kolom** agar sisi kanan card ikut terpakai: <br> * **Header item** — ikon dokumen, **Nama Paket Servis**, dan **Nomor PKB** di bawah judul; pada sisi kanan **tag jenis servis** (`Bayar` / `KPB 2`) dan **chip Tanggal Servis** <br> * **Kolom kiri — Parts Used** — daftar part beserta **qty** (qty rata kanan, antar baris dipisah garis putus-putus) <br> * **Kolom kanan — Service Detail** — **Kilometer**, **Dealer/Bengkel**, **Mekanik**, dan **Next Service** (tanggal + kilometer), format label kiri / nilai kanan dengan garis pemisah vertikal terhadap kolom kiri<br><br>Pada layar **≤1024px** kedua kolom ditumpuk vertikal dan garis pemisah berubah menjadi horizontal<br><br>**Catatan pengembangan:** isi riwayat masih **hardcode di HTML** (2 item) dan tidak berubah saat kendaraan lain di-scan. Field **Nomor PKB**, **Mekanik**, **Next Service**, dan **tag jenis servis** masih **data dummy** — seluruh isi perlu di-binding ke API riwayat servis per kendaraan | | | | | | |
 | BUTTON-Show More History | BUTTON | Menampilkan seluruh riwayat servis | **Catatan pengembangan:** tombol baru menampilkan toast **"Showing all historical services (2 records displayed)"** tanpa benar-benar menambah data. Perlu implementasi paging / lazy load riwayat | | | | | | |
 | TXTBOX-Kilometer | TXTBOX | Input kilometer kendaraan saat penerimaan | Berada pada card **Pre-Inspection Data**<br><br>Terisi otomatis dari **Current KM** kendaraan hasil scan (contoh: `233`)<br><br>**Catatan pengembangan:** tipe input masih **text** (bukan number) sehingga menerima karakter non-angka, dan belum ada validasi bahwa kilometer saat ini tidak boleh lebih kecil dari kilometer servis terakhir | Yes | | | | | |
 | LOV-Service Reason | LIST OF VIEW | Menampilkan daftar alasan kedatangan / servis | Nilai default terpilih: **Inisiatif Sendiri**<br><br>Pilihan yang tersedia: Inisiatif Sendiri, Servis Berkala / Rutin, Keluhan Mesin, Ganti Oli Saja, Klaim Garansi<br><br>**Catatan pengembangan:** isi dropdown masih hardcode dan perlu di-binding ke master alasan servis | Yes | | | | | |

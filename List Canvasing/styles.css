@@ -948,15 +948,31 @@ body {
 .history-list-container {
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 16px 20px;
+  padding: 18px 20px;
   background: #ffffff;
 }
 
 .history-service-item {
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  flex-direction: column;
+  gap: 14px;
   padding: 4px 0;
+}
+
+/* Item header: icon + title on the left, status & date on the right */
+.history-item-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.history-head-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
 }
 
 .history-item-icon {
@@ -969,14 +985,13 @@ body {
   border-radius: 8px;
   color: #94a3b8;
   flex-shrink: 0;
-  margin-top: 2px;
 }
 
-.history-item-details {
-  flex: 1;
+.history-head-text {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 3px;
+  min-width: 0;
 }
 
 .history-service-title {
@@ -986,19 +1001,104 @@ body {
   letter-spacing: -0.2px;
 }
 
+.history-service-sub {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.2px;
+}
+
+.history-head-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.history-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  border: 1px solid transparent;
+}
+
+.history-tag.tag-paid {
+  background: var(--primary-light);
+  border-color: #fed7aa;
+  color: #c2410c;
+}
+
+.history-tag.tag-kpb {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.history-date-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.history-date-chip svg {
+  color: #94a3b8;
+}
+
+/* Item body: parts list (left) + service detail (right) */
+.history-item-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+  gap: 18px 32px;
+  padding-left: 50px;
+}
+
+.history-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.history-block-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: #94a3b8;
+}
+
 .history-parts-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   font-size: 12.5px;
-  max-width: 320px;
 }
 
 .parts-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   gap: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed #eef2f7;
+}
+
+.parts-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .part-name {
@@ -1009,25 +1109,64 @@ body {
 .part-qty {
   font-weight: 700;
   color: #1e293b;
+  min-width: 32px;
+  text-align: right;
+  flex-shrink: 0;
 }
 
-.history-meta-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-size: 12px;
-  color: #64748b;
-  margin-top: 4px;
+.history-meta-block {
+  border-left: 1px solid #eef2f7;
+  padding-left: 24px;
 }
 
-.meta-badge {
+.history-meta-grid {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.meta-label {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  flex-shrink: 0;
 }
 
-.meta-badge svg {
-  color: #64748b;
+.meta-label svg {
+  color: #cbd5e1;
+  flex-shrink: 0;
+}
+
+.meta-value {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #334155;
+  text-align: right;
+}
+
+@media (max-width: 1024px) {
+  .history-item-grid {
+    grid-template-columns: 1fr;
+    padding-left: 0;
+    gap: 16px;
+  }
+
+  .history-meta-block {
+    border-left: none;
+    border-top: 1px solid #eef2f7;
+    padding-left: 0;
+    padding-top: 14px;
+  }
 }
 
 .history-divider {
