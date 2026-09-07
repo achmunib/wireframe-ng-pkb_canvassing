@@ -615,8 +615,8 @@ function viewCanvasingDetail(id) {
           <td style="font-weight: 600; color: #1e293b; font-family: monospace; font-size: 13px;">${p.code}</td>
           <td style="color: #334155; font-weight: 500;">${p.name}</td>
           <td style="text-align: center; font-weight: 600; color: #0f172a;">${p.qty} <span style="font-size: 11px; color: #64748b; font-weight: normal;">${p.satuan || ''}</span></td>
-          <td style="text-align: right; font-weight: 600; color: #475569;">${p.harga}</td>
-          <td style="text-align: right; font-weight: 700; color: var(--primary);">${formatRupiah(subtotalNum)}</td>
+          <td style="text-align: right; font-weight: 600; color: #475569; white-space: nowrap;">${p.harga}</td>
+          <td style="text-align: right; font-weight: 700; color: var(--primary); white-space: nowrap;">${formatRupiah(subtotalNum)}</td>
         </tr>
       `;
     }).join('');
@@ -627,11 +627,11 @@ function viewCanvasingDetail(id) {
           <thead>
             <tr>
               <th style="width: 5%; text-align: center;">No</th>
-              <th style="width: 25%; text-align: left;">Kode Part</th>
-              <th style="width: 33%; text-align: left;">Nama Part</th>
-              <th style="width: 13%; text-align: center;">Qty</th>
-              <th style="width: 12%; text-align: right;">Harga</th>
-              <th style="width: 12%; text-align: right;">Subtotal</th>
+              <th style="width: 19%; text-align: left;">Kode Part</th>
+              <th style="width: 31%; text-align: left;">Nama Part</th>
+              <th style="width: 11%; text-align: center;">Qty</th>
+              <th style="width: 16%; text-align: right;">Harga</th>
+              <th style="width: 18%; text-align: right;">Subtotal</th>
             </tr>
           </thead>
           <tbody>
@@ -648,7 +648,7 @@ function viewCanvasingDetail(id) {
               <td style="text-align: right; font-size: 12px; color: #64748b; font-weight: 600;">
                 Total Nilai:
               </td>
-              <td style="text-align: right; font-weight: 800; color: var(--primary); font-size: 13.5px;">
+              <td style="text-align: right; font-weight: 800; color: var(--primary); font-size: 13.5px; white-space: nowrap;">
                 ${formatRupiah(totalNilai)}
               </td>
             </tr>

@@ -1193,7 +1193,7 @@ input[type="checkbox"]:focus-visible + .custom-checkbox {
 }
 
 .modal-card.detail-card {
-  max-width: 740px;
+  max-width: 880px;
   max-height: 94vh;
   width: 95%;
 }
