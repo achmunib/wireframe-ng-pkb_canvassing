@@ -1252,7 +1252,7 @@
                     </thead>
                     <tbody>
                       <!-- Row 1: Oli Mesin -->
-                      <tr>
+                      <tr class="cek-row" data-row="1">
                         <td class="td-pict">
                           <img src="assets/oil_mpx2.jpg" alt="Oli Mesin" class="cek-product-img">
                         </td>
@@ -1266,27 +1266,29 @@
                               <span>Ok</span>
                             </label>
                             <label class="cek-radio-label">
-                              <input type="radio" name="cond_1" value="Not Ok" class="cek-radio" checked>
+                              <input type="radio" name="cond_1" value="Not Ok" class="cek-radio">
                               <span>Not Ok</span>
                             </label>
                           </div>
+                          <p class="cek-error-text" data-error="condition"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Condition wajib dipilih</span></p>
                         </td>
                         <td class="td-replacement">
                           <div class="cek-replacement-box">
                             <div class="cek-radio-group-horizontal">
                               <label class="cek-radio-label">
-                                <input type="radio" name="rep_1" value="Yes" class="cek-radio">
+                                <input type="radio" name="rep_1" value="Yes" class="cek-radio" disabled>
                                 <span>Yes</span>
                               </label>
                               <label class="cek-radio-label">
-                                <input type="radio" name="rep_1" value="No" class="cek-radio" checked>
+                                <input type="radio" name="rep_1" value="No" class="cek-radio" disabled>
                                 <span>No</span>
                               </label>
                             </div>
+                            <p class="cek-error-text" data-error="replacement"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Replacement wajib dipilih</span></p>
                             <div class="cek-part-code-group">
                               <label class="cek-field-sublabel">Part Code</label>
                               <div class="cek-select-pill-wrapper">
-                                <select class="cek-select-pill" id="partCode1">
+                                <select class="cek-select-pill" id="partCode1" disabled>
                                   <option value="" selected>Select Part Code</option>
                                   <option value="082322MBK0LN1">082322MBK0LN1 - AHM OIL MPX2 0.8L</option>
                                   <option value="082322MBK0LN2">082322MBK0LN2 - AHM OIL MPX2 0.65L</option>
@@ -1297,20 +1299,22 @@
                                   <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                               </div>
+                              <p class="cek-error-text" data-error="partCode"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Part Code wajib dipilih</span></p>
                             </div>
                           </div>
                         </td>
                         <td class="td-reason">
                           <div class="cek-reason-box">
                             <textarea class="cek-reason-textarea" placeholder="Reason for not replacing the part..."
-                              maxlength="500" data-counter="counter1"></textarea>
+                              maxlength="500" data-counter="counter1" disabled></textarea>
                             <span class="cek-char-counter" id="counter1">0/500</span>
                           </div>
+                          <p class="cek-error-text" data-error="reason"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Reason wajib diisi minimal 10 karakter</span></p>
                         </td>
                       </tr>
 
                       <!-- Row 2: Kampas Rem Depan -->
-                      <tr>
+                      <tr class="cek-row" data-row="2">
                         <td class="td-pict">
                           <img src="assets/brake_pad_front.jpg" alt="Kampas Rem Depan" class="cek-product-img">
                         </td>
@@ -1324,27 +1328,29 @@
                               <span>Ok</span>
                             </label>
                             <label class="cek-radio-label">
-                              <input type="radio" name="cond_2" value="Not Ok" class="cek-radio" checked>
+                              <input type="radio" name="cond_2" value="Not Ok" class="cek-radio">
                               <span>Not Ok</span>
                             </label>
                           </div>
+                          <p class="cek-error-text" data-error="condition"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Condition wajib dipilih</span></p>
                         </td>
                         <td class="td-replacement">
                           <div class="cek-replacement-box">
                             <div class="cek-radio-group-horizontal">
                               <label class="cek-radio-label">
-                                <input type="radio" name="rep_2" value="Yes" class="cek-radio">
+                                <input type="radio" name="rep_2" value="Yes" class="cek-radio" disabled>
                                 <span>Yes</span>
                               </label>
                               <label class="cek-radio-label">
-                                <input type="radio" name="rep_2" value="No" class="cek-radio" checked>
+                                <input type="radio" name="rep_2" value="No" class="cek-radio" disabled>
                                 <span>No</span>
                               </label>
                             </div>
+                            <p class="cek-error-text" data-error="replacement"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Replacement wajib dipilih</span></p>
                             <div class="cek-part-code-group">
                               <label class="cek-field-sublabel">Part Code</label>
                               <div class="cek-select-pill-wrapper">
-                                <select class="cek-select-pill" id="partCode2">
+                                <select class="cek-select-pill" id="partCode2" disabled>
                                   <option value="" selected>Select Part Code</option>
                                   <option value="06455KVB911">06455KVB911 - PAD SET, FR. BRAKE</option>
                                   <option value="06455KREK01">06455KREK01 - PAD SET, FR. BRAKE</option>
@@ -1355,20 +1361,22 @@
                                   <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                               </div>
+                              <p class="cek-error-text" data-error="partCode"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Part Code wajib dipilih</span></p>
                             </div>
                           </div>
                         </td>
                         <td class="td-reason">
                           <div class="cek-reason-box">
                             <textarea class="cek-reason-textarea" placeholder="Reason for not replacing the part..."
-                              maxlength="500" data-counter="counter2"></textarea>
+                              maxlength="500" data-counter="counter2" disabled></textarea>
                             <span class="cek-char-counter" id="counter2">0/500</span>
                           </div>
+                          <p class="cek-error-text" data-error="reason"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Reason wajib diisi minimal 10 karakter</span></p>
                         </td>
                       </tr>
 
-                      <!-- Row 3: Kampas Rem Depan (Rear Brake Shoes) -->
-                      <tr>
+                      <!-- Row 3: Kampas Rem Belakang (Rear Brake Shoes) -->
+                      <tr class="cek-row" data-row="3">
                         <td class="td-pict">
                           <img src="assets/brake_shoe.jpg" alt="Kampas Rem Depan" class="cek-product-img">
                         </td>
@@ -1382,27 +1390,29 @@
                               <span>Ok</span>
                             </label>
                             <label class="cek-radio-label">
-                              <input type="radio" name="cond_3" value="Not Ok" class="cek-radio" checked>
+                              <input type="radio" name="cond_3" value="Not Ok" class="cek-radio">
                               <span>Not Ok</span>
                             </label>
                           </div>
+                          <p class="cek-error-text" data-error="condition"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Condition wajib dipilih</span></p>
                         </td>
                         <td class="td-replacement">
                           <div class="cek-replacement-box">
                             <div class="cek-radio-group-horizontal">
                               <label class="cek-radio-label">
-                                <input type="radio" name="rep_3" value="Yes" class="cek-radio">
+                                <input type="radio" name="rep_3" value="Yes" class="cek-radio" disabled>
                                 <span>Yes</span>
                               </label>
                               <label class="cek-radio-label">
-                                <input type="radio" name="rep_3" value="No" class="cek-radio" checked>
+                                <input type="radio" name="rep_3" value="No" class="cek-radio" disabled>
                                 <span>No</span>
                               </label>
                             </div>
+                            <p class="cek-error-text" data-error="replacement"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Replacement wajib dipilih</span></p>
                             <div class="cek-part-code-group">
                               <label class="cek-field-sublabel">Part Code</label>
                               <div class="cek-select-pill-wrapper">
-                                <select class="cek-select-pill" id="partCode3">
+                                <select class="cek-select-pill" id="partCode3" disabled>
                                   <option value="" selected>Select Part Code</option>
                                   <option value="43120KZL930">43120KZL930 - SHOE SET, BRAKE</option>
                                   <option value="43120KPP900">43120KPP900 - SHOE SET, REAR BRAKE</option>
@@ -1413,20 +1423,22 @@
                                   <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                               </div>
+                              <p class="cek-error-text" data-error="partCode"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Part Code wajib dipilih</span></p>
                             </div>
                           </div>
                         </td>
                         <td class="td-reason">
                           <div class="cek-reason-box">
                             <textarea class="cek-reason-textarea" placeholder="Reason for not replacing the part..."
-                              maxlength="500" data-counter="counter3"></textarea>
+                              maxlength="500" data-counter="counter3" disabled></textarea>
                             <span class="cek-char-counter" id="counter3">0/500</span>
                           </div>
+                          <p class="cek-error-text" data-error="reason"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Reason wajib diisi minimal 10 karakter</span></p>
                         </td>
                       </tr>
 
                       <!-- Row 4: Spark Plugs -->
-                      <tr>
+                      <tr class="cek-row" data-row="4">
                         <td class="td-pict">
                           <img src="assets/spark_plugs.jpg" alt="Busi" class="cek-product-img">
                         </td>
@@ -1440,27 +1452,29 @@
                               <span>Ok</span>
                             </label>
                             <label class="cek-radio-label">
-                              <input type="radio" name="cond_4" value="Not Ok" class="cek-radio" checked>
+                              <input type="radio" name="cond_4" value="Not Ok" class="cek-radio">
                               <span>Not Ok</span>
                             </label>
                           </div>
+                          <p class="cek-error-text" data-error="condition"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Condition wajib dipilih</span></p>
                         </td>
                         <td class="td-replacement">
                           <div class="cek-replacement-box">
                             <div class="cek-radio-group-horizontal">
                               <label class="cek-radio-label">
-                                <input type="radio" name="rep_4" value="Yes" class="cek-radio">
+                                <input type="radio" name="rep_4" value="Yes" class="cek-radio" disabled>
                                 <span>Yes</span>
                               </label>
                               <label class="cek-radio-label">
-                                <input type="radio" name="rep_4" value="No" class="cek-radio" checked>
+                                <input type="radio" name="rep_4" value="No" class="cek-radio" disabled>
                                 <span>No</span>
                               </label>
                             </div>
+                            <p class="cek-error-text" data-error="replacement"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Replacement wajib dipilih</span></p>
                             <div class="cek-part-code-group">
                               <label class="cek-field-sublabel">Part Code</label>
                               <div class="cek-select-pill-wrapper">
-                                <select class="cek-select-pill" id="partCode4">
+                                <select class="cek-select-pill" id="partCode4" disabled>
                                   <option value="" selected>Select Part Code</option>
                                   <option value="31916K97T01">31916K97T01 - PLUG, SPARK (CPR9EA-9)</option>
                                   <option value="31917K97T01">31917K97T01 - PLUG, SPARK (CPR8EA-9)</option>
@@ -1471,15 +1485,17 @@
                                   <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                               </div>
+                              <p class="cek-error-text" data-error="partCode"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Part Code wajib dipilih</span></p>
                             </div>
                           </div>
                         </td>
                         <td class="td-reason">
                           <div class="cek-reason-box">
                             <textarea class="cek-reason-textarea" placeholder="Reason for not replacing the part..."
-                              maxlength="500" data-counter="counter4"></textarea>
+                              maxlength="500" data-counter="counter4" disabled></textarea>
                             <span class="cek-char-counter" id="counter4">0/500</span>
                           </div>
+                          <p class="cek-error-text" data-error="reason"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span>Reason wajib diisi minimal 10 karakter</span></p>
                         </td>
                       </tr>
                     </tbody>

@@ -1676,6 +1676,86 @@ body {
   user-select: none;
 }
 
+/* Validasi Cek Aja Dulu — disabled & error state */
+.cek-radio:disabled {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+  cursor: not-allowed;
+}
+
+.cek-radio:disabled:hover {
+  border-color: #e2e8f0;
+}
+
+.cek-radio-label:has(.cek-radio:disabled) {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.cek-select-pill:disabled,
+.cek-reason-textarea:disabled {
+  background: #f8fafc;
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.cek-reason-box:has(.cek-reason-textarea:disabled) {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.cek-reason-box:has(.cek-reason-textarea:disabled) .cek-char-counter {
+  color: #cbd5e1;
+}
+
+.cek-select-pill.is-invalid {
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #b91c1c;
+}
+
+.cek-select-pill.is-invalid:focus {
+  background: #ffffff;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.14);
+}
+
+.cek-reason-box.is-invalid {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+.cek-reason-box.is-invalid:focus-within {
+  background: #ffffff;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.14);
+}
+
+.cek-radio-group-vertical.is-invalid .cek-radio,
+.cek-radio-group-horizontal.is-invalid .cek-radio {
+  border-color: #ef4444;
+}
+
+.cek-error-text {
+  display: none;
+  align-items: flex-start;
+  gap: 5px;
+  margin: 6px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #dc2626;
+}
+
+.cek-error-text.show {
+  display: flex;
+}
+
+.cek-error-text svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
 /* ==========================================================================
    Bottom Action Bar
    ========================================================================== */

@@ -426,8 +426,15 @@ try {
   await waitFor(`document.getElementById('stepPane3').style.display === 'block'`);
   await shot('list-canvasing-05-step3-cek-aja-dulu', { fullPage: true });
 
+  // 05b — Step 3: state error validasi
+  console.log('05b Step 3 — Validasi Cek Aja Dulu');
+  await evaluate(TRIGGER_CEK_AJA_DULU_ERRORS);
+  await waitFor(`document.querySelectorAll('.cek-error-text.show').length === 4`);
+  await shot('list-canvasing-05b-step3-validasi', { fullPage: true });
+
   // 06 — Step 4: Service & Parts
   console.log('06 Step 4 — Service & Parts');
+  await evaluate(FILL_CEK_AJA_DULU);   // Step 3 wajib valid sebelum lanjut
   await evaluate(`goToStep(4)`);
   await waitFor(`document.getElementById('stepPane4').style.display === 'block'`);
   await shot('list-canvasing-06-step4-service-parts', { fullPage: true });

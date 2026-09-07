@@ -773,6 +773,10 @@ function initStepper() {
   });
 
   function goToStep(step) {
+    if (currentStep === 3 && step > 3 && window.validateCekAjaDulu && !window.validateCekAjaDulu()) {
+      return;
+    }
+
     currentStep = step;
     updateStepperUI();
   }
@@ -1601,34 +1605,233 @@ function initLcrBookingDate() {
 }
 
 function initCekAjaDuluStep() {
-  // Character counters for reason textareas
-  const reasonTextareas = document.querySelectorAll('.cek-reason-textarea');
-  reasonTextareas.forEach(textarea => {
-    const counterId = textarea.dataset.counter;
-    const counterElem = document.getElementById(counterId);
+  const rows = Array.from(document.querySelectorAll('.cek-row'));
 
-    const updateCounter = () => {
-      const len = textarea.value.length;
-      if (counterElem) {
-        counterElem.textContent = `${len}/500`;
-      }
+  // Error baru ditampilkan setelah user mencoba lanjut/simpan untuk pertama kali,
+  // supaya form tidak tampil merah sebelum disentuh.
+  let submitAttempted = false;
+
+  const MIN_REASON = 10;
+
+  function rowRefs(row) {
+    return {
+      condGroup: row.querySelector('.cek-radio-group-vertical'),
+      condRadios: Array.from(row.querySelectorAll('input[name^="cond_"]')),
+      repGroup: row.querySelector('.cek-radio-group-horizontal'),
+      repRadios: Array.from(row.querySelectorAll('input[name^="rep_"]')),
+      select: row.querySelector('.cek-select-pill'),
+      reasonBox: row.querySelector('.cek-reason-box'),
+      textarea: row.querySelector('.cek-reason-textarea')
     };
+  }
 
-    textarea.addEventListener('input', updateCounter);
-  });
+  function rowLabel(row) {
+    const name = (row.querySelector('.cek-group-name').textContent || '').trim();
+    return name ? `Baris ${row.dataset.row} — ${name}` : `Baris ${row.dataset.row}`;
+  }
 
-  // Select dropdown color change on selection
-  const selectPills = document.querySelectorAll('.cek-select-pill');
-  selectPills.forEach(select => {
-    select.addEventListener('change', () => {
-      if (select.value) {
-        select.style.color = '#1e293b';
-        select.style.fontWeight = '600';
-      } else {
-        select.style.color = '#64748b';
-        select.style.fontWeight = 'normal';
-      }
+  function pickedValue(radios) {
+    const picked = radios.find(r => r.checked);
+    return picked ? picked.value : '';
+  }
+
+  function resetSelect(select) {
+    if (!select) return;
+    select.value = '';
+    select.style.color = '#64748b';
+    select.style.fontWeight = 'normal';
+  }
+
+  function resetTextarea(textarea) {
+    if (!textarea) return;
+    textarea.value = '';
+    const counter = document.getElementById(textarea.dataset.counter);
+    if (counter) counter.textContent = '0/500';
+  }
+
+  function setError(row, key, message) {
+    const box = row.querySelector(`.cek-error-text[data-error="${key}"]`);
+    if (!box) return;
+    if (message) box.querySelector('span').textContent = message;
+    box.classList.toggle('show', Boolean(message));
+  }
+
+  // Enable/disable kolom sesuai jalur Condition -> Replacement, dan kosongkan
+  // field yang menjadi tidak relevan agar tidak ada data yatim yang terkirim.
+  function applyRowState(row) {
+    const { condRadios, repRadios, select, textarea } = rowRefs(row);
+    const condition = pickedValue(condRadios);
+
+    if (condition === 'Ok') {
+      // Condition = Ok -> Replacement dikunci pada "No"
+      repRadios.forEach(r => {
+        r.checked = r.value === 'No';
+        r.disabled = true;
+      });
+    } else {
+      repRadios.forEach(r => { r.disabled = condition !== 'Not Ok'; });
+    }
+
+    const replacement = pickedValue(repRadios);
+    const partCodeActive = condition === 'Not Ok' && replacement === 'Yes';
+    const reasonActive = condition === 'Not Ok' && replacement === 'No';
+
+    if (select) {
+      if (!partCodeActive && select.value) resetSelect(select);
+      select.disabled = !partCodeActive;
+    }
+    if (textarea) {
+      if (!reasonActive && textarea.value) resetTextarea(textarea);
+      textarea.disabled = !reasonActive;
+    }
+  }
+
+  function readRow(row) {
+    const { condRadios, repRadios, select, textarea } = rowRefs(row);
+    return {
+      condition: pickedValue(condRadios),
+      replacement: pickedValue(repRadios),
+      partCode: select && !select.disabled ? select.value : '',
+      reason: textarea && !textarea.disabled ? textarea.value.trim() : ''
+    };
+  }
+
+  function collectDuplicatePartCodes() {
+    const tally = new Map();
+    rows.forEach(row => {
+      const { partCode } = readRow(row);
+      if (partCode) tally.set(partCode, (tally.get(partCode) || 0) + 1);
     });
+    return new Set(Array.from(tally.entries()).filter(pair => pair[1] > 1).map(pair => pair[0]));
+  }
+
+  function rowIssues(row, duplicatePartCodes) {
+    const { condition, replacement, partCode, reason } = readRow(row);
+    const issues = [];
+
+    if (!condition) {
+      issues.push({ key: 'condition', message: 'Condition wajib dipilih' });
+      return issues;
+    }
+    if (condition === 'Ok') return issues;
+
+    if (!replacement) {
+      issues.push({ key: 'replacement', message: 'Replacement wajib dipilih' });
+      return issues;
+    }
+    if (replacement === 'Yes') {
+      if (!partCode) {
+        issues.push({ key: 'partCode', message: 'Part Code wajib dipilih' });
+      } else if (duplicatePartCodes.has(partCode)) {
+        issues.push({ key: 'partCode', message: 'Part Code sudah dipilih pada baris lain' });
+      }
+    } else {
+      if (!reason) {
+        issues.push({ key: 'reason', message: 'Reason wajib diisi' });
+      } else if (reason.length < MIN_REASON) {
+        issues.push({ key: 'reason', message: `Reason minimal ${MIN_REASON} karakter` });
+      }
+    }
+    return issues;
+  }
+
+  function paintRow(row, issues, mark) {
+    const { condGroup, repGroup, select, reasonBox } = rowRefs(row);
+    const byKey = new Map(issues.map(i => [i.key, i.message]));
+    ['condition', 'replacement', 'partCode', 'reason'].forEach(key => {
+      setError(row, key, mark ? byKey.get(key) || '' : '');
+    });
+    const flagged = key => mark && byKey.has(key);
+    if (condGroup) condGroup.classList.toggle('is-invalid', flagged('condition'));
+    if (repGroup) repGroup.classList.toggle('is-invalid', flagged('replacement'));
+    if (select) select.classList.toggle('is-invalid', flagged('partCode'));
+    if (reasonBox) reasonBox.classList.toggle('is-invalid', flagged('reason'));
+  }
+
+  function focusTarget(row, key) {
+    const refs = rowRefs(row);
+    if (key === 'condition') return refs.condRadios[0];
+    if (key === 'replacement') return refs.repRadios[0];
+    if (key === 'partCode') return refs.select;
+    return refs.textarea;
+  }
+
+  // mark = tampilkan error pada UI. Mengembalikan hasil validasi seluruh tabel.
+  function validateAll(mark) {
+    const duplicates = collectDuplicatePartCodes();
+    let first = null;
+    rows.forEach(row => {
+      const issues = rowIssues(row, duplicates);
+      if (issues.length && !first) first = { row, issue: issues[0] };
+      paintRow(row, issues, mark);
+    });
+    return {
+      valid: !first,
+      message: first ? `${rowLabel(first.row)}: ${first.issue.message}` : '',
+      target: first ? focusTarget(first.row, first.issue.key) : null
+    };
+  }
+
+  function revalidate() {
+    if (submitAttempted) validateAll(true);
+  }
+
+  // Gate untuk tombol Next (Step 3 -> Step 4) dan tombol Save & Print PKB
+  window.validateCekAjaDulu = function () {
+    submitAttempted = true;
+    const result = validateAll(true);
+    if (!result.valid) {
+      showToast(result.message);
+      if (result.target) {
+        result.target.focus();
+        result.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    return result.valid;
+  };
+
+  rows.forEach(row => {
+    const { condRadios, repRadios, select, textarea } = rowRefs(row);
+
+    condRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        // Condition berubah -> pilihan Replacement sebelumnya tidak lagi berlaku
+        repRadios.forEach(r => { r.checked = false; });
+        applyRowState(row);
+        revalidate();
+      });
+    });
+
+    repRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        applyRowState(row);
+        revalidate();
+      });
+    });
+
+    if (select) {
+      select.addEventListener('change', () => {
+        if (select.value) {
+          select.style.color = '#1e293b';
+          select.style.fontWeight = '600';
+        } else {
+          select.style.color = '#64748b';
+          select.style.fontWeight = 'normal';
+        }
+        revalidate();
+      });
+    }
+
+    if (textarea) {
+      const counter = document.getElementById(textarea.dataset.counter);
+      textarea.addEventListener('input', () => {
+        if (counter) counter.textContent = `${textarea.value.length}/500`;
+        revalidate();
+      });
+      textarea.addEventListener('blur', revalidate);
+    }
+
+    applyRowState(row);
   });
 
   // Save & Print PKB Button Handler
