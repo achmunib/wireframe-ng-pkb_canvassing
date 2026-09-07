@@ -385,6 +385,26 @@ try {
   await waitFor(`document.getElementById('carrierPhoneDropdown').classList.contains('open')`);
   await shot('list-canvasing-04c-step2-phone-dropdown');
 
+  // 04d — Step 2: Tanggal Booking tersembunyi saat Customer Agreement lain dipilih
+  console.log('04d Step 2 — Tanggal Booking tersembunyi');
+  await openPage();
+  await evaluate(OPEN_FIRST_PKB);
+  await waitFor(`document.getElementById('stepPane1').style.display === 'block'`);
+  await evaluate(`goToStep(2)`);
+  await waitFor(`document.getElementById('stepPane2').style.display === 'block'`);
+  await evaluate(`
+    (function () {
+      var s = document.getElementById('lcrAgreement');
+      s.value = 'Tidak Bersedia';
+      s.dispatchEvent(new Event('change', { bubbles: true }));
+      s.closest('.content-card').scrollIntoView({ block: 'center' });
+      return true;
+    })()
+  `);
+  await waitFor(`document.getElementById('lcrBookingGroup').hidden === true`);
+  await shot('list-canvasing-04d-step2-lcr-tanpa-booking');
+  await scrollTop();   // kembalikan posisi scroll agar capture berikutnya tidak tergeser
+
   // 05 — Step 3: Cek Aja Dulu
   console.log('05 Step 3 — Cek Aja Dulu');
   await evaluate(`goToStep(3)`);

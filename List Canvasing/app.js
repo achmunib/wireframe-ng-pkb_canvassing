@@ -237,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initKilometerValidation();
   initVehicleScanner();
   initCarrierStep();
+  initLcrBookingDate();
   initCekAjaDuluStep();
   initServiceAndPartsStep();
   initSummaryStep();
@@ -1475,6 +1476,122 @@ function initLangSwitcher() {
 }
 
 // Cek Aja Dulu (Step 3) Handlers
+// Layanan Cek Rangka — Tanggal Booking tampil kondisional dari Customer Agreement
+const LCR_BOOKING_AGREEMENT = 'Bersedia Langsung dilakukan Pengecekan + Treatment 1';
+
+function initLcrBookingDate() {
+  const agreement = document.getElementById('lcrAgreement');
+  const group = document.getElementById('lcrBookingGroup');
+  const display = document.getElementById('lcrBookingDateDisplay');
+  const native = document.getElementById('lcrBookingDate');
+  const errorBox = document.getElementById('lcrBookingError');
+  const errorText = document.getElementById('lcrBookingErrorText');
+  const btnAlokasi = document.getElementById('btnCekAlokasi');
+  if (!agreement || !group) return;
+
+  // Menolak tanggal yang formatnya benar tapi tidak ada di kalender (contoh 31-02-2026)
+  function isRealDate(iso) {
+    const parts = (iso || '').split('-').map(Number);
+    if (parts.length !== 3) return false;
+    const [year, month, day] = parts;
+    const date = new Date(Date.UTC(year, month - 1, day));
+    return date.getUTCFullYear() === year
+      && date.getUTCMonth() === month - 1
+      && date.getUTCDate() === day;
+  }
+
+  function showError(message) {
+    if (errorText) errorText.textContent = message;
+    if (errorBox) errorBox.classList.add('show');
+    if (display) display.classList.add('is-invalid');
+  }
+
+  function clearError() {
+    if (errorBox) errorBox.classList.remove('show');
+    if (display) display.classList.remove('is-invalid');
+  }
+
+  function resetBooking() {
+    if (display) display.value = '';
+    if (native) native.value = '';
+    clearError();
+  }
+
+  // Tampilkan/sembunyikan field mengikuti pilihan Customer Agreement
+  function syncVisibility() {
+    const visible = agreement.value === LCR_BOOKING_AGREEMENT;
+    group.hidden = !visible;
+    if (!visible) resetBooking();
+  }
+
+  agreement.addEventListener('change', syncVisibility);
+
+  if (display) {
+    // Field hanya menerima angka & otomatis diformat dd-mm-yyyy
+    display.addEventListener('input', () => {
+      const digits = display.value.replace(/[^0-9]/g, '').slice(0, 8);
+      const parts = [digits.slice(0, 2), digits.slice(2, 4), digits.slice(4, 8)].filter(Boolean);
+      display.value = parts.join('-');
+      clearError();
+    });
+
+    display.addEventListener('blur', () => {
+      const iso = displayDateToIso(display.value);
+      if (display.value === '') {
+        resetBooking();
+      } else if (!iso) {
+        showError('Format Tanggal Booking harus dd-mm-yyyy');
+      } else if (!isRealDate(iso)) {
+        if (native) native.value = '';
+        showError('Tanggal Booking tidak valid');
+      } else {
+        if (native) native.value = iso;
+        clearError();
+      }
+    });
+
+    display.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') e.target.blur();
+    });
+  }
+
+  if (native) {
+    native.addEventListener('change', () => {
+      if (display) display.value = isoDateToDisplay(native.value);
+      clearError();
+    });
+  }
+
+  if (btnAlokasi) {
+    btnAlokasi.addEventListener('click', () => {
+      const typed = display ? display.value.trim() : '';
+      const iso = native && native.value ? native.value : displayDateToIso(typed);
+      if (!iso && typed !== '') {
+        showError('Format Tanggal Booking harus dd-mm-yyyy');
+        if (display) display.focus();
+        return;
+      }
+      if (!iso) {
+        showError('Tanggal Booking wajib diisi sebelum cek alokasi');
+        if (display) display.focus();
+        return;
+      }
+      if (!isRealDate(iso)) {
+        showError('Tanggal Booking tidak valid');
+        if (display) display.focus();
+        return;
+      }
+      clearError();
+      showToast(`Mengecek alokasi slot untuk ${isoDateToDisplay(iso)}...`);
+      setTimeout(() => {
+        showToast(`Alokasi tersedia pada ${isoDateToDisplay(iso)} — 3 slot pengecekan rangka`);
+      }, 900);
+    });
+  }
+
+  syncVisibility();
+}
+
 function initCekAjaDuluStep() {
   // Character counters for reason textareas
   const reasonTextareas = document.querySelectorAll('.cek-reason-textarea');

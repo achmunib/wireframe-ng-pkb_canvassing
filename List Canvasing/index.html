@@ -937,10 +937,11 @@
                     <div class="select-pill-wrapper w-100">
                       <select class="form-select-pill carrier-select-pill" id="lcrAgreement">
                         <option value="" disabled hidden></option>
-                        <option value="Tidak Bersedia" selected>Tidak Bersedia</option>
+                        <option value="Bersedia Langsung dilakukan Pengecekan + Treatment 1" selected>Bersedia Langsung dilakukan Pengecekan + Treatment 1</option>
                         <option value="Bersedia Langsung dilakukan Treatment 2">Bersedia Langsung dilakukan Treatment 2</option>
-                        <option value="Bersedia Langsung dilakukan Pengecekan + Treatment 1">Bersedia Langsung dilakukan Pengecekan + Treatment 1</option>
-                        <option value="Bersedia Pengecekan Rangka">Bersedia Pengecekan Rangka</option>
+                        <option value="Bersedia Langsung dilakukan Penggantian">Bersedia Langsung dilakukan Penggantian</option>
+                        <option value="Bersedia Di Cek di Lain Waktu">Bersedia Di Cek di Lain Waktu</option>
+                        <option value="Tidak Bersedia">Tidak Bersedia</option>
                       </select>
                       <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="6 9 12 15 18 9"></polyline>
@@ -980,6 +981,34 @@
                         <polyline points="6 9 12 15 18 9"></polyline>
                       </svg>
                     </div>
+                  </div>
+
+                  <!-- Row 2 (kolom 2): Tanggal Booking — hanya tampil bila Customer Agreement
+                       bernilai "Bersedia Langsung dilakukan Pengecekan + Treatment 1" -->
+                  <div class="form-group lcr-booking-group" id="lcrBookingGroup" hidden>
+                    <label class="form-label" for="lcrBookingDateDisplay">Tanggal Booking</label>
+                    <div class="lcr-booking-row">
+                      <div class="lcr-date-box">
+                        <input type="text" id="lcrBookingDateDisplay" class="carrier-pill-input lcr-date-input" placeholder="dd-mm-yyyy" maxlength="10" autocomplete="off">
+                        <svg class="lcr-date-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                          <line x1="16" y1="2" x2="16" y2="6"></line>
+                          <line x1="8" y1="2" x2="8" y2="6"></line>
+                          <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <input type="date" id="lcrBookingDate" class="lcr-date-native" aria-label="Pilih tanggal booking" tabindex="-1">
+                      </div>
+                      <button type="button" class="btn-outline-primary lcr-btn-alokasi" id="btnCekAlokasi">Cek Alokasi</button>
+                    </div>
+                    <p class="form-error-text" id="lcrBookingError">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                      </svg>
+                      <span id="lcrBookingErrorText">Tanggal Booking wajib diisi sebelum cek alokasi</span>
+                    </p>
                   </div>
                 </div>
               </div>
