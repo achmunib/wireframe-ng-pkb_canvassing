@@ -2437,6 +2437,11 @@ body {
   gap: 20px;
 }
 
+/* Margin bawah card dinetralkan; jarak vertikal diatur oleh banner Voucher KPB */
+.sp-top-grid > .content-card {
+  margin-bottom: 0;
+}
+
 .sp-rec-card,
 .sp-promo-card {
   padding: 20px 24px;
@@ -2581,6 +2586,7 @@ body {
   border: 1.5px dashed #f97316;
   border-radius: 14px;
   padding: 16px 24px;
+  margin: 24px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
