@@ -385,7 +385,7 @@ try {
   await waitFor(`document.getElementById('carrierPhoneDropdown').classList.contains('open')`);
   await shot('list-canvasing-04c-step2-phone-dropdown');
 
-  // 04d — Step 2: Tanggal Booking tersembunyi saat Customer Agreement lain dipilih
+  // 04d — Step 2: Tanggal Booking & Decline Reason tersembunyi saat Customer Agreement lain dipilih
   console.log('04d Step 2 — Tanggal Booking tersembunyi');
   await openPage();
   await evaluate(OPEN_FIRST_PKB);
@@ -395,7 +395,7 @@ try {
   await evaluate(`
     (function () {
       var s = document.getElementById('lcrAgreement');
-      s.value = 'Tidak Bersedia';
+      s.value = 'Bersedia Langsung dilakukan Treatment 2';
       s.dispatchEvent(new Event('change', { bubbles: true }));
       s.closest('.content-card').scrollIntoView({ block: 'center' });
       return true;
@@ -404,6 +404,21 @@ try {
   await waitFor(`document.getElementById('lcrBookingGroup').hidden === true`);
   await shot('list-canvasing-04d-step2-lcr-tanpa-booking');
   await scrollTop();   // kembalikan posisi scroll agar capture berikutnya tidak tergeser
+
+  // 04e — Step 2: Decline Reason tampil saat Customer Agreement "Tidak Bersedia"
+  console.log('04e Step 2 — Decline Reason tampil');
+  await evaluate(`
+    (function () {
+      var s = document.getElementById('lcrAgreement');
+      s.value = 'Tidak Bersedia';
+      s.dispatchEvent(new Event('change', { bubbles: true }));
+      s.closest('.content-card').scrollIntoView({ block: 'center' });
+      return true;
+    })()
+  `);
+  await waitFor(`document.getElementById('lcrDeclineGroup').hidden === false`);
+  await shot('list-canvasing-04e-step2-lcr-decline-reason');
+  await scrollTop();
 
   // 05 — Step 3: Cek Aja Dulu
   console.log('05 Step 3 — Cek Aja Dulu');

@@ -12,11 +12,11 @@ Modul ini dijalankan di dalam **iframe** pada layout shell portal (`index.html`)
 
 # Tampilan Awal — Dashboard List PKB Canvasing
 
- ![Tampilan awal dashboard List PKB Canvasing](attachments/list-canvasing-01-dashboard.png " =1440x1152")
+ ![Tampilan awal dashboard List PKB Canvasing](attachments/list-canvasing-01-dashboard.png " =1440x1176")
 
- ![Empty state saat hasil pencarian tidak ditemukan](attachments/list-canvasing-01b-dashboard-empty.png " =1440x1064")
+ ![Empty state saat hasil pencarian tidak ditemukan](attachments/list-canvasing-01b-dashboard-empty.png " =1440x1088")
 
- ![Filter rentang tanggal aktif](attachments/list-canvasing-01c-dashboard-date-filter.png " =1440x1152")
+ ![Filter rentang tanggal aktif](attachments/list-canvasing-01c-dashboard-date-filter.png " =1440x1176")
 
 | Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
 |--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
@@ -36,11 +36,11 @@ Modul ini dijalankan di dalam **iframe** pada layout shell portal (`index.html`)
 
 # Tampilan Step 1 — Vehicle
 
- ![Step 1 Vehicle](attachments/list-canvasing-02-step1-vehicle.png " =1440x1840")
+ ![Step 1 Vehicle](attachments/list-canvasing-02-step1-vehicle.png " =1440x1864")
 
- ![Empty state saat data kendaraan dihapus](attachments/list-canvasing-02b-step1-empty-vehicle.png " =1440x1702")
+ ![Empty state saat data kendaraan dihapus](attachments/list-canvasing-02b-step1-empty-vehicle.png " =1440x1726")
 
- ![Validasi Kilometer tidak lebih besar dari Kilometer Sebelumnya](attachments/list-canvasing-02c-step1-kilometer-invalid.png " =1440x1887")
+ ![Validasi Kilometer tidak lebih besar dari Kilometer Sebelumnya](attachments/list-canvasing-02c-step1-kilometer-invalid.png " =1440x1911")
 
 **Stepper Wizard** terdiri dari 5 step: **Vehicle** → **Carrier Data** → **Cek Aja Dulu** → **Service & Parts** → **Summary**.
 
@@ -96,13 +96,15 @@ Modal menggunakan satu markup yang sama (`inputDataModal`) dengan dua mode:
 
 # Tampilan Step 2 — Carrier Data
 
- ![Step 2 Carrier Data](attachments/list-canvasing-04-step2-carrier.png " =1440x1735")
+ ![Step 2 Carrier Data](attachments/list-canvasing-04-step2-carrier.png " =1440x1759")
 
- ![Step 2 dengan tab STNK Information aktif](attachments/list-canvasing-04b-step2-stnk.png " =1440x1690")
+ ![Step 2 dengan tab STNK Information aktif](attachments/list-canvasing-04b-step2-stnk.png " =1440x1714")
 
  ![Dropdown nomor telepon tersimpan pada kolom pencarian carrier](attachments/list-canvasing-04c-step2-phone-dropdown.png " =1440x900")
 
  ![Field Tanggal Booking tersembunyi saat Customer Agreement bukan Pengecekan + Treatment 1](attachments/list-canvasing-04d-step2-lcr-tanpa-booking.png " =1440x900")
+
+ ![Field Decline Reason tampil saat Customer Agreement bernilai Tidak Bersedia](attachments/list-canvasing-04e-step2-lcr-decline-reason.png " =1440x900")
 
 | Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
 |--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
@@ -121,8 +123,8 @@ Modal menggunakan satu markup yang sama (`inputDataModal`) dengan dua mode:
 | TXTBOX-STNK Owner Name | TXTBOX | Input nama pemilik sesuai STNK | Terisi otomatis dari data carrier terpilih (contoh: `Achmad Munib`) | No | | | | | |
 | TXTBOX-STNK Police Number | TXTBOX | Input plat nomor sesuai STNK | Terisi otomatis dari data carrier terpilih (contoh: `AG 1000 ELM`)<br><br>**Catatan pengembangan:** belum ada validasi kecocokan dengan **Nomor Polisi** kendaraan pada Step 1 | No | | | | | |
 | TXTBOX-STNK Address | TXTBOX | Input alamat sesuai STNK | Terisi otomatis dari data carrier terpilih (contoh: `Jl. Merdeka No. 45, Jombang`)<br><br>**Catatan pengembangan:** seluruh field pada tab STNK sudah ikut terisi dari dataset carrier, namun **belum tersimpan / tidak dipakai** di step manapun (termasuk Summary) | No | | | | | |
-| LOV-Customer Agreement | LIST OF VIEW | Menampilkan pilihan kesediaan pelanggan terhadap Layanan Cek Rangka (LCR) | Ditandai wajib (`*`) pada label<br><br>Nilai default terpilih: **Bersedia Langsung dilakukan Pengecekan + Treatment 1**<br><br>Pilihan yang tersedia: Bersedia Langsung dilakukan Pengecekan + Treatment 1, Bersedia Langsung dilakukan Treatment 2, Bersedia Langsung dilakukan Penggantian, Bersedia Di Cek di Lain Waktu, Tidak Bersedia<br><br>Ter-cascade ke **Tanggal Booking**: field **DATE-Tanggal Booking** beserta tombol **BUTTON-Cek Alokasi** hanya ditampilkan bila nilai terpilih **Bersedia Langsung dilakukan Pengecekan + Treatment 1**; memilih nilai lain menyembunyikan sekaligus **mengosongkan** field tersebut<br><br>**Catatan pengembangan:** belum ada validasi mandatory di sisi script dan isi dropdown masih hardcode | Yes | | | | | |
-| LOV-Decline Reason | LIST OF VIEW | Menampilkan alasan penolakan layanan cek rangka | Ditandai wajib (`*`) pada label<br><br>Nilai default terpilih: **Motor di rasa masih dalam kondisi baik**<br><br>Pilihan yang tersedia: -, Motor di rasa masih dalam kondisi baik, Tidak Memiliki Waktu, Biaya Tidak Memadai, Lainnya<br><br>**Catatan pengembangan:** field belum **ter-cascade** dengan Customer Agreement — seharusnya hanya wajib/aktif saat pelanggan memilih **Tidak Bersedia**. Untuk pilihan **Lainnya** juga belum ada field keterangan bebas | Yes | | | | | |
+| LOV-Customer Agreement | LIST OF VIEW | Menampilkan pilihan kesediaan pelanggan terhadap Layanan Cek Rangka (LCR) | Ditandai wajib (`*`) pada label<br><br>Nilai default terpilih: **Bersedia Langsung dilakukan Pengecekan + Treatment 1**<br><br>Pilihan yang tersedia: Bersedia Langsung dilakukan Pengecekan + Treatment 1, Bersedia Langsung dilakukan Treatment 2, Bersedia Langsung dilakukan Penggantian, Bersedia Di Cek di Lain Waktu, Tidak Bersedia<br><br>Ter-cascade ke **Tanggal Booking**: field **DATE-Tanggal Booking** beserta tombol **BUTTON-Cek Alokasi** hanya ditampilkan bila nilai terpilih **Bersedia Langsung dilakukan Pengecekan + Treatment 1**; memilih nilai lain menyembunyikan sekaligus **mengosongkan** field tersebut<br><br>Ter-cascade ke **Decline Reason**: field **LOV-Decline Reason** hanya ditampilkan bila nilai terpilih **Tidak Bersedia**; memilih nilai lain menyembunyikan sekaligus **mengosongkan** field tersebut<br><br>**Catatan pengembangan:** belum ada validasi mandatory di sisi script dan isi dropdown masih hardcode | Yes | | | | | |
+| LOV-Decline Reason | LIST OF VIEW | Menampilkan alasan penolakan layanan cek rangka | Field bersifat **kondisional** — hanya tampil saat **Customer Agreement** bernilai **Tidak Bersedia**, dan otomatis disembunyikan + dikosongkan saat pilihan diganti ke nilai lain<br><br>Ditandai wajib (`*`) pada label<br><br>Saat pertama tampil belum ada nilai terpilih (kosong)<br><br>Pilihan yang tersedia: -, Motor di rasa masih dalam kondisi baik, Tidak Memiliki Waktu, Biaya Tidak Memadai, Lainnya<br><br>**Catatan pengembangan:** belum ada validasi mandatory di sisi script saat field tampil, dan untuk pilihan **Lainnya** belum ada field keterangan bebas | Yes | | | | | |
 | LOV-Inspection Result | LIST OF VIEW | Menampilkan hasil pemeriksaan rangka | Ditandai wajib (`*`) pada label<br><br>Nilai default terpilih: **-**<br><br>Pilihan yang tersedia: -, Butuh dilakukan Treatment, Butuh dilakukan Penggantian, Kondisi Rangka Baik / Normal<br><br>**Catatan pengembangan:** field belum ter-cascade dengan Customer Agreement — seharusnya baru dapat diisi bila pelanggan bersedia dilakukan pengecekan | Yes | | | | | |
 | DATE-Tanggal Booking | DATE PICKER | Input tanggal booking pengecekan rangka | Field bersifat **kondisional** — hanya tampil saat **Customer Agreement** bernilai **Bersedia Langsung dilakukan Pengecekan + Treatment 1**, dan otomatis disembunyikan + dikosongkan saat pilihan diganti<br><br>Placeholder: *"dd-mm-yyyy"*<br><br>Terdiri dari input teks berformat **DD-MM-YYYY** (hanya menerima angka, tanda hubung ditambahkan otomatis) dan ikon kalender yang membuka **date picker** native browser; kedua input saling disinkronkan<br><br>Saat field kehilangan fokus: format tidak lengkap memunculkan pesan **"Format Tanggal Booking harus dd-mm-yyyy"**, dan tanggal yang tidak ada di kalender (contoh `31-02-2026`) memunculkan pesan **"Tanggal Booking tidak valid"** — pada kedua kondisi border field berubah merah<br><br>Mengosongkan field akan menghapus pesan error beserta nilai date picker<br><br>**Catatan pengembangan:** belum ada pembatasan tanggal minimal (masih bisa memilih tanggal lampau) dan nilainya **belum dipakai** pada step manapun (termasuk Summary) | No | | | | | |
 | BUTTON-Cek Alokasi | BUTTON | Mengecek ketersediaan slot booking pada tanggal terpilih | Tombol tampil bersamaan dengan field **Tanggal Booking** (kondisional dari Customer Agreement)<br><br>Bila Tanggal Booking belum diisi: muncul pesan **"Tanggal Booking wajib diisi sebelum cek alokasi"**, border field berubah merah, dan fokus dipindah ke field tersebut<br><br>Bila isi field belum lengkap / bukan tanggal yang valid: aksi dibatalkan dengan pesan **"Format Tanggal Booking harus dd-mm-yyyy"** atau **"Tanggal Booking tidak valid"**<br><br>Bila sudah terisi: muncul toast **"Mengecek alokasi slot untuk `<tanggal>`..."** lalu toast **"Alokasi tersedia pada `<tanggal>` — 3 slot pengecekan rangka"**<br><br>**Catatan pengembangan:** hasil cek alokasi masih **dummy** (jumlah slot hardcode) — perlu di-binding ke API alokasi/kuota booking bengkel | | | | | | |
@@ -132,7 +134,7 @@ Modal menggunakan satu markup yang sama (`inputDataModal`) dengan dua mode:
 
 # Tampilan Step 3 — Cek Aja Dulu
 
- ![Step 3 Cek Aja Dulu](attachments/list-canvasing-05-step3-cek-aja-dulu.png " =1440x1150")
+ ![Step 3 Cek Aja Dulu](attachments/list-canvasing-05-step3-cek-aja-dulu.png " =1440x1174")
 
 | Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
 |--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
@@ -149,7 +151,7 @@ Modal menggunakan satu markup yang sama (`inputDataModal`) dengan dua mode:
 
 # Tampilan Step 4 — Service & Parts
 
- ![Step 4 Service & Parts](attachments/list-canvasing-06-step4-service-parts.png " =1440x2263")
+ ![Step 4 Service & Parts](attachments/list-canvasing-06-step4-service-parts.png " =1440x2287")
 
  ![Peringatan stok dan dropdown Source Request pada Step 4](attachments/list-canvasing-06b-step4-source-request.png " =1440x900")
 
@@ -186,7 +188,7 @@ Modal menggunakan satu markup yang sama (`inputDataModal`) dengan dua mode:
 
 # Tampilan Step 5 — Summary
 
- ![Step 5 Summary](attachments/list-canvasing-07-step5-summary.png " =1440x1164")
+ ![Step 5 Summary](attachments/list-canvasing-07-step5-summary.png " =1440x1188")
 
 | Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
 |--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|

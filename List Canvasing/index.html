@@ -949,13 +949,14 @@
                     </div>
                   </div>
 
-                  <div class="form-group">
-                    <label class="form-label">Decline Reason <span class="required-star">*</span></label>
+                  <!-- Decline Reason — hanya tampil bila Customer Agreement bernilai "Tidak Bersedia" -->
+                  <div class="form-group lcr-decline-group" id="lcrDeclineGroup" hidden>
+                    <label class="form-label" for="lcrDeclineReason">Decline Reason <span class="required-star">*</span></label>
                     <div class="select-pill-wrapper w-100">
                       <select class="form-select-pill carrier-select-pill" id="lcrDeclineReason">
-                        <option value="" disabled hidden></option>
+                        <option value="" disabled hidden selected></option>
                         <option value="-">-</option>
-                        <option value="Motor di rasa masih dalam kondisi baik" selected>Motor di rasa masih dalam kondisi baik</option>
+                        <option value="Motor di rasa masih dalam kondisi baik">Motor di rasa masih dalam kondisi baik</option>
                         <option value="Tidak Memiliki Waktu">Tidak Memiliki Waktu</option>
                         <option value="Biaya Tidak Memadai">Biaya Tidak Memadai</option>
                         <option value="Lainnya">Lainnya</option>
@@ -967,8 +968,8 @@
                   </div>
 
                   <!-- Row 2: Inspection Result -->
-                  <div class="form-group">
-                    <label class="form-label">Inspection Result <span class="required-star">*</span></label>
+                  <div class="form-group lcr-inspection-group">
+                    <label class="form-label" for="lcrInspectionResult">Inspection Result <span class="required-star">*</span></label>
                     <div class="select-pill-wrapper w-100">
                       <select class="form-select-pill carrier-select-pill" id="lcrInspectionResult">
                         <option value="" disabled hidden></option>

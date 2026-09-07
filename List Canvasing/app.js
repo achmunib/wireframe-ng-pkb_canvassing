@@ -1476,8 +1476,9 @@ function initLangSwitcher() {
 }
 
 // Cek Aja Dulu (Step 3) Handlers
-// Layanan Cek Rangka — Tanggal Booking tampil kondisional dari Customer Agreement
+// Layanan Cek Rangka — Tanggal Booking & Decline Reason tampil kondisional dari Customer Agreement
 const LCR_BOOKING_AGREEMENT = 'Bersedia Langsung dilakukan Pengecekan + Treatment 1';
+const LCR_DECLINE_AGREEMENT = 'Tidak Bersedia';
 
 function initLcrBookingDate() {
   const agreement = document.getElementById('lcrAgreement');
@@ -1487,6 +1488,8 @@ function initLcrBookingDate() {
   const errorBox = document.getElementById('lcrBookingError');
   const errorText = document.getElementById('lcrBookingErrorText');
   const btnAlokasi = document.getElementById('btnCekAlokasi');
+  const declineGroup = document.getElementById('lcrDeclineGroup');
+  const declineSelect = document.getElementById('lcrDeclineReason');
   if (!agreement || !group) return;
 
   // Menolak tanggal yang formatnya benar tapi tidak ada di kalender (contoh 31-02-2026)
@@ -1522,6 +1525,11 @@ function initLcrBookingDate() {
     const visible = agreement.value === LCR_BOOKING_AGREEMENT;
     group.hidden = !visible;
     if (!visible) resetBooking();
+
+    // Decline Reason hanya relevan bila customer menolak layanan
+    const declineVisible = agreement.value === LCR_DECLINE_AGREEMENT;
+    if (declineGroup) declineGroup.hidden = !declineVisible;
+    if (declineSelect && !declineVisible) declineSelect.value = '';
   }
 
   agreement.addEventListener('change', syncVisibility);

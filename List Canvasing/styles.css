@@ -2227,6 +2227,17 @@ body {
   box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
 }
 
+/* Decline Reason (muncul kondisional dari Customer Agreement = "Tidak Bersedia") */
+.lcr-decline-group[hidden] {
+  display: none;
+}
+
+/* Inspection Result selalu membuka baris baru agar layout tetap rapi
+   saat Decline Reason disembunyikan */
+.lcr-inspection-group {
+  grid-column: 1;
+}
+
 /* Tanggal Booking (muncul kondisional dari Customer Agreement) */
 .lcr-booking-group[hidden] {
   display: none;
