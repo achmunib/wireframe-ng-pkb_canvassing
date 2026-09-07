@@ -1,0 +1,9 @@
+# Dev server lokal (lihat RUNNING.md) — tidak dipakai Vercel
+serve.bun.ts
+serve.node.mjs
+
+# Dokumentasi & instruksi repo — tidak disajikan ke publik
+RUNNING.md
+CLAUDE.md
+docs/
+.claude/
