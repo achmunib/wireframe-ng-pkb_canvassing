@@ -12,11 +12,11 @@ Modul ini dijalankan di dalam **iframe** pada layout shell portal (`index.html`)
 
 # Tampilan Awal — Dashboard List PKB Canvasing
 
- ![Tampilan awal dashboard List PKB Canvasing](attachments/list-canvasing-01-dashboard.png " =1440x1176")
+ ![Tampilan awal dashboard List PKB Canvasing](attachments/list-canvasing-01-dashboard.png " =1440x1152")
 
- ![Empty state saat hasil pencarian tidak ditemukan](attachments/list-canvasing-01b-dashboard-empty.png " =1440x1088")
+ ![Empty state saat hasil pencarian tidak ditemukan](attachments/list-canvasing-01b-dashboard-empty.png " =1440x1064")
 
- ![Filter rentang tanggal aktif](attachments/list-canvasing-01c-dashboard-date-filter.png " =1440x1176")
+ ![Filter rentang tanggal aktif](attachments/list-canvasing-01c-dashboard-date-filter.png " =1440x1152")
 
 | Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
 |--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
@@ -36,11 +36,11 @@ Modul ini dijalankan di dalam **iframe** pada layout shell portal (`index.html`)
 
 # Tampilan Step 1 — Vehicle
 
- ![Step 1 Vehicle](attachments/list-canvasing-02-step1-vehicle.png " =1440x1864")
+ ![Step 1 Vehicle](attachments/list-canvasing-02-step1-vehicle.png " =1440x1840")
 
- ![Empty state saat data kendaraan dihapus](attachments/list-canvasing-02b-step1-empty-vehicle.png " =1440x1726")
+ ![Empty state saat data kendaraan dihapus](attachments/list-canvasing-02b-step1-empty-vehicle.png " =1440x1702")
 
- ![Validasi Kilometer tidak lebih besar dari Kilometer Sebelumnya](attachments/list-canvasing-02c-step1-kilometer-invalid.png " =1440x1911")
+ ![Validasi Kilometer tidak lebih besar dari Kilometer Sebelumnya](attachments/list-canvasing-02c-step1-kilometer-invalid.png " =1440x1887")
 
 **Stepper Wizard** terdiri dari 5 step: **Vehicle** → **Carrier Data** → **Cek Aja Dulu** → **Service & Parts** → **Summary**.
 
@@ -96,9 +96,9 @@ Modal menggunakan satu markup yang sama (`inputDataModal`) dengan dua mode:
 
 # Tampilan Step 2 — Carrier Data
 
- ![Step 2 Carrier Data](attachments/list-canvasing-04-step2-carrier.png " =1440x1759")
+ ![Step 2 Carrier Data](attachments/list-canvasing-04-step2-carrier.png " =1440x1735")
 
- ![Step 2 dengan tab STNK Information aktif](attachments/list-canvasing-04b-step2-stnk.png " =1440x1714")
+ ![Step 2 dengan tab STNK Information aktif](attachments/list-canvasing-04b-step2-stnk.png " =1440x1690")
 
  ![Dropdown nomor telepon tersimpan pada kolom pencarian carrier](attachments/list-canvasing-04c-step2-phone-dropdown.png " =1440x900")
 
@@ -141,8 +141,8 @@ Modal menggunakan satu markup yang sama (`inputDataModal`) dengan dua mode:
 | Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
 |--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
 |              |                |          |                 |           |     |                   |        |            |            |
-| LABEL-Judul Card | LABEL | Menampilkan judul card pada Step 3 | **Catatan pengembangan / Bug:** judul card masih tertulis **"Carrier Information"** (sisa salin dari Step 2), padahal isinya adalah tabel pemeriksaan part **Cek Aja Dulu**. Judul perlu diperbaiki | | | | | | |
-| TABLE-Cek Aja Dulu | TABLE | Menampilkan daftar part yang diperiksa beserta kondisi dan rekomendasi penggantian | Kolom yang ditampilkan berurutan: **Product Pict**, **Part Group Name**, **Condition**, **Replacement (jika diperlukan)**, **Reason**<br><br>Saat ini tersedia 4 baris pemeriksaan: **Oli Mesin**, **Kampas Rem Depan**, **Kampas Rem Depan** (gambar *brake shoe*), dan satu baris dengan gambar **Busi**<br><br>**Catatan pengembangan / Bug:** <br> 1. Baris ke-3 menggunakan nama **"Kampas Rem Depan"** padahal gambarnya *brake shoe* — seharusnya **Kampas Rem Belakang** <br> 2. Baris ke-4 (Busi) memiliki **Part Group Name kosong** <br> 3. Seluruh baris masih hardcode di HTML; perlu di-binding ke master item pemeriksaan per tipe kendaraan | | | | | | |
+| LABEL-Judul Card | LABEL | Menampilkan judul card pada Step 3 | Judul card: **"Cek Aja Dulu"**, dengan ikon *clipboard-check* yang mewakili isi card (sebelumnya keliru memakai judul **"Carrier Information"** beserta ikon orang, sisa salin dari Step 2) | | | | | | |
+| TABLE-Cek Aja Dulu | TABLE | Menampilkan daftar part yang diperiksa beserta kondisi dan rekomendasi penggantian | Kolom yang ditampilkan berurutan: **Product Pict**, **Part Group Name**, **Condition**, **Replacement (jika diperlukan)**, **Reason**<br><br>Saat ini tersedia 4 baris pemeriksaan: **Oli Mesin**, **Kampas Rem Depan**, **Kampas Rem Belakang** (gambar *brake shoe*), dan **Busi**<br><br>Setiap baris memiliki penanda nomor (`data-row`) yang dipakai pada pesan validasi, contoh: *"Baris 1 — Oli Mesin: Condition wajib dipilih"*<br><br>**Catatan pengembangan:** seluruh baris masih hardcode di HTML; perlu di-binding ke master item pemeriksaan per tipe kendaraan | | | | | | |
 | IMAGE-Product Pict | IMAGE | Menampilkan foto part yang diperiksa | Gambar diambil dari folder `assets/` modul (contoh: `oil_mpx2.jpg`, `brake_pad_front.jpg`, `brake_shoe.jpg`, `spark_plugs.jpg`)<br><br>**Catatan pengembangan:** gambar masih berupa asset statis lokal; perlu ditentukan sumber gambar dari master part | | | | | | |
 | RADIO-Condition | RADIO BUTTON | Menandai kondisi part hasil pemeriksaan | Pilihan: **Ok** dan **Not Ok** (susunan vertikal)<br><br>**Catatan pengembangan:** nilai default seluruh baris adalah **Not Ok** — perlu dikonfirmasi apakah kondisi awal seharusnya kosong (belum diperiksa) agar hasil pemeriksaan tidak salah terekam | Yes | | | | | |
 | RADIO-Replacement | RADIO BUTTON | Menandai apakah part perlu diganti | Pilihan: **Yes** dan **No** (susunan horizontal)<br><br>Nilai default seluruh baris adalah **No** | Yes | | | | | |
@@ -190,7 +190,7 @@ Modal menggunakan satu markup yang sama (`inputDataModal`) dengan dua mode:
 
 # Tampilan Step 5 — Summary
 
- ![Step 5 Summary](attachments/list-canvasing-07-step5-summary.png " =1440x1188")
+ ![Step 5 Summary](attachments/list-canvasing-07-step5-summary.png " =1440x1164")
 
 | Element Code | Component Type | Function | Behavior & Rule | Mandatory | API | Endpoint/Navigate | Method | Status QCC | Status Dev |
 |--------------|----------------|----------|-----------------|-----------|-----|-------------------|--------|------------|------------|
@@ -236,6 +236,6 @@ Modal menggunakan satu markup yang sama (`inputDataModal`) dengan dua mode:
 | 5 | Step 4 — Service & Parts | Aksi Add / Use / Hapus item hanya menampilkan toast tanpa mengubah daftar, dan Ringkasan Transaksi tidak pernah dihitung ulang | Nilai transaksi tidak dapat dipertanggungjawabkan |
 | 6 | Step 2 — Carrier | Pencarian carrier sudah memakai dataset dummy dan sudah menangani kondisi *tidak ditemukan*, namun pencocokan masih **partial match** pada nomor telepon / nama / plat sehingga kata kunci pendek langsung mengembalikan data pertama | Data pengantar berpotensi salah pilih; pencarian by phone sebaiknya exact match |
 | 7 | Step 2 — Mode PKB Baru | Mode **PKB Baru** tetap memuat carrier dummy pertama (Achmad Munib) alih-alih form carrier kosong | Data pengantar pada PKB baru berpotensi terisi milik orang lain |
-| 8 | Step 3 — Cek Aja Dulu | Judul card masih *"Carrier Information"*, satu baris tanpa Part Group Name, satu baris salah nama, dan seluruh Condition default **Not Ok** | Hasil pemeriksaan berpotensi terekam salah |
+| 8 | Step 3 — Cek Aja Dulu | Seluruh temuan sudah diperbaiki: judul card & ikon, nama part baris 3, Part Group Name baris 4, default Condition, dan validasi antar kolom | — |
 | 9 | Step 4 & 5 — Format Nilai | Input nominal bertipe text tanpa formatter serta format mata uang tidak seragam antar step | Risiko salah input dan salah baca nominal |
 | 10 | Dashboard | Belum ada chip statistik yang bertanda aktif saat halaman dibuka, dan data dummy bertanggal Agustus 2024 sementara subtitle menyebut tanggal hari ini | Filter status yang sedang berlaku tidak terlihat dan konteks tanggal dashboard membingungkan |
