@@ -228,6 +228,96 @@ const SET_FUEL_FULL = `
   })()
 `;
 
+/**
+ * Mengisi tabel "Cek Aja Dulu" (Step 3) dengan kombinasi yang valid.
+ * Sejak Step 3 divalidasi, perpindahan ke Step 4 diblokir bila masih ada baris
+ * kosong — pengisian ini dijalankan SETELAH screenshot Step 3 diambil agar
+ * gambar tetap memperlihatkan kondisi awal halaman.
+ */
+/**
+ * Menyiapkan kondisi error pada tabel "Cek Aja Dulu" lalu memicu validasi,
+ * agar screenshot memperlihatkan seluruh jenis pesan error sekaligus:
+ * Condition kosong, Part Code kosong, dan Reason kurang dari 10 karakter.
+ */
+const TRIGGER_CEK_AJA_DULU_ERRORS = `
+  (function () {
+    var rows = document.querySelectorAll('.cek-row');
+    var pick = function (row, name, value) {
+      var el = Array.prototype.find.call(
+        row.querySelectorAll('input[name^="' + name + '_"]'),
+        function (r) { return r.value === value; });
+      if (el && !el.disabled) el.click();
+    };
+    // Baris 1 & 4 dibiarkan kosong -> error Condition
+    pick(rows[1], 'cond', 'Not Ok');
+    pick(rows[1], 'rep', 'Yes');          // Part Code dibiarkan kosong
+    pick(rows[2], 'cond', 'Not Ok');
+    pick(rows[2], 'rep', 'No');
+    var ta = rows[2].querySelector('.cek-reason-textarea');
+    ta.value = 'habis';                   // kurang dari 10 karakter
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    goToStep(4);                          // diblokir, memunculkan seluruh error
+    return true;
+  })()
+`;
+
+/**
+ * Mengisi tabel Cek Aja Dulu dengan kombinasi Ok / Not Ok lalu menekan tombol
+ * "Save & Print CAD" sehingga lembar Honda Safety Check Sheet terbuka.
+ * Dijalankan paling akhir karena aksi simpan mengembalikan tampilan ke dashboard.
+ */
+const OPEN_CAD_REPORT = `
+  (function () {
+    var rows = document.querySelectorAll('.cek-row');
+    var pick = function (row, name, value) {
+      var el = Array.prototype.find.call(
+        row.querySelectorAll('input[name^="' + name + '_"]'),
+        function (r) { return r.value === value; });
+      if (el && !el.disabled) el.click();
+    };
+    // Dua baris pertama Not Ok agar "Parts Not Ok" pada kop bernilai 2
+    pick(rows[0], 'cond', 'Not Ok');
+    pick(rows[0], 'rep', 'Yes');
+    var sel = rows[0].querySelector('.cek-select-pill');
+    sel.selectedIndex = 1;
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+    pick(rows[1], 'cond', 'Not Ok');
+    pick(rows[1], 'rep', 'No');
+    var ta = rows[1].querySelector('.cek-reason-textarea');
+    ta.value = 'Stok kampas rem belum tersedia';
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+    for (var i = 2; i < rows.length; i++) pick(rows[i], 'cond', 'Ok');
+    document.getElementById('btnSavePrint').click();
+    return true;
+  })()
+`;
+
+const FILL_CEK_AJA_DULU = `
+  (function () {
+    var pick = function (row, name, value) {
+      var el = Array.prototype.find.call(
+        row.querySelectorAll('input[name^="' + name + '_"]'),
+        function (r) { return r.value === value; });
+      if (el && !el.disabled) el.click();
+    };
+    document.querySelectorAll('.cek-row').forEach(function (row, i) {
+      pick(row, 'cond', 'Not Ok');
+      if (i % 2 === 0) {
+        pick(row, 'rep', 'Yes');
+        var sel = row.querySelector('.cek-select-pill');
+        sel.selectedIndex = 1;
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      } else {
+        pick(row, 'rep', 'No');
+        var ta = row.querySelector('.cek-reason-textarea');
+        ta.value = 'Stok part belum tersedia di bengkel';
+        ta.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
+    return true;
+  })()
+`;
+
 // ---------------------------------------------------------------------------
 // Proses utama
 // ---------------------------------------------------------------------------
@@ -458,6 +548,16 @@ try {
   await waitFor(`document.getElementById('stepPane5').style.display === 'block'`);
   await scrollTop();
   await shot('list-canvasing-07-step5-summary', { fullPage: true });
+
+  // 08 — CAD Report (Honda Safety Check Sheet) dari tombol Save & Print CAD
+  console.log('08 CAD Report — Honda Safety Check Sheet');
+  await openPage();
+  await evaluate(OPEN_FIRST_PKB);
+  await evaluate(`goToStep(3)`);
+  await waitFor(`document.getElementById('stepPane3').style.display === 'block'`);
+  await evaluate(OPEN_CAD_REPORT);
+  await waitFor(`document.getElementById('cadReportOverlay').classList.contains('is-open')`);
+  await shot('list-canvasing-08-cad-report');
 
   console.log('\nSelesai. Perbarui atribut ukuran pada list-canvasing.md');
   console.log('bila dimensi yang tercetak di atas berubah.');

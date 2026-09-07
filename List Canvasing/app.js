@@ -241,6 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCarrierStep();
   initLcrBookingDate();
   initCekAjaDuluStep();
+  initCadReport();
   initServiceAndPartsStep();
   initSummaryStep();
   initModal();
@@ -1943,10 +1944,9 @@ function initCekAjaDuluStep() {
   const btnSavePrint = document.getElementById('btnSavePrint');
   if (btnSavePrint) {
     btnSavePrint.addEventListener('click', () => {
-      showToast('Menyimpan data dan mencetak PKB...');
-      setTimeout(() => {
-        showToast('PKB #PKB-2026-00892 berhasil disimpan & diteruskan ke sistem!');
-      }, 1000);
+      if (!window.validateCekAjaDulu()) return;
+      openCadReport();
+      savePkbFromWizard(3, { keepOnStep: true });
     });
   }
 }
@@ -2175,6 +2175,164 @@ function initSummaryStep() {
 }
 
 // Toast Helper
+// ---------------------------------------------------------------------------
+// CAD Report — Honda Safety Check Sheet
+// ---------------------------------------------------------------------------
+// Lembar hasil pemeriksaan "Cek Aja Dulu" yang muncul saat tombol
+// "Save & Print CAD" pada Step 3 ditekan. Isinya dibangun dari baris tabel
+// Cek Aja Dulu, jadi jumlah item mengikuti master item pemeriksaan.
+
+/** Identitas dealer pada kop lembar (masih statis, menunggu master dealer). */
+const CAD_DEALER = {
+  name: 'MPM Motor',
+  address: 'Jl. Simpang Dukuh',
+  phone: '(031) 5356862',
+};
+
+/** Jumlah kolom grid item pada lembar report. */
+const CAD_GRID_COLUMNS = 4;
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/** Tanggal cetak bergaya "7 August 2026" sesuai format lembar Honda. */
+function cadPrintDate() {
+  return new Date().toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'long', year: 'numeric',
+  });
+}
+
+/** Membaca hasil pemeriksaan dari tabel Cek Aja Dulu. */
+function collectCadItems() {
+  return Array.from(document.querySelectorAll('.cek-row')).map(row => {
+    const nameEl = row.querySelector('.cek-group-name');
+    const picked = Array.from(row.querySelectorAll('input[name^="cond_"]')).find(r => r.checked);
+    return {
+      name: ((nameEl && nameEl.textContent) || '').trim().toUpperCase(),
+      status: picked ? picked.value.toUpperCase() : '-',
+    };
+  });
+}
+
+function buildCadSheet() {
+  const items = collectCadItems();
+  const notOk = items.filter(i => i.status === 'NOT OK').length;
+  const carrierName = `${textOf('carrierFirstName')} ${textOf('carrierLastName')}`.trim() || '-';
+  const phone = textOf('carrierInputPhone', '-');
+  const vehicleBox = document.getElementById('vehicleInfoCard');
+  const hasVehicle = vehicleBox && vehicleBox.style.display !== 'none';
+  const plate = hasVehicle ? textOf('dispPlate', '-') : '-';
+  const model = hasVehicle ? textOf('dispModel', '-') : '-';
+  const date = cadPrintDate();
+
+  // Lengkapi baris grid terakhir dengan sel kosong agar tabel tetap rata.
+  const filler = (CAD_GRID_COLUMNS - (items.length % CAD_GRID_COLUMNS)) % CAD_GRID_COLUMNS;
+  const cells = items.map(item => `
+        <div class="cad-cell">
+          <div class="cad-cell-name">${escapeHtml(item.name)}</div>
+          <div class="cad-cell-status">${escapeHtml(item.status)}</div>
+          <div class="cad-cell-price">Estimasi Harga : Rp0</div>
+        </div>`).join('');
+  const emptyCells = Array.from({ length: filler }, () => `
+        <div class="cad-cell cad-cell--empty">
+          <div class="cad-cell-name"></div>
+        </div>`).join('');
+
+  const notes = items.map(item =>
+    `<li>${escapeHtml(item.name)} : ${escapeHtml(item.status)}</li>`).join('');
+
+  return `
+      <div class="cad-meta">
+        <div class="cad-meta-col">
+          <div class="cad-meta-row"><span class="cad-meta-label">Nama</span><span>:</span><span>${escapeHtml(carrierName)}</span></div>
+          <div class="cad-meta-row"><span class="cad-meta-label">No. HP</span><span>:</span><span>${escapeHtml(phone)}</span></div>
+        </div>
+        <div class="cad-meta-col cad-meta-col--center">
+          <div class="cad-meta-row"><span class="cad-meta-label">Nopol</span><span>:</span><span>${escapeHtml(plate)}</span></div>
+          <div class="cad-meta-row"><span class="cad-meta-label">Tipe Motor</span><span>:</span><span>${escapeHtml(model)}</span></div>
+        </div>
+        <div class="cad-meta-col cad-meta-col--right">
+          <div class="cad-meta-row"><span class="cad-meta-label">Tanggal</span><span>:</span><span>${escapeHtml(date)}</span></div>
+          <div class="cad-meta-row"><span class="cad-meta-label">Parts Not Ok</span><span>:</span><span>${notOk}</span></div>
+        </div>
+      </div>
+
+      <div class="cad-dashed"></div>
+
+      <div class="cad-title-band">
+        <span class="cad-title-bar"></span>
+        <h1 class="cad-title">HONDA SAFETY CHECK SHEET</h1>
+        <span class="cad-title-bar"></span>
+      </div>
+
+      <div class="cad-dealer">
+        <div>Nama&nbsp; : ${escapeHtml(CAD_DEALER.name)}</div>
+        <div>Alamat&nbsp; : ${escapeHtml(CAD_DEALER.address)}</div>
+        <div>Telp&nbsp; : ${escapeHtml(CAD_DEALER.phone)}</div>
+      </div>
+
+      <div class="cad-customer-bar">
+        <span>Nama : ${escapeHtml(carrierName)}</span>
+        <span>Nopol : ${escapeHtml(plate)}</span>
+        <span>Tanggal : ${escapeHtml(date)}</span>
+      </div>
+
+      <div class="cad-grid">${cells}${emptyCells}
+      </div>
+
+      <div class="cad-footer">
+        <div class="cad-notes">
+          <div class="cad-notes-title">Catatan Teknisi:</div>
+          <ul class="cad-notes-list">${notes}</ul>
+        </div>
+        <div class="cad-sign">
+          <div class="cad-sign-bar">Salam Satu Hati</div>
+          <div class="cad-sign-body">
+            <span>TTD</span>
+            <span class="cad-sign-line"></span>
+          </div>
+        </div>
+      </div>`;
+}
+
+/** Membangun ulang isi lembar lalu menampilkan overlay report. */
+function openCadReport() {
+  const overlay = document.getElementById('cadReportOverlay');
+  const sheet = document.getElementById('cadSheet');
+  if (!overlay || !sheet) return;
+
+  sheet.innerHTML = buildCadSheet();
+  overlay.style.display = 'flex';
+  overlay.classList.add('is-open');
+}
+
+function closeCadReport() {
+  const overlay = document.getElementById('cadReportOverlay');
+  if (!overlay) return;
+  overlay.style.display = 'none';
+  overlay.classList.remove('is-open');
+}
+
+function initCadReport() {
+  const btnPrint = document.getElementById('btnCadPrint');
+  const btnClose = document.getElementById('btnCadClose');
+
+  if (btnPrint) btnPrint.addEventListener('click', () => window.print());
+  if (btnClose) btnClose.addEventListener('click', closeCadReport);
+
+  document.addEventListener('keydown', (e) => {
+    const overlay = document.getElementById('cadReportOverlay');
+    if (e.key === 'Escape' && overlay && overlay.classList.contains('is-open')) {
+      closeCadReport();
+    }
+  });
+}
+
 function showToast(msg) {
   const toast = document.getElementById('toastNotification');
   toast.textContent = msg;

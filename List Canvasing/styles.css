@@ -5,6 +5,10 @@
   --primary-light: #fff7ed;
   --primary-border: #fdba74;
   --accent-orange: #f97316;
+
+  /* Warna lembar CAD Report (Honda Safety Check Sheet) */
+  --cad-red: #e30613;
+  --cad-blue: #1f3f9e;
   
   --bg-page: #f1f3f5;
   --bg-card: #ffffff;
@@ -1754,6 +1758,348 @@ body {
 .cek-error-text svg {
   flex-shrink: 0;
   margin-top: 1px;
+}
+
+/* ==========================================================================
+   CAD Report — Honda Safety Check Sheet
+   Dibuka dari tombol "Save & Print CAD" pada Step 3 (Cek Aja Dulu).
+   ========================================================================== */
+.cad-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.cad-toolbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 56px;
+  padding: 0 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cad-toolbar-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.cad-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cad-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 18px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, background 0.15s ease;
+}
+
+.cad-btn-print {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.cad-btn-print:hover {
+  filter: brightness(0.94);
+}
+
+.cad-btn-close {
+  background: #eef2f7;
+  color: #475569;
+}
+
+.cad-btn-close:hover {
+  background: #e2e8f0;
+}
+
+.cad-sheet-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+}
+
+.cad-sheet {
+  width: 1180px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 18px 20px 24px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.28);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  color: #111111;
+}
+
+/* --- Baris identitas paling atas ----------------------------------------- */
+.cad-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.cad-meta-col--center {
+  justify-self: center;
+}
+
+.cad-meta-col--right {
+  justify-self: end;
+}
+
+.cad-meta-row {
+  display: flex;
+  gap: 6px;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.cad-meta-label {
+  min-width: 62px;
+  font-weight: 400;
+}
+
+.cad-meta-col--center .cad-meta-label {
+  min-width: 70px;
+  font-weight: 700;
+}
+
+.cad-meta-col--right .cad-meta-label {
+  min-width: 78px;
+  font-weight: 700;
+}
+
+.cad-dashed {
+  border-top: 1px dashed #555555;
+  margin: 6px 0 12px;
+}
+
+/* --- Judul --------------------------------------------------------------- */
+.cad-title-band {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.cad-title-bar {
+  flex: 1;
+  height: 22px;
+  background: var(--cad-red);
+}
+
+.cad-title {
+  margin: 0;
+  padding: 0 14px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #111111;
+}
+
+/* --- Identitas dealer ---------------------------------------------------- */
+.cad-dealer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.cad-dealer > :nth-child(2) {
+  justify-self: center;
+}
+
+.cad-dealer > :nth-child(3) {
+  justify-self: end;
+}
+
+/* --- Bar identitas pelanggan --------------------------------------------- */
+.cad-customer-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  background: var(--cad-red);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.cad-customer-bar > :nth-child(2) {
+  justify-self: center;
+}
+
+.cad-customer-bar > :nth-child(3) {
+  justify-self: end;
+}
+
+/* --- Grid item pemeriksaan ----------------------------------------------- */
+.cad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-left: 1px solid #111111;
+  border-top: 1px solid #111111;
+}
+
+.cad-cell {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #111111;
+  border-bottom: 1px solid #111111;
+}
+
+.cad-cell-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 6px 10px;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.cad-cell-status {
+  padding: 3px 6px;
+  background: var(--cad-red);
+  color: #ffffff;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.cad-cell-price {
+  padding: 3px 6px;
+  font-size: 9px;
+  color: #111111;
+}
+
+.cad-cell--empty .cad-cell-name {
+  min-height: 52px;
+}
+
+/* --- Catatan teknisi & tanda tangan -------------------------------------- */
+.cad-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.cad-notes {
+  padding: 8px 10px;
+  border: 1px solid var(--cad-red);
+}
+
+.cad-notes-title {
+  margin-bottom: 6px;
+  font-weight: 700;
+  color: #111111;
+}
+
+.cad-notes-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--cad-blue);
+  line-height: 1.65;
+}
+
+.cad-sign-bar {
+  padding: 6px 10px;
+  background: var(--cad-red);
+  color: #ffffff;
+  text-align: center;
+  font-weight: 700;
+}
+
+.cad-sign-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  min-height: 120px;
+  padding: 12px 10px 6px;
+}
+
+.cad-sign-line {
+  width: 170px;
+  border-bottom: 1px solid #111111;
+}
+
+/* --- Mode cetak ----------------------------------------------------------
+   Hanya lembar report yang ikut tercetak; sisa halaman disembunyikan.
+   ------------------------------------------------------------------------- */
+@media print {
+  body:has(#cadReportOverlay.is-open) > *:not(#cadReportOverlay) {
+    display: none !important;
+  }
+
+  #cadReportOverlay.is-open {
+    position: static;
+    background: #ffffff;
+  }
+
+  /* Chrome mematikan "Background graphics" secara default, sehingga seluruh
+     bar merah lembar hilang dan teks putih di atasnya jadi tidak terbaca.
+     Aturan berikut memaksa latar tetap ikut tercetak. */
+  #cadReportOverlay.is-open,
+  #cadReportOverlay.is-open * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #cadReportOverlay.is-open .cad-toolbar {
+    display: none !important;
+  }
+
+  #cadReportOverlay.is-open .cad-sheet-scroll {
+    overflow: visible;
+    padding: 0;
+  }
+
+  #cadReportOverlay.is-open .cad-sheet {
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  /* Jangan potong grid item maupun blok catatan di tengah halaman */
+  #cadReportOverlay.is-open .cad-grid,
+  #cadReportOverlay.is-open .cad-cell,
+  #cadReportOverlay.is-open .cad-footer,
+  #cadReportOverlay.is-open .cad-notes,
+  #cadReportOverlay.is-open .cad-sign {
+    break-inside: avoid;
+  }
+
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
 }
 
 /* ==========================================================================
