@@ -2,6 +2,8 @@
 let currentStep = 1;
 const totalSteps = 5;
 let currentFuelLevel = 4; // Default full/sample level
+// Entri PKB yang sedang dibuka pada wizard (null = mode PKB Baru)
+let currentPkbEntry = null;
 // PKB Canvasing entries for simulation (status: 'pending' | 'progress' | 'done')
 const samplePkbList = [
   { id: 'PKB-20240826-001', plate: 'AG 1000 ELM', model: 'VG - VARIO 125 CBS ISS', customer: 'Achmad Munib', engine: 'JB91E1260677', frame: 'MH1J891158K260', phone: '081234567890', service: 'Servis Berkala & Ganti Oli MPX2', time: '09:30', mechanic: 'Andi', status: 'progress', step: 3, date: '2024-08-26' },
@@ -659,6 +661,8 @@ function renderPkbPagination(totalItems, totalPages, startIndex, endIndex) {
 }
 
 function openPkbWizard(entry) {
+  currentPkbEntry = entry || null;
+
   const dashView = document.getElementById('pkbDashboardView');
   const wizardView = document.getElementById('wizardContentView');
 
@@ -708,6 +712,107 @@ function openPkbWizard(entry) {
   if (window.goToStep) {
     window.goToStep(1);
   }
+}
+
+// ---------------------------------------------------------------------------
+// Simpan PKB (simulasi front-end)
+// ---------------------------------------------------------------------------
+// Satu jalur simpan dipakai bersama oleh tombol Save & Print PKB pada Step 3
+// (kasus "cek saja") dan tombol Save and Print PKB pada Step 5, agar nomor PKB,
+// pesan notifikasi, dan efeknya ke dashboard selalu konsisten.
+
+/** Membuat nomor PKB baru bergaya `PKB-YYYYMMDD-NNN` untuk tanggal hari ini. */
+function generatePkbId() {
+  const now = new Date();
+  const stamp = `${now.getFullYear()}`
+    + `${String(now.getMonth() + 1).padStart(2, '0')}`
+    + `${String(now.getDate()).padStart(2, '0')}`;
+  const prefix = `PKB-${stamp}-`;
+  const lastSeq = samplePkbList
+    .filter(p => p.id.startsWith(prefix))
+    .reduce((max, p) => Math.max(max, parseInt(p.id.slice(prefix.length), 10) || 0), 0);
+  return prefix + String(lastSeq + 1).padStart(3, '0');
+}
+
+function textOf(id, fallback = '') {
+  const el = document.getElementById(id);
+  const value = el ? (el.value !== undefined ? el.value : el.textContent) : '';
+  return (value || '').trim() || fallback;
+}
+
+/** Tanggal hari ini dalam format ISO (dipakai sebagai dasar filter dashboard). */
+function todayIso() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+    + `-${String(now.getDate()).padStart(2, '0')}`;
+}
+
+/**
+ * Menyimpan wizard yang sedang dibuka ke daftar PKB in-memory.
+ * PKB yang dibuka dari kartu dashboard diperbarui di tempat; mode PKB Baru
+ * menambahkan entri baru di urutan teratas.
+ */
+function persistPkbFromWizard(savedFromStep) {
+  // Data kendaraan hanya dipakai bila kartu kendaraan benar-benar tampil;
+  // pada empty state teks lama masih tertinggal di DOM.
+  const vehicleBox = document.getElementById('vehicleInfoCard');
+  const hasVehicle = vehicleBox && vehicleBox.style.display !== 'none';
+  const vehicleField = (id) => (hasVehicle ? textOf(id, '-') : '-');
+
+  const carrierName = `${textOf('carrierFirstName')} ${textOf('carrierLastName')}`.trim();
+  const data = {
+    plate: vehicleField('dispPlate'),
+    model: vehicleField('dispModel'),
+    engine: vehicleField('dispEngine'),
+    frame: vehicleField('dispFrame'),
+    customer: carrierName || '-',
+    phone: textOf('carrierInputPhone', '-'),
+    status: 'progress',
+    step: savedFromStep,
+  };
+
+  if (currentPkbEntry) {
+    Object.assign(currentPkbEntry, data);
+    return currentPkbEntry;
+  }
+
+  const now = new Date();
+  const entry = {
+    id: generatePkbId(),
+    service: savedFromStep >= 4 ? 'Servis Berkala & Ganti Oli MPX2' : 'Cek Aja Dulu',
+    time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
+    mechanic: '-',
+    date: todayIso(),
+    ...data,
+  };
+  samplePkbList.unshift(entry);
+  currentPkbEntry = entry;
+  return entry;
+}
+
+/**
+ * Menyimpan PKB lalu mengembalikan tampilan ke dashboard agar hasilnya terlihat.
+ * `savedFromStep` menentukan progres yang tercatat pada kartu dashboard.
+ */
+function savePkbFromWizard(savedFromStep, options) {
+  // keepOnStep: tetap di step yang sedang dibuka, jangan kembali ke dashboard
+  const keepOnStep = Boolean(options && options.keepOnStep);
+  const entry = persistPkbFromWizard(savedFromStep);
+  showToast('Menyimpan data dan mencetak PKB...');
+  setTimeout(() => {
+    showToast(`PKB #${entry.id} berhasil disimpan & diteruskan ke mekanik!`);
+    pkbCurrentPage = 1;
+    renderPkbGrid();
+
+    // Simpan lewat CAD Report (Step 3) tidak memindahkan halaman: setelah lembar
+    // ditutup, user tetap berada di Step 3 dan dapat melanjutkan pengecekan.
+    // Dipakai sebagai flag, bukan mengecek overlay, agar menutup lembar lebih
+    // cepat dari jeda 1 detik tidak membuat halaman ikut berpindah.
+    if (keepOnStep) return;
+
+    showPkbDashboard();
+    currentPkbEntry = null;
+  }, 1000);
 }
 
 // Collapsible Vehicle Info Box
@@ -760,7 +865,7 @@ function initStepper() {
     if (currentStep < totalSteps) {
       goToStep(currentStep + 1);
     } else {
-      showToast('PKB Berhasil Disimpan & Diteruskan ke Mekanik!');
+      savePkbFromWizard(totalSteps);
     }
   });
 
@@ -2052,10 +2157,7 @@ function initSummaryStep() {
 
   if (btnSummarySavePrint) {
     btnSummarySavePrint.addEventListener('click', () => {
-      showToast('Menyimpan data dan mencetak PKB...');
-      setTimeout(() => {
-        showToast('PKB #PKB-2026-00892 berhasil disimpan & diteruskan ke mekanik!');
-      }, 1000);
+      savePkbFromWizard(5);
     });
   }
 
