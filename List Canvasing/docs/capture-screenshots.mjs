@@ -391,6 +391,57 @@ try {
   await waitFor(`document.getElementById('pkbDateClear').disabled === false`);
   await shot('list-canvasing-01c-dashboard-date-filter', { fullPage: true });
 
+  // 01d — Pop-up Pilih Data Canvasing (dibuka dari tombol PKB Baru)
+  console.log('01d Pop-up Pilih Data Canvasing');
+  await openPage();
+  await evaluate(`document.getElementById('btnNewPkb').click()`);
+  await waitFor(`document.getElementById('pickCanvasingModal').style.display === 'flex'`);
+  await scrollTop();
+  await shot('list-canvasing-01d-modal-pilih-canvasing');
+
+  // 01e — Pop-up Pilih Data Canvasing: satu data terpilih (tombol Lanjut aktif)
+  console.log('01e Pop-up Pilih Data Canvasing — data terpilih');
+  await evaluate(`document.querySelector('#canvasingPickList .canvasing-pick-item').click()`);
+  await waitFor(`document.getElementById('btnPickCanvasingConfirm').disabled === false`);
+  await shot('list-canvasing-01e-modal-pilih-canvasing-selected');
+
+  // 01f — Pop-up Pilih Data Canvasing: empty state (semua canvasing sudah punya PKB)
+  console.log('01f Pop-up Pilih Data Canvasing — empty state');
+  await openPage();
+  await evaluate(`
+    (function () {
+      // Simulasi kondisi seluruh data Master Canvasing sudah dibuatkan PKB:
+      // setiap canvasing yang belum tertaut diberi entri PKB tiruan. Daftar
+      // kartu dashboard tidak dirender ulang sehingga tampilan latar tetap sama.
+      masterCanvasingList.forEach(function (c) {
+        var taken = samplePkbList.some(function (p) { return p.canvasingId === c.id; });
+        if (!taken) {
+          samplePkbList.push(Object.assign({}, samplePkbList[0], {
+            id: 'PKB-SIMULASI-' + c.id,
+            canvasingId: c.id,
+          }));
+        }
+      });
+      document.getElementById('btnNewPkb').click();
+      return true;
+    })()
+  `);
+  await waitFor(`document.getElementById('canvasingPickEmpty').style.display === 'flex'`);
+  await scrollTop();
+  await shot('list-canvasing-01f-modal-pilih-canvasing-empty');
+
+  // 01g — Step 1 mode PKB Baru: bar konteks data canvasing terpilih
+  console.log('01g Step 1 — Bar konteks Data Canvasing');
+  await openPage();
+  await evaluate(`document.getElementById('btnNewPkb').click()`);
+  await waitFor(`document.getElementById('pickCanvasingModal').style.display === 'flex'`);
+  await evaluate(`document.querySelector('#canvasingPickList .canvasing-pick-item').click()`);
+  await waitFor(`document.getElementById('btnPickCanvasingConfirm').disabled === false`);
+  await evaluate(`document.getElementById('btnPickCanvasingConfirm').click()`);
+  await waitFor(`document.getElementById('canvasingContextBar').style.display === 'flex'`);
+  await scrollTop();
+  await shot('list-canvasing-01g-step1-canvasing-context');
+
   // 02 — Step 1: Vehicle (dibuka dari kartu PKB pertama)
   console.log('02 Step 1 — Vehicle');
   await openPage();

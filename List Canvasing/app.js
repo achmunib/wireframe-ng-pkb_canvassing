@@ -8,13 +8,34 @@ let currentPkbEntry = null;
 const samplePkbList = [
   { id: 'PKB-20240826-001', plate: 'AG 1000 ELM', model: 'VG - VARIO 125 CBS ISS', customer: 'Achmad Munib', engine: 'JB91E1260677', frame: 'MH1J891158K260', phone: '081234567890', service: 'Servis Berkala & Ganti Oli MPX2', time: '09:30', mechanic: 'Andi', status: 'progress', step: 3, date: '2024-08-26' },
   { id: 'PKB-20240826-002', plate: 'B 4592 KLR', model: 'VG - VARIO 160 ABS', customer: 'Budi Santoso', engine: 'KF11E1084920', frame: 'MH1KF1118PK092144', phone: '085712345678', service: 'Cek CVT & Kampas Rem', time: '10:45', mechanic: 'Rudi', status: 'pending', step: 0, date: '2024-08-26' },
-  { id: 'PKB-20240826-003', plate: 'L 2831 AB', model: 'VG - SCOOPY PRESTIGE', customer: 'Siti Rahmawati', engine: 'JM31E2948102', frame: 'MH1JM3116PK748291', phone: '087898765432', service: 'Ganti Busi & Oli MPX2', time: '13:15', mechanic: 'Andi', status: 'pending', step: 0, date: '2024-08-25' },
+  { id: 'PKB-20240826-003', plate: 'L 2831 AB', model: 'VG - SCOOPY PRESTIGE', customer: 'Siti Rahmawati', engine: 'JM31E2948102', frame: 'MH1JM3116PK748291', phone: '087898765432', service: 'Ganti Busi & Oli MPX2', time: '13:15', mechanic: 'Andi', status: 'pending', step: 0, date: '2024-08-25', canvasingId: 9 },
   { id: 'PKB-20240826-004', plate: 'AB 1234 CD', model: 'VG - NMAX 155 CONNECTED', customer: 'Dewi Lestari', engine: 'B6NE1123456', frame: 'MH1B6NE11PK123456', phone: '081122334455', service: 'Servis Besar 10.000 km', time: '08:00', mechanic: 'Joko', status: 'pending', step: 0, date: '2024-08-24' },
   { id: 'PKB-20240826-005', plate: 'B 6789 XYZ', model: 'VG - BEAT SPORTY CBS', customer: 'Eko Prasetyo', engine: 'K1FJ2233445', frame: 'MH1K1FJ22PK223344', phone: '085566778899', service: 'Ganti Oli & Tune Up', time: '11:20', mechanic: 'Rudi', status: 'progress', step: 4, date: '2024-08-26' },
-  { id: 'PKB-20240826-006', plate: 'D 4321 EF', model: 'VG - PCX 160 ABS', customer: 'Fitri Handayani', engine: 'JKE1EE556677', frame: 'MH1JKE11PK556677', phone: '081900112233', service: 'Cek Aki & Rem Depan', time: '14:00', mechanic: 'Joko', status: 'progress', step: 2, date: '2024-08-23' },
-  { id: 'PKB-20240826-007', plate: 'H 9876 GH', model: 'VG - LEXI 125 KEYLESS', customer: 'Gunawan Wibowo', engine: 'F4SE1198877', frame: 'MH1F4SE11PK119887', phone: '082133445566', service: 'Servis Berkala & Ganti Oli MPX2', time: '09:00', mechanic: 'Andi', status: 'done', step: 5, date: '2024-08-25' },
-  { id: 'PKB-20240826-008', plate: 'N 5555 IJ', model: 'VG - VARIO 125 CBS', customer: 'Hendra Saputra', engine: 'JB9NE2244668', frame: 'MH1JB9NEPK224466', phone: '083899887766', service: 'Ganti Roller & V-Belt', time: '15:30', mechanic: 'Rudi', status: 'done', step: 5, date: '2024-08-23' },
+  { id: 'PKB-20240826-006', plate: 'D 4321 EF', model: 'VG - PCX 160 ABS', customer: 'Fitri Handayani', engine: 'JKE1EE556677', frame: 'MH1JKE11PK556677', phone: '081900112233', service: 'Cek Aki & Rem Depan', time: '14:00', mechanic: 'Joko', status: 'progress', step: 2, date: '2024-08-23', canvasingId: 8 },
+  { id: 'PKB-20240826-007', plate: 'H 9876 GH', model: 'VG - LEXI 125 KEYLESS', customer: 'Gunawan Wibowo', engine: 'F4SE1198877', frame: 'MH1F4SE11PK119887', phone: '082133445566', service: 'Servis Berkala & Ganti Oli MPX2', time: '09:00', mechanic: 'Andi', status: 'done', step: 5, date: '2024-08-25', canvasingId: 6 },
+  { id: 'PKB-20240826-008', plate: 'N 5555 IJ', model: 'VG - VARIO 125 CBS', customer: 'Hendra Saputra', engine: 'JB9NE2244668', frame: 'MH1JB9NEPK224466', phone: '083899887766', service: 'Ganti Roller & V-Belt', time: '15:30', mechanic: 'Rudi', status: 'done', step: 5, date: '2024-08-23', canvasingId: 7 },
 ];
+
+// ---------------------------------------------------------------------------
+// Data Master Canvasing (salinan dummy dari modul Master Canvasing)
+// ---------------------------------------------------------------------------
+// Dipakai oleh pop-up "Pilih Data Canvasing" yang muncul saat tombol PKB Baru
+// diklik. Sebuah data canvasing dianggap "belum dibuatkan PKB" bila tidak ada
+// entri pada `samplePkbList` yang memiliki `canvasingId` sama dengan `id`-nya.
+const masterCanvasingList = [
+  { id: 1, kodeCanvasing: '051-CNVS-2026-DMS0000000020', namaCanvasing: 'AHASS Roadshow & Service Keliling', lokasi: 'Lapangan Balai Desa Wage', kota: 'KAB. SIDOARJO', kecamatan: 'TAMAN', kelurahan: 'WAGE', dari: '26-08-2026', sampai: '27-08-2026', petugas: 'Kalvin, Rizal', jumlahPart: 4 },
+  { id: 2, kodeCanvasing: '051-CNVS-2026-DMS0000000019', namaCanvasing: 'AHASS Peduli Warga Jelbuk', lokasi: 'Balai Desa Sucopangepok', kota: 'KAB. JEMBER', kecamatan: 'JELBUK', kelurahan: 'SUCOPANGEPOK', dari: '25-08-2026', sampai: '28-08-2026', petugas: 'Agung, Hendri', jumlahPart: 3 },
+  { id: 3, kodeCanvasing: '051-CNVS-2026-DMS0000000004', namaCanvasing: 'Service Kunjung Kampus Surabaya', lokasi: 'Plaza Barat Kampus Wonokromo', kota: 'KOTA SURABAYA', kecamatan: 'WONOKROMO', kelurahan: 'NGAGEL', dari: '20-08-2026', sampai: '22-08-2026', petugas: 'Robin, Ratna', jumlahPart: 3 },
+  { id: 4, kodeCanvasing: '051-CNVS-2026-DMS0000000002', namaCanvasing: 'Canvasing Komunitas Honda Wonokromo', lokasi: 'Parkir Sentra Kuliner Wonokromo', kota: 'KOTA SURABAYA', kecamatan: 'WONOKROMO', kelurahan: 'WONOKROMO', dari: '18-08-2026', sampai: '19-08-2026', petugas: 'Ratna', jumlahPart: 2 },
+  { id: 5, kodeCanvasing: '051-CNVS-2026-DMS0000000001', namaCanvasing: 'AHASS Keliling Desa Gampingrowo', lokasi: 'Halaman Kantor Kecamatan Tarik', kota: 'KAB. SIDOARJO', kecamatan: 'TARIK', kelurahan: 'GAMPINGROWO', dari: '10-08-2026', sampai: '12-08-2026', petugas: 'Kalvin', jumlahPart: 3 },
+  { id: 6, kodeCanvasing: '051-CNVS-2025-DMS0000000023', namaCanvasing: 'Program Servis Hemat Akhir Tahun', lokasi: 'Alun-Alun Sidoarjo', kota: 'KAB. SIDOARJO', kecamatan: 'SIDOARJO', kelurahan: 'BULUSIDOKARE', dari: '15-12-2025', sampai: '17-12-2025', petugas: 'Rizal, Kalvin', jumlahPart: 3 },
+  { id: 7, kodeCanvasing: '051-CNVS-2025-DMS0000000017', namaCanvasing: 'AHASS Sahabat Pelanggan Wonokromo', lokasi: 'Pelataran Ruko Darmo Trade Center', kota: 'KOTA SURABAYA', kecamatan: 'WONOKROMO', kelurahan: 'WONOKROMO', dari: '05-11-2025', sampai: '08-11-2025', petugas: 'Agung', jumlahPart: 4 },
+  { id: 8, kodeCanvasing: '051-CNVS-2025-DMS0000000015', namaCanvasing: 'Service Kunjung Instansi Bapenda', lokasi: 'Gedung Bapenda Jawa Timur Gubeng', kota: 'KOTA SURABAYA', kecamatan: 'GUBENG', kelurahan: 'GUBENG', dari: '22-10-2025', sampai: '24-10-2025', petugas: 'Robin', jumlahPart: 3 },
+  { id: 9, kodeCanvasing: '051-CNVS-2025-DMS0000000014', namaCanvasing: 'Honda Roadshow & Uji Emisi Gratis', lokasi: 'Area Terbuka Taman Bungkul', kota: 'KOTA SURABAYA', kecamatan: 'WONOKROMO', kelurahan: 'NGAGEL', dari: '14-10-2025', sampai: '15-10-2025', petugas: 'Kalvin', jumlahPart: 2 },
+];
+
+// Canvasing yang dipilih untuk PKB yang sedang dibuka pada wizard (null = tidak ada)
+let selectedCanvasing = null;
 
 // Sample Vehicle Database for scanning simulation
 const sampleVehicles = [
@@ -245,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initServiceAndPartsStep();
   initSummaryStep();
   initModal();
+  initCanvasingPicker();
   initSidebar();
   initLangSwitcher();
   initHistoryShowMore();
@@ -281,9 +303,10 @@ function initPkbDashboard() {
   const btnNext = document.getElementById('pkbNextPage');
 
   if (btnNew) {
+    // PKB Baru wajib berangkat dari data Master Canvasing yang belum punya PKB,
+    // sehingga tombol ini membuka pop-up pemilihan terlebih dahulu.
     btnNew.addEventListener('click', () => {
-      openPkbWizard(null);
-      showToast('Canvasing baru dimulai (form kosong)');
+      openCanvasingPicker();
     });
   }
 
@@ -512,6 +535,9 @@ function showPkbDashboard() {
   if (dashView) dashView.style.display = 'flex';
   if (wizardView) wizardView.style.display = 'none';
 
+  // Konteks canvasing hanya berlaku selama wizard dibuka.
+  selectedCanvasing = null;
+
   if (window.parent && window.parent !== window) {
     window.parent.postMessage({ type: 'UPDATE_CRUMB', module: 'list', subCrumb: 'List PKB' }, '*');
   }
@@ -661,8 +687,181 @@ function renderPkbPagination(totalItems, totalPages, startIndex, endIndex) {
   }
 }
 
-function openPkbWizard(entry) {
+// ---------------------------------------------------------------------------
+// Pop-up "Pilih Data Canvasing" (validasi sebelum PKB Baru)
+// ---------------------------------------------------------------------------
+// Tombol PKB Baru tidak lagi membuka wizard secara langsung. User wajib memilih
+// satu data Master Canvasing yang belum memiliki PKB, baru wizard PKB Baru
+// dibuka dengan konteks canvasing tersebut.
+
+let canvasingPickQuery = '';
+let canvasingPickSelectedId = null;
+
+/** Mencari data canvasing berdasarkan id (null bila tidak ada / id kosong). */
+function findCanvasing(id) {
+  if (id === null || id === undefined) return null;
+  return masterCanvasingList.find(c => c.id === id) || null;
+}
+
+/** Data Master Canvasing yang belum dibuatkan PKB pada List Canvasing. */
+function getAvailableCanvasing() {
+  return masterCanvasingList.filter(c => !samplePkbList.some(p => p.canvasingId === c.id));
+}
+
+/** Hasil filter pop-up: data yang belum punya PKB + cocok dengan kata kunci. */
+function getFilteredCanvasingPick() {
+  const key = canvasingPickQuery;
+  return getAvailableCanvasing().filter(c => {
+    if (!key) return true;
+    const hay = `${c.kodeCanvasing} ${c.namaCanvasing} ${c.lokasi} ${c.kota} ${c.kecamatan} ${c.kelurahan} ${c.petugas}`.toLowerCase();
+    return hay.includes(key);
+  });
+}
+
+function renderCanvasingPickList() {
+  const list = document.getElementById('canvasingPickList');
+  const empty = document.getElementById('canvasingPickEmpty');
+  const emptyText = document.getElementById('canvasingPickEmptyText');
+  const counter = document.getElementById('canvasingPickCount');
+  const btnConfirm = document.getElementById('btnPickCanvasingConfirm');
+  if (!list) return;
+
+  const available = getAvailableCanvasing();
+  const items = getFilteredCanvasingPick();
+
+  if (counter) {
+    counter.textContent = `${available.length} data canvasing belum dibuatkan PKB`;
+  }
+
+  list.innerHTML = items.map(c => `
+    <button type="button" class="canvasing-pick-item${c.id === canvasingPickSelectedId ? ' selected' : ''}" data-canvasing-id="${c.id}">
+      <span class="canvasing-pick-radio" aria-hidden="true"></span>
+      <span class="canvasing-pick-body">
+        <span class="canvasing-pick-top">
+          <span class="canvasing-pick-code">${c.kodeCanvasing}</span>
+          <span class="canvasing-pick-period">${c.dari} s/d ${c.sampai}</span>
+        </span>
+        <strong class="canvasing-pick-name">${c.namaCanvasing}</strong>
+        <span class="canvasing-pick-meta">
+          <span class="canvasing-pick-meta-item">${c.lokasi}</span>
+          <span class="canvasing-pick-meta-item">${c.kelurahan}, ${c.kecamatan} — ${c.kota}</span>
+        </span>
+        <span class="canvasing-pick-meta">
+          <span class="canvasing-pick-meta-item">Petugas: ${c.petugas}</span>
+          <span class="canvasing-pick-meta-item">${c.jumlahPart} jenis part dibawa</span>
+        </span>
+      </span>
+    </button>`).join('');
+
+  if (empty) empty.style.display = items.length === 0 ? 'flex' : 'none';
+  if (emptyText) {
+    emptyText.textContent = available.length === 0
+      ? 'Semua data Master Canvasing sudah dibuatkan PKB. Buat data canvasing baru pada modul Master Canvasing terlebih dahulu.'
+      : 'Tidak ada data canvasing yang cocok dengan kata kunci pencarian.';
+  }
+  if (btnConfirm) btnConfirm.disabled = canvasingPickSelectedId === null;
+
+  list.querySelectorAll('.canvasing-pick-item').forEach(item => {
+    item.addEventListener('click', () => {
+      canvasingPickSelectedId = parseInt(item.dataset.canvasingId, 10);
+      renderCanvasingPickList();
+    });
+  });
+}
+
+/** Membuka pop-up pemilihan canvasing dengan kondisi bersih (tanpa pilihan). */
+function openCanvasingPicker() {
+  const modal = document.getElementById('pickCanvasingModal');
+  const search = document.getElementById('canvasingPickSearch');
+  if (!modal) return;
+
+  canvasingPickQuery = '';
+  canvasingPickSelectedId = null;
+  if (search) search.value = '';
+  renderCanvasingPickList();
+  modal.style.display = 'flex';
+  if (search) search.focus();
+
+  if (getAvailableCanvasing().length === 0) {
+    showToast('Tidak ada data canvasing yang belum dibuatkan PKB');
+  }
+}
+
+function closeCanvasingPicker() {
+  const modal = document.getElementById('pickCanvasingModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function initCanvasingPicker() {
+  const modal = document.getElementById('pickCanvasingModal');
+  if (!modal) return;
+
+  const search = document.getElementById('canvasingPickSearch');
+  const btnClose = document.getElementById('btnPickCanvasingClose');
+  const btnCancel = document.getElementById('btnPickCanvasingCancel');
+  const btnConfirm = document.getElementById('btnPickCanvasingConfirm');
+
+  if (search) {
+    search.addEventListener('input', (e) => {
+      canvasingPickQuery = e.target.value.toLowerCase().trim();
+      // Pilihan yang tidak lagi tampil pada hasil filter ikut dibatalkan.
+      if (canvasingPickSelectedId !== null
+        && !getFilteredCanvasingPick().some(c => c.id === canvasingPickSelectedId)) {
+        canvasingPickSelectedId = null;
+      }
+      renderCanvasingPickList();
+    });
+  }
+
+  if (btnClose) btnClose.addEventListener('click', closeCanvasingPicker);
+  if (btnCancel) btnCancel.addEventListener('click', closeCanvasingPicker);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeCanvasingPicker();
+  });
+
+  if (btnConfirm) {
+    btnConfirm.addEventListener('click', () => {
+      const canvasing = findCanvasing(canvasingPickSelectedId);
+      if (!canvasing) {
+        showToast('Pilih salah satu data canvasing terlebih dahulu');
+        return;
+      }
+      closeCanvasingPicker();
+      openPkbWizard(null, canvasing);
+    });
+  }
+}
+
+/** Menampilkan konteks canvasing terpilih pada bagian atas wizard PKB. */
+function renderCanvasingContext() {
+  const bar = document.getElementById('canvasingContextBar');
+  if (!bar) return;
+
+  if (!selectedCanvasing) {
+    bar.style.display = 'none';
+    return;
+  }
+
+  const c = selectedCanvasing;
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  };
+  setText('canvasingContextName', c.namaCanvasing);
+  setText('canvasingContextSub', `${c.lokasi} · ${c.kelurahan}, ${c.kecamatan} — ${c.kota} · ${c.dari} s/d ${c.sampai}`);
+  setText('canvasingContextCode', c.kodeCanvasing);
+  bar.style.display = 'flex';
+}
+
+/**
+ * Membuka wizard PKB.
+ * `canvasing` hanya diisi pada mode PKB Baru (hasil pop-up Pilih Data
+ * Canvasing); pada PKB yang dibuka dari kartu dashboard, konteks canvasing
+ * diambil dari `canvasingId` entri tersebut.
+ */
+function openPkbWizard(entry, canvasing) {
   currentPkbEntry = entry || null;
+  selectedCanvasing = entry ? findCanvasing(entry.canvasingId) : (canvasing || null);
 
   const dashView = document.getElementById('pkbDashboardView');
   const wizardView = document.getElementById('wizardContentView');
@@ -672,6 +871,8 @@ function openPkbWizard(entry) {
     wizardView.style.display = 'block';
     wizardView.style.animation = 'fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
   }
+
+  renderCanvasingContext();
 
   if (entry) {
     // Auto fill vehicle
@@ -702,7 +903,9 @@ function openPkbWizard(entry) {
     if (window.loadCarrierData) {
       window.loadCarrierData(sampleCarriers[0]);
     }
-    showToast('Mode PKB Baru dimulai');
+    showToast(selectedCanvasing
+      ? `PKB Baru untuk canvasing ${selectedCanvasing.namaCanvasing}`
+      : 'Mode PKB Baru dimulai');
   }
 
   if (window.parent && window.parent !== window) {
@@ -770,6 +973,9 @@ function persistPkbFromWizard(savedFromStep) {
     phone: textOf('carrierInputPhone', '-'),
     status: 'progress',
     step: savedFromStep,
+    // Menandai canvasing sumber PKB agar data tersebut tidak lagi muncul pada
+    // pop-up Pilih Data Canvasing.
+    canvasingId: selectedCanvasing ? selectedCanvasing.id : null,
   };
 
   if (currentPkbEntry) {

@@ -170,6 +170,23 @@
         <!-- View 2: Wizard Content (Hidden initially until PKB selected or created) -->
         <div class="wizard-content-view" id="wizardContentView" style="display: none;">
 
+          <!-- Konteks data canvasing sumber PKB (hasil pop-up Pilih Data Canvasing) -->
+          <div class="canvasing-context-bar" id="canvasingContextBar" style="display: none;">
+            <span class="canvasing-context-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </span>
+            <div class="canvasing-context-main">
+              <span class="canvasing-context-label">Data Canvasing</span>
+              <strong class="canvasing-context-name" id="canvasingContextName">-</strong>
+              <span class="canvasing-context-sub" id="canvasingContextSub">-</span>
+            </div>
+            <span class="canvasing-context-code" id="canvasingContextCode">-</span>
+          </div>
+
           <!-- Stepper Wizard -->
           <section class="stepper-section">
           <div class="stepper-container">
@@ -2315,6 +2332,52 @@
         </div>
         <!-- End wizardContentView -->
       </main>
+    </div>
+  </div>
+
+  <!-- Modal: Pilih Data Canvasing (validasi tombol PKB Baru) -->
+  <div class="modal-overlay" id="pickCanvasingModal" style="display: none;">
+    <div class="modal-card canvasing-pick-card">
+      <div class="modal-header">
+        <div class="canvasing-pick-heading">
+          <h3 class="modal-title">Pilih Data Canvasing</h3>
+          <p class="canvasing-pick-subtitle">Hanya data Master Canvasing yang <strong>belum dibuatkan PKB</strong> yang
+            dapat dipilih</p>
+        </div>
+        <button class="modal-close" id="btnPickCanvasingClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="canvasing-pick-toolbar">
+          <div class="canvasing-pick-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="canvasingPickSearch" class="form-input"
+              placeholder="Cari kode / nama / lokasi / petugas canvasing...">
+          </div>
+          <span class="canvasing-pick-count" id="canvasingPickCount">0 data canvasing belum dibuatkan PKB</span>
+        </div>
+
+        <div class="canvasing-pick-list" id="canvasingPickList"></div>
+
+        <div class="canvasing-pick-empty" id="canvasingPickEmpty" style="display: none;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v13" />
+            <path d="M3 19h18" />
+            <line x1="9" y1="9" x2="15" y2="9" />
+          </svg>
+          <p id="canvasingPickEmptyText">Tidak ada data canvasing yang cocok dengan kata kunci pencarian.</p>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btnPickCanvasingCancel">Batal</button>
+          <button type="button" class="btn-primary-modal" id="btnPickCanvasingConfirm" disabled>Lanjut ke PKB
+            Baru</button>
+        </div>
+      </div>
     </div>
   </div>
 

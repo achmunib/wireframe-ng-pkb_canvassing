@@ -4649,3 +4649,316 @@ body {
   }
 }
 
+
+/* ==========================================================================
+   Pop-up "Pilih Data Canvasing" (validasi tombol PKB Baru)
+   ========================================================================== */
+.canvasing-pick-card {
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  max-height: 88vh;
+}
+
+.canvasing-pick-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.canvasing-pick-subtitle {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.canvasing-pick-subtitle strong {
+  color: var(--primary-hover);
+  font-weight: 700;
+}
+
+.canvasing-pick-card .modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 24px 22px;
+}
+
+.canvasing-pick-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.canvasing-pick-search {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+}
+
+.canvasing-pick-search svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  pointer-events: none;
+}
+
+.canvasing-pick-search .form-input {
+  padding-left: 38px;
+}
+
+.canvasing-pick-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: #f1f5f9;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 6px 12px;
+  white-space: nowrap;
+}
+
+.canvasing-pick-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 50vh;
+  padding-right: 4px;
+}
+
+.canvasing-pick-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.canvasing-pick-item:hover {
+  border-color: var(--primary-border);
+  background: var(--primary-light);
+}
+
+.canvasing-pick-item.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.canvasing-pick-radio {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  background: #ffffff;
+  transition: var(--transition);
+}
+
+.canvasing-pick-item.selected .canvasing-pick-radio {
+  border-color: var(--primary);
+  background: radial-gradient(circle, var(--primary) 0 45%, #ffffff 46% 100%);
+}
+
+.canvasing-pick-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.canvasing-pick-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.canvasing-pick-code {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--primary-hover);
+  background: #ffedd5;
+  border: 1px solid var(--primary-border);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.canvasing-pick-period {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.canvasing-pick-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.35;
+}
+
+.canvasing-pick-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.canvasing-pick-meta-item {
+  position: relative;
+  padding-left: 11px;
+}
+
+.canvasing-pick-meta-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-light);
+}
+
+.canvasing-pick-meta-item:first-child {
+  padding-left: 0;
+}
+
+.canvasing-pick-meta-item:first-child::before {
+  display: none;
+}
+
+.canvasing-pick-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 28px 20px;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: #f8fafc;
+  color: var(--text-muted);
+}
+
+.canvasing-pick-empty svg {
+  color: var(--text-light);
+}
+
+.canvasing-pick-empty p {
+  font-size: 13px;
+  max-width: 440px;
+  line-height: 1.55;
+}
+
+.canvasing-pick-card .modal-actions {
+  margin-top: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-primary-modal:disabled {
+  background: #e2e8f0;
+  color: var(--text-light);
+  cursor: not-allowed;
+}
+
+/* Konteks canvasing pada bagian atas wizard PKB */
+.canvasing-context-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--primary-light);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.canvasing-context-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--primary-border);
+  color: var(--primary);
+}
+
+.canvasing-context-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.canvasing-context-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--primary-hover);
+}
+
+.canvasing-context-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.canvasing-context-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.canvasing-context-code {
+  flex-shrink: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--primary-hover);
+  background: #ffffff;
+  border: 1px solid var(--primary-border);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
+@media (max-width: 720px) {
+  .canvasing-pick-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .canvasing-pick-count {
+    align-self: flex-start;
+  }
+
+  .canvasing-context-bar {
+    flex-wrap: wrap;
+  }
+
+  .canvasing-context-code {
+    order: 3;
+  }
+}
