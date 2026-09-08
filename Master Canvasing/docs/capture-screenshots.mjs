@@ -316,6 +316,32 @@ try {
   await waitFor(`document.getElementById('stepPane1').style.display !== 'none'`);
   await shot('master-canvasing-03-step1', { fullPage: true });
 
+  // 03b — Step 1: dropdown wilayah dibuka dengan kata kunci pencarian
+  console.log('03b Step 1 — Pencarian dalam dropdown wilayah');
+  // Field digeser ke tengah viewport lebih dulu agar panel membuka ke bawah
+  // (arah buka ditentukan dari ruang yang tersisa saat panel dibuka)
+  await evaluate(`
+    document.getElementById('wizKabupaten').closest('.form-group')
+      .scrollIntoView({ block: 'center' })`);
+  await sleep(300);
+  await evaluate(`
+    (() => {
+      const w = document.getElementById('wizKabupaten').closest('.select-wrapper');
+      w.querySelector('.searchable-select-trigger').click();
+      const i = w.querySelector('.searchable-select-search-input');
+      i.value = 'malang';
+      i.dispatchEvent(new Event('input', { bubbles: true }));
+      return true;
+    })()`);
+  await waitFor(`document.querySelectorAll('#wizKabupaten-listbox .searchable-select-option').length === 2`);
+  // Kembali ke atas agar header sticky tidak ikut ter-render di tengah halaman.
+  // Panel tetap terbuka & tetap menempel di bawah trigger-nya.
+  await evaluate(`window.scrollTo(0, 0)`);
+  await sleep(200);
+  await shot('master-canvasing-03b-dropdown-search', { fullPage: true });
+  await evaluate(`closeAllSearchableSelects()`);
+  await sleep(200);
+
   // 04 — Step 2: Daftar Part Dibawa (terisi data contoh)
   console.log('04 Step 2 — Part Dibawa');
   await evaluate(`goToStep(2); ${SEED_PARTS}`);

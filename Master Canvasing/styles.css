@@ -1872,6 +1872,190 @@ input[type="checkbox"]:focus-visible + .custom-checkbox {
 }
 
 /* ==========================================================================
+   Searchable Select (Combobox dengan kolom pencarian)
+   Dipakai pada dropdown wilayah Step 1. Elemen <select> asli tetap ada
+   sebagai penyimpan nilai, namun disembunyikan secara visual.
+   ========================================================================== */
+
+/* <select> asli: disembunyikan secara visual namun tetap ada di DOM sebagai
+   penyimpan nilai. Memakai pola "visually hidden" agar tidak menyisakan kotak
+   transparan di atas trigger. Butuh !important untuk mengalahkan .form-input
+   dan padding-right !important pada .form-select. */
+.searchable-select-native {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Trigger — tampilannya harus identik dengan .form-input.form-select */
+.searchable-select-trigger {
+  width: 100%;
+  height: 42px;
+  padding: 0 38px 0 20px;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 13.5px;
+  font-family: inherit;
+  color: var(--text-title);
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+}
+
+.searchable-select-trigger:focus-visible {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(242, 92, 5, 0.12);
+}
+
+.searchable-select-trigger:disabled {
+  background: #d2dbe4;
+  border-color: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+/* Placeholder (belum ada nilai terpilih) */
+.searchable-select-trigger.is-placeholder .searchable-select-value {
+  color: #64748b;
+}
+
+.searchable-select-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Panel dropdown */
+.searchable-select-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  z-index: 120;
+  display: none;
+  overflow: hidden;
+}
+
+.searchable-select-panel.show {
+  display: block;
+}
+
+/* Panel dibuka ke atas bila ruang di bawah tidak cukup */
+.searchable-select-panel.drop-up {
+  top: auto;
+  bottom: calc(100% + 4px);
+}
+
+/* Kolom pencarian di dalam panel */
+.searchable-select-search {
+  position: relative;
+  padding: 8px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.searchable-select-search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+/* Selector memakai 2 class + tipe elemen agar mengalahkan
+   `.form-group input, .form-group select` (styles.css:1271) yang juga
+   menjangkau kolom pencarian ini karena berada di dalam .form-group. */
+.searchable-select-search input.searchable-select-search-input {
+  width: 100%;
+  height: 34px;
+  padding: 0 10px 0 32px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 12.5px;
+  font-family: inherit;
+  color: #1e293b;
+  outline: none;
+  transition: var(--transition);
+}
+
+.searchable-select-search input.searchable-select-search-input:focus {
+  background: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(242, 92, 5, 0.1);
+}
+
+.searchable-select-search input.searchable-select-search-input::placeholder {
+  color: #94a3b8;
+}
+
+/* Daftar opsi */
+.searchable-select-options {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.searchable-select-option {
+  padding: 8px 12px;
+  font-size: 12.5px;
+  color: #1e293b;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s ease;
+}
+
+.searchable-select-option:last-child {
+  border-bottom: none;
+}
+
+.searchable-select-option:hover,
+.searchable-select-option.is-active {
+  background: #f1f5f9;
+  color: var(--primary);
+}
+
+/* Opsi yang sedang terpilih */
+.searchable-select-option.is-selected {
+  background: #fff7ed;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Penanda potongan teks yang cocok dengan kata kunci */
+.searchable-select-option mark {
+  background: #fde68a;
+  color: inherit;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+/* Keterangan bila kata kunci tidak menemukan hasil */
+.searchable-select-empty {
+  padding: 14px 12px;
+  font-size: 12.5px;
+  font-style: italic;
+  color: #94a3b8;
+  text-align: center;
+}
+
+/* ==========================================================================
    Step 2: Part Dibawa (Part Canvasing) Styles (Matching Reference)
    ========================================================================== */
 .btn-upload-part-outline {

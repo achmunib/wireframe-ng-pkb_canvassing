@@ -1666,6 +1666,291 @@ const sampleVehicles = {
 };
 
 /* ==========================================================================
+   Searchable Select (Combobox dengan kolom pencarian)
+   ------------------------------------------------------------------------
+   Membungkus elemen <select> biasa menjadi dropdown yang bisa dicari.
+   Elemen <select> asli tetap menjadi penyimpan nilai (source of truth),
+   sehingga seluruh kode yang membaca `.value` / `.disabled` / `.options`
+   maupun listener `change` tetap bekerja tanpa perubahan.
+
+   Pemakaian:
+     initSearchableSelect(document.getElementById('wizProvinsi'));
+     refreshSearchableSelect(select);  // setelah daftar <option> diubah
+   ========================================================================== */
+
+// Registry instance per elemen <select>
+const searchableSelects = new WeakMap();
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+}
+
+/** Menyorot potongan teks yang cocok dengan kata kunci. */
+function highlightMatch(label, query) {
+  const safe = escapeHtml(label);
+  if (!query) return safe;
+  const idx = label.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return safe;
+  const before = escapeHtml(label.slice(0, idx));
+  const match = escapeHtml(label.slice(idx, idx + query.length));
+  const after = escapeHtml(label.slice(idx + query.length));
+  return `${before}<mark>${match}</mark>${after}`;
+}
+
+/** Menutup semua panel searchable select yang sedang terbuka. */
+function closeAllSearchableSelects(except) {
+  document.querySelectorAll('.searchable-select-panel.show').forEach(panel => {
+    if (panel !== except) {
+      panel.classList.remove('show', 'drop-up');
+      const trigger = panel.parentElement?.querySelector('.searchable-select-trigger');
+      if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+/**
+ * Mengubah satu <select> menjadi dropdown dengan kolom pencarian.
+ * Aman dipanggil berulang — pemanggilan kedua diabaikan.
+ */
+function initSearchableSelect(select) {
+  if (!select || searchableSelects.has(select)) return;
+
+  const wrapper = select.closest('.select-wrapper');
+  if (!wrapper) return;
+
+  // Nama field dipakai sebagai placeholder pencarian, diambil dari label
+  const labelEl = document.querySelector(`label[for="${select.id}"]`);
+  const fieldName = labelEl
+    ? labelEl.textContent.replace('*', '').trim()
+    : 'data';
+
+  select.classList.add('searchable-select-native');
+  select.setAttribute('tabindex', '-1');
+  select.setAttribute('aria-hidden', 'true');
+
+  const listboxId = `${select.id}-listbox`;
+
+  const trigger = document.createElement('button');
+  trigger.type = 'button';
+  trigger.className = 'searchable-select-trigger';
+  trigger.setAttribute('role', 'combobox');
+  trigger.setAttribute('aria-haspopup', 'listbox');
+  trigger.setAttribute('aria-expanded', 'false');
+  trigger.setAttribute('aria-controls', listboxId);
+  if (labelEl) trigger.setAttribute('aria-label', fieldName);
+  trigger.innerHTML = '<span class="searchable-select-value"></span>';
+
+  const panel = document.createElement('div');
+  panel.className = 'searchable-select-panel';
+  panel.innerHTML = `
+    <div class="searchable-select-search">
+      <svg class="searchable-select-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" class="searchable-select-search-input" placeholder="Cari ${escapeHtml(fieldName)}..."
+        autocomplete="off" spellcheck="false">
+    </div>
+    <div class="searchable-select-options" id="${listboxId}" role="listbox"></div>
+  `;
+
+  // Trigger & panel disisipkan sebelum ikon chevron agar chevron tetap di atas
+  const chevron = wrapper.querySelector('.select-chevron-icon');
+  wrapper.insertBefore(trigger, chevron || null);
+  wrapper.insertBefore(panel, chevron || null);
+
+  const searchInput = panel.querySelector('.searchable-select-search-input');
+  const optionsBox = panel.querySelector('.searchable-select-options');
+
+  const instance = { select, wrapper, trigger, panel, searchInput, optionsBox, activeValue: null };
+  searchableSelects.set(select, instance);
+
+  /** Membangun ulang daftar opsi sesuai kata kunci pencarian. */
+  function renderOptions() {
+    const query = searchInput.value.trim();
+    const items = Array.from(select.options)
+      .filter(o => o.value !== '')
+      .filter(o => !query || o.textContent.toLowerCase().includes(query.toLowerCase()));
+
+    if (items.length === 0) {
+      optionsBox.innerHTML = `<div class="searchable-select-empty">${
+        query ? 'Tidak ada data yang cocok' : 'Belum ada data'
+      }</div>`;
+      instance.activeValue = null;
+      trigger.removeAttribute('aria-activedescendant');
+      return;
+    }
+
+    // Opsi aktif dipertahankan bila masih tampil, jika tidak ambil yang pertama
+    if (!items.some(o => o.value === instance.activeValue)) {
+      instance.activeValue = items[0].value;
+    }
+
+    optionsBox.innerHTML = items.map(o => {
+      const isSelected = o.value === select.value;
+      const isActive = o.value === instance.activeValue;
+      return `<div class="searchable-select-option${isSelected ? ' is-selected' : ''}${isActive ? ' is-active' : ''}"
+        role="option" aria-selected="${isSelected}" data-value="${escapeHtml(o.value)}"
+        >${highlightMatch(o.textContent, query)}</div>`;
+    }).join('');
+
+    optionsBox.querySelectorAll('.searchable-select-option').forEach(el => {
+      el.addEventListener('mousedown', (e) => {
+        e.preventDefault();               // jaga fokus tetap di kolom pencarian
+        commitValue(el.dataset.value);
+      });
+    });
+
+    scrollActiveIntoView();
+  }
+
+  function scrollActiveIntoView() {
+    const activeEl = optionsBox.querySelector('.searchable-select-option.is-active');
+    if (activeEl) activeEl.scrollIntoView({ block: 'nearest' });
+  }
+
+  /** Menetapkan nilai ke <select> asli lalu memicu event change. */
+  function commitValue(value) {
+    if (select.value !== value) {
+      select.value = value;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    syncTrigger();
+    closePanel();
+  }
+
+  /** Menyamakan teks & status trigger dengan kondisi <select> asli. */
+  function syncTrigger() {
+    const selected = select.options[select.selectedIndex];
+    const isPlaceholder = !select.value;
+    trigger.querySelector('.searchable-select-value').textContent =
+      selected ? selected.textContent : '';
+    trigger.classList.toggle('is-placeholder', isPlaceholder);
+    trigger.disabled = select.disabled;
+  }
+
+  /**
+   * Menentukan arah buka panel serta tinggi maksimum daftar opsi.
+   * Panel diutamakan membuka ke bawah; tingginya dipangkas agar tetap berada
+   * di dalam viewport. Membuka ke atas hanya dilakukan bila ruang di bawah
+   * benar-benar sempit dan ruang di atas lebih lega — sehingga panel tidak
+   * menutupi label field-nya sendiri tanpa alasan.
+   */
+  function positionPanel() {
+    const MARGIN = 8;
+    const MIN_LIST = 120;
+    const MAX_LIST = 240;
+
+    const rect = trigger.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom - MARGIN;
+    const spaceAbove = rect.top - MARGIN;
+
+    const dropUp = spaceBelow < MIN_LIST && spaceAbove > spaceBelow;
+    panel.classList.toggle('drop-up', dropUp);
+
+    const searchH = panel.querySelector('.searchable-select-search').offsetHeight;
+    const available = (dropUp ? spaceAbove : spaceBelow) - searchH - MARGIN;
+    optionsBox.style.maxHeight = `${Math.max(MIN_LIST, Math.min(MAX_LIST, available))}px`;
+  }
+
+  function openPanel() {
+    if (select.disabled) return;
+    closeAllSearchableSelects(panel);
+
+    searchInput.value = '';
+    instance.activeValue = select.value || null;
+    renderOptions();
+
+    panel.classList.add('show');
+    trigger.setAttribute('aria-expanded', 'true');
+    positionPanel();
+
+    searchInput.focus();
+  }
+
+  function closePanel() {
+    panel.classList.remove('show', 'drop-up');
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+
+  function moveActive(step) {
+    const els = Array.from(optionsBox.querySelectorAll('.searchable-select-option'));
+    if (els.length === 0) return;
+    const currentIdx = els.findIndex(el => el.dataset.value === instance.activeValue);
+    const nextIdx = Math.min(Math.max(currentIdx + step, 0), els.length - 1);
+    instance.activeValue = els[nextIdx].dataset.value;
+    els.forEach(el => el.classList.toggle('is-active', el.dataset.value === instance.activeValue));
+    scrollActiveIntoView();
+  }
+
+  trigger.addEventListener('click', () => {
+    panel.classList.contains('show') ? closePanel() : openPanel();
+  });
+
+  // Buka panel langsung saat user menekan panah / mulai mengetik di trigger
+  trigger.addEventListener('keydown', (e) => {
+    if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
+      e.preventDefault();
+      openPanel();
+    }
+  });
+
+  searchInput.addEventListener('input', renderOptions);
+
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); moveActive(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); moveActive(-1); }
+    else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (instance.activeValue !== null) commitValue(instance.activeValue);
+    } else if (e.key === 'Escape' || e.key === 'Tab') {
+      closePanel();
+      if (e.key === 'Escape') { e.preventDefault(); trigger.focus(); }
+    }
+  });
+
+  // Fokus yang diarahkan ke <select> tersembunyi (mis. dari validasi Step 1)
+  // diteruskan ke trigger agar tetap terlihat oleh user
+  select.addEventListener('focus', () => trigger.focus());
+
+  syncTrigger();
+}
+
+/**
+ * Memindahkan fokus ke kontrol yang benar-benar terlihat. Untuk <select> yang
+ * sudah dijadikan searchable select, fokus diarahkan ke trigger-nya.
+ */
+function focusFormControl(el) {
+  if (!el) return;
+  const instance = searchableSelects.get(el);
+  (instance ? instance.trigger : el).focus();
+}
+
+/** Menyegarkan tampilan combobox setelah daftar <option> diubah dari script. */
+function refreshSearchableSelect(select) {
+  const instance = searchableSelects.get(select);
+  if (!instance) return;
+
+  const selected = select.options[select.selectedIndex];
+  instance.trigger.querySelector('.searchable-select-value').textContent =
+    selected ? selected.textContent : '';
+  instance.trigger.classList.toggle('is-placeholder', !select.value);
+  instance.trigger.disabled = select.disabled;
+
+  // Panel yang masih terbuka ditutup karena daftar isinya sudah tidak relevan
+  instance.panel.classList.remove('show', 'drop-up');
+  instance.trigger.setAttribute('aria-expanded', 'false');
+}
+
+// Klik di luar panel menutup dropdown yang terbuka
+document.addEventListener('mousedown', (e) => {
+  if (!e.target.closest('.select-wrapper')) closeAllSearchableSelects();
+});
+
+/* ==========================================================================
    Cascade Dropdown Wilayah (Provinsi → Kabupaten/Kota → Kecamatan → Kelurahan)
    Data master ada di wilayah-data.js
    ========================================================================== */
@@ -1700,6 +1985,9 @@ function populateWilayahSelect(levelIndex, options, selected) {
 
   // Pertahankan nilai hanya bila diminta eksplisit dan masih valid
   select.value = (selected && options && options.includes(selected)) ? selected : '';
+
+  // Samakan tampilan combobox pencarian dengan kondisi <select> terbaru
+  refreshSearchableSelect(select);
 }
 
 /**
@@ -1741,6 +2029,11 @@ function initWilayahCascade() {
     console.warn('wilayah-data.js belum dimuat — cascade dropdown wilayah tidak aktif.');
     return;
   }
+
+  // Jadikan keempat dropdown wilayah bisa dicari sebelum diisi datanya
+  WILAYAH_LEVELS.forEach(level => {
+    initSearchableSelect(document.getElementById(level.id));
+  });
 
   populateWilayahSelect(0, getProvinsiList());
   resetWilayahBelow(0);
@@ -1858,7 +2151,7 @@ function initStepperWizard() {
           const wilayahKosong = wilayahRules.find(r => !document.getElementById(r.id)?.value.trim());
           if (wilayahKosong) {
             showToast(wilayahKosong.message, 'info');
-            document.getElementById(wilayahKosong.id)?.focus();
+            focusFormControl(document.getElementById(wilayahKosong.id));
             return;
           }
         } else if (currentWizStep === 2) {
