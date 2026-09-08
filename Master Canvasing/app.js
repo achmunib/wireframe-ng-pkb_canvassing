@@ -199,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initModals();
   initEqualizerToggle();
   initStepperWizard();
+  initWilayahCascade();
   initTambahPartModal();
   initUploadPartModal();
   initTambahMekanikStep();
@@ -1664,6 +1665,118 @@ const sampleVehicles = {
   }
 };
 
+/* ==========================================================================
+   Cascade Dropdown Wilayah (Provinsi → Kabupaten/Kota → Kecamatan → Kelurahan)
+   Data master ada di wilayah-data.js
+   ========================================================================== */
+
+// Urutan level + placeholder saat parent belum dipilih
+const WILAYAH_LEVELS = [
+  { id: 'wizProvinsi',  emptyText: 'Pilih Provinsi',        lockedText: 'Pilih Provinsi' },
+  { id: 'wizKabupaten', emptyText: 'Pilih Kabupaten/Kota',  lockedText: 'Pilih Provinsi terlebih dahulu' },
+  { id: 'wizKecamatan', emptyText: 'Pilih Kecamatan',       lockedText: 'Pilih Kabupaten/Kota terlebih dahulu' },
+  { id: 'wizKelurahan', emptyText: 'Pilih Kelurahan',       lockedText: 'Pilih Kecamatan terlebih dahulu' }
+];
+
+/**
+ * Isi satu dropdown wilayah.
+ * @param {number} levelIndex  posisi pada WILAYAH_LEVELS
+ * @param {string[]} options   daftar nilai; array kosong = dropdown dikunci
+ * @param {string} [selected]  nilai yang ingin dipilih otomatis
+ */
+function populateWilayahSelect(levelIndex, options, selected) {
+  const level = WILAYAH_LEVELS[levelIndex];
+  const select = document.getElementById(level.id);
+  if (!select) return;
+
+  const isLocked = !options || options.length === 0;
+  const placeholder = isLocked ? level.lockedText : level.emptyText;
+
+  select.innerHTML = `<option value="">${placeholder}</option>` +
+    (options || []).map(v => `<option value="${v}">${v}</option>`).join('');
+
+  select.disabled = isLocked;
+  select.classList.toggle('form-select-locked', isLocked);
+
+  // Pertahankan nilai hanya bila diminta eksplisit dan masih valid
+  select.value = (selected && options && options.includes(selected)) ? selected : '';
+}
+
+/**
+ * Reset seluruh level di bawah `fromIndex` menjadi kosong + disabled.
+ */
+function resetWilayahBelow(fromIndex) {
+  for (let i = fromIndex + 1; i < WILAYAH_LEVELS.length; i++) {
+    populateWilayahSelect(i, []);
+  }
+}
+
+/**
+ * Terapkan satu set nilai wilayah sekaligus (dipakai saat wizard dibuka).
+ * Nilai yang tidak cocok dengan master data akan menghentikan cascade
+ * pada level tersebut sehingga level di bawahnya tetap terkunci.
+ */
+function setWilayahSelection(provinsi, kabupaten, kecamatan, kelurahan) {
+  populateWilayahSelect(0, getProvinsiList(), provinsi);
+  const provValue = document.getElementById('wizProvinsi')?.value || '';
+  if (!provValue) { resetWilayahBelow(0); return; }
+
+  populateWilayahSelect(1, getKabupatenList(provValue), kabupaten);
+  const kabValue = document.getElementById('wizKabupaten')?.value || '';
+  if (!kabValue) { resetWilayahBelow(1); return; }
+
+  populateWilayahSelect(2, getKecamatanList(provValue, kabValue), kecamatan);
+  const kecValue = document.getElementById('wizKecamatan')?.value || '';
+  if (!kecValue) { resetWilayahBelow(2); return; }
+
+  populateWilayahSelect(3, getKelurahanList(provValue, kabValue, kecValue), kelurahan);
+}
+
+/**
+ * Pasang listener cascade. Mengganti nilai satu level akan selalu
+ * mereset & mengunci seluruh level di bawahnya.
+ */
+function initWilayahCascade() {
+  if (typeof WILAYAH_INDONESIA === 'undefined') {
+    console.warn('wilayah-data.js belum dimuat — cascade dropdown wilayah tidak aktif.');
+    return;
+  }
+
+  populateWilayahSelect(0, getProvinsiList());
+  resetWilayahBelow(0);
+
+  const provSelect = document.getElementById('wizProvinsi');
+  const kabSelect = document.getElementById('wizKabupaten');
+  const kecSelect = document.getElementById('wizKecamatan');
+
+  if (provSelect) {
+    provSelect.addEventListener('change', () => {
+      const prov = provSelect.value;
+      resetWilayahBelow(0);
+      if (prov) populateWilayahSelect(1, getKabupatenList(prov));
+    });
+  }
+
+  if (kabSelect) {
+    kabSelect.addEventListener('change', () => {
+      const prov = provSelect ? provSelect.value : '';
+      const kab = kabSelect.value;
+      resetWilayahBelow(1);
+      if (prov && kab) populateWilayahSelect(2, getKecamatanList(prov, kab));
+    });
+  }
+
+  if (kecSelect) {
+    kecSelect.addEventListener('change', () => {
+      const prov = provSelect ? provSelect.value : '';
+      const kab = kabSelect ? kabSelect.value : '';
+      const kec = kecSelect.value;
+      resetWilayahBelow(2);
+      if (prov && kab && kec) populateWilayahSelect(3, getKelurahanList(prov, kab, kec));
+    });
+  }
+}
+
 function initStepperWizard() {
   const btnCreate = document.getElementById('btnCreatePkb');
   const btnBackToTable = document.getElementById('btnBackToTable');
@@ -1725,7 +1838,6 @@ function initStepperWizard() {
         if (currentWizStep === 1) {
           const namaCanvasing = document.getElementById('wizNamaCanvasing')?.value.trim();
           const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value.trim();
-          const kelurahan = document.getElementById('wizKelurahan')?.value.trim();
           if (!namaCanvasing) {
             showToast('Harap isi nama canvasing', 'info');
             document.getElementById('wizNamaCanvasing')?.focus();
@@ -1736,9 +1848,17 @@ function initStepperWizard() {
             document.getElementById('wizLokasiCanvasing')?.focus();
             return;
           }
-          if (!kelurahan) {
-            showToast('Harap pilih kelurahan', 'info');
-            document.getElementById('wizKelurahan')?.focus();
+          // Wilayah wajib dipilih berurutan dari Provinsi sampai Kelurahan
+          const wilayahRules = [
+            { id: 'wizProvinsi', message: 'Harap pilih provinsi' },
+            { id: 'wizKabupaten', message: 'Harap pilih kabupaten/kota' },
+            { id: 'wizKecamatan', message: 'Harap pilih kecamatan' },
+            { id: 'wizKelurahan', message: 'Harap pilih kelurahan' }
+          ];
+          const wilayahKosong = wilayahRules.find(r => !document.getElementById(r.id)?.value.trim());
+          if (wilayahKosong) {
+            showToast(wilayahKosong.message, 'info');
+            document.getElementById(wilayahKosong.id)?.focus();
             return;
           }
         } else if (currentWizStep === 2) {
@@ -1878,10 +1998,9 @@ function showCreateWizard() {
   if (document.getElementById('wizLokasiCanvasing')) document.getElementById('wizLokasiCanvasing').value = 'Area Parkir PT Maspion I Gedangan';
   if (document.getElementById('wizDari')) document.getElementById('wizDari').value = '26-08-2026';
   if (document.getElementById('wizSampai')) document.getElementById('wizSampai').value = '27-08-2026';
-  if (document.getElementById('wizProvinsi')) document.getElementById('wizProvinsi').value = 'JAWA TIMUR';
-  if (document.getElementById('wizKabupaten')) document.getElementById('wizKabupaten').value = 'KAB. SIDOARJO';
-  if (document.getElementById('wizKecamatan')) document.getElementById('wizKecamatan').value = 'GEDANGAN';
-  if (document.getElementById('wizKelurahan')) document.getElementById('wizKelurahan').value = 'SAWOTRATAP';
+  // Wilayah: hanya Provinsi terisi default (JAWA TIMUR); level di bawahnya
+  // dibiarkan kosong agar user memilih sendiri secara berurutan
+  setWilayahSelection('JAWA TIMUR');
   if (document.getElementById('wizTransNo')) document.getElementById('wizTransNo').value = newKode;
 
   // Reset Parts Dibawa Table
@@ -2013,10 +2132,10 @@ function syncSummaryPane() {
   const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value || 'Area Parkir PT Maspion I Gedangan';
   const dari = document.getElementById('wizDari')?.value || '26-08-2026';
   const sampai = document.getElementById('wizSampai')?.value || '27-08-2026';
-  const provinsi = document.getElementById('wizProvinsi')?.value || 'JAWA TIMUR';
-  const kabupaten = document.getElementById('wizKabupaten')?.value || 'KAB. SIDOARJO';
-  const kecamatan = document.getElementById('wizKecamatan')?.value || 'GEDANGAN';
-  const kelurahan = document.getElementById('wizKelurahan')?.value || 'SAWOTRATAP';
+  const provinsi = document.getElementById('wizProvinsi')?.value || '';
+  const kabupaten = document.getElementById('wizKabupaten')?.value || '';
+  const kecamatan = document.getElementById('wizKecamatan')?.value || '';
+  const kelurahan = document.getElementById('wizKelurahan')?.value || '';
 
   if (document.getElementById('sumNamaCanvasing')) document.getElementById('sumNamaCanvasing').textContent = namaCanvasing || '-';
   if (document.getElementById('sumLokasiCanvasing')) document.getElementById('sumLokasiCanvasing').textContent = lokasiCanvasing || '-';
@@ -2072,10 +2191,10 @@ function submitWizardForm() {
   const lokasiCanvasing = document.getElementById('wizLokasiCanvasing')?.value.trim() || 'Area Parkir PT Maspion I Gedangan';
   const dari = document.getElementById('wizDari')?.value || '26-08-2026';
   const sampai = document.getElementById('wizSampai')?.value || '27-08-2026';
-  const provinsi = document.getElementById('wizProvinsi')?.value || 'JAWA TIMUR';
-  const kabupaten = document.getElementById('wizKabupaten')?.value || 'KAB. SIDOARJO';
-  const kecamatan = document.getElementById('wizKecamatan')?.value || 'GEDANGAN';
-  const kelurahan = document.getElementById('wizKelurahan')?.value || 'SAWOTRATAP';
+  const provinsi = document.getElementById('wizProvinsi')?.value || '';
+  const kabupaten = document.getElementById('wizKabupaten')?.value || '';
+  const kecamatan = document.getElementById('wizKecamatan')?.value || '';
+  const kelurahan = document.getElementById('wizKelurahan')?.value || '';
 
   const newKode = document.getElementById('wizTransNo')?.value || generateNextKodeCanvasing();
   const mechNames = selectedMechanicsList.map(m => m.name).join(', ') || 'Kalvin';

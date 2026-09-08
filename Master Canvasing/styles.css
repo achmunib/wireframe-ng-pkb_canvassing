@@ -1854,6 +1854,23 @@ input[type="checkbox"]:focus-visible + .custom-checkbox {
   pointer-events: none;
 }
 
+/* Dropdown wilayah yang masih terkunci (dropdown induk belum dipilih) */
+.form-select:disabled,
+.form-select-locked {
+  background: #d2dbe4;
+  border-color: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.select-wrapper:has(.form-select:disabled) .required-indicator-bar {
+  background-color: #94a3b8;
+}
+
+.select-wrapper:has(.form-select:disabled) .select-chevron-icon {
+  color: #94a3b8;
+}
+
 /* ==========================================================================
    Step 2: Part Dibawa (Part Canvasing) Styles (Matching Reference)
    ========================================================================== */

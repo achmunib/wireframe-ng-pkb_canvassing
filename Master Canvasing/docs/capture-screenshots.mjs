@@ -202,6 +202,14 @@ const SEED_PARTS = `
   renderPartsDibawa();
 `;
 
+/**
+ * Melengkapi pilihan wilayah Step 1. Wizard sengaja dibuka hanya dengan
+ * Provinsi terisi, sehingga Summary perlu diseed agar menampilkan wilayah utuh.
+ */
+const SEED_WILAYAH = `
+  setWilayahSelection('JAWA TIMUR', 'KAB. SIDOARJO', 'GEDANGAN', 'SAWOTRATAP');
+`;
+
 const SEED_MECHANICS = `
   mechanicCatalog = [
     { name: 'Kalvin', stall: 'Stall 1', isBusy: true,  currentPkb: '051-PKB-CNVS-2026-DMS000001' },
@@ -344,7 +352,7 @@ try {
 
   // 08 — Step 4: Summary
   console.log('08 Step 4 — Summary');
-  await evaluate(`goToStep(4)`);
+  await evaluate(`${SEED_WILAYAH} goToStep(4)`);
   await waitFor(`document.querySelectorAll('#sumPartsTableBody tr').length === 3`);
   await shot('master-canvasing-08-step4', { fullPage: true });
 

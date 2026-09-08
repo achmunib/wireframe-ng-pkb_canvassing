@@ -471,11 +471,7 @@
                       <div class="input-indicator-wrapper select-wrapper">
                         <span class="required-indicator-bar"></span>
                         <select id="wizProvinsi" class="form-input input-with-indicator form-select" required>
-                          <option value="JAWA TIMUR" selected>JAWA TIMUR</option>
-                          <option value="JAWA TENGAH">JAWA TENGAH</option>
-                          <option value="JAWA BARAT">JAWA BARAT</option>
-                          <option value="DKI JAKARTA">DKI JAKARTA</option>
-                          <option value="BALI">BALI</option>
+                          <option value="">Pilih Provinsi</option>
                         </select>
                         <svg class="select-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <polyline points="6 9 12 15 18 9"></polyline>
@@ -488,12 +484,8 @@
                       <label class="form-label" for="wizKabupaten">Kabupaten/Kota <span class="required-star">*</span></label>
                       <div class="input-indicator-wrapper select-wrapper">
                         <span class="required-indicator-bar"></span>
-                        <select id="wizKabupaten" class="form-input input-with-indicator form-select" required>
-                          <option value="KAB. SIDOARJO" selected>KAB. SIDOARJO</option>
-                          <option value="KOTA SURABAYA">KOTA SURABAYA</option>
-                          <option value="KAB. GRESIK">KAB. GRESIK</option>
-                          <option value="KAB. MOJOKERTO">KAB. MOJOKERTO</option>
-                          <option value="KAB. PASURUAN">KAB. PASURUAN</option>
+                        <select id="wizKabupaten" class="form-input input-with-indicator form-select" required disabled>
+                          <option value="">Pilih Provinsi terlebih dahulu</option>
                         </select>
                         <svg class="select-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <polyline points="6 9 12 15 18 9"></polyline>
@@ -506,13 +498,8 @@
                       <label class="form-label" for="wizKecamatan">Kecamatan <span class="required-star">*</span></label>
                       <div class="input-indicator-wrapper select-wrapper">
                         <span class="required-indicator-bar"></span>
-                        <select id="wizKecamatan" class="form-input input-with-indicator form-select" required>
-                          <option value="GEDANGAN" selected>GEDANGAN</option>
-                          <option value="WARU">WARU</option>
-                          <option value="SEDATI">SEDATI</option>
-                          <option value="CANDI">CANDI</option>
-                          <option value="BUDURAN">BUDURAN</option>
-                          <option value="SIDOARJO">SIDOARJO</option>
+                        <select id="wizKecamatan" class="form-input input-with-indicator form-select" required disabled>
+                          <option value="">Pilih Kabupaten/Kota terlebih dahulu</option>
                         </select>
                         <svg class="select-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <polyline points="6 9 12 15 18 9"></polyline>
@@ -525,14 +512,8 @@
                       <label class="form-label" for="wizKelurahan">Kelurahan <span class="required-star">*</span></label>
                       <div class="input-indicator-wrapper select-wrapper">
                         <span class="required-indicator-bar"></span>
-                        <select id="wizKelurahan" class="form-input input-with-indicator form-select" required>
-                          <option value="GEDANGAN" selected>GEDANGAN</option>
-                          <option value="KEBOANSIKEP">KEBOANSIKEP</option>
-                          <option value="SAWAHOTOC">SAWAHOTOC</option>
-                          <option value="SAWOTRATAP">SAWOTRATAP</option>
-                          <option value="SEMAMBUNG">SEMAMBUNG</option>
-                          <option value="SRUNI">SRUNI</option>
-                          <option value="WEDGE">WEDGE</option>
+                        <select id="wizKelurahan" class="form-input input-with-indicator form-select" required disabled>
+                          <option value="">Pilih Kecamatan terlebih dahulu</option>
                         </select>
                         <svg class="select-chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <polyline points="6 9 12 15 18 9"></polyline>
@@ -1151,6 +1132,7 @@
 
   <!-- SheetJS / XLSX parser for robust Excel/CSV client-side parsing -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="wilayah-data.js"></script>
   <script src="app.js"></script>
 </body>
 
