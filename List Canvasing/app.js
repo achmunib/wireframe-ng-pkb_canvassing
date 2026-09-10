@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCanvasingPicker();
   initSidebar();
   initLangSwitcher();
-  initHistoryShowMore();
+  initHistoryService();
 
   // Deep links from the parent portal (kept for compatibility)
   if (window.location.hash === '#new') {
@@ -1656,14 +1656,259 @@ function initCarrierStep() {
   window.resetCarrierData = resetCarrierData;
 }
 
-// History Show More Action
-function initHistoryShowMore() {
-  const btnShowMore = document.getElementById('btnShowMoreHistory');
-  if (!btnShowMore) return;
+// History Service - data dummy riwayat servis kendaraan (urut terbaru ke terlama).
+// Catatan: sumber data sementara; nantinya diganti response API riwayat servis per kendaraan.
+const HISTORY_SERVICE_DATA = [
+  {
+    title: 'BJ113 - GANTI OLI - MATIC - MID',
+    pkbNo: 'PKB/JMB/2025/05/0312',
+    tag: 'Bayar',
+    tagType: 'paid',
+    date: '03-05-2025',
+    kilometer: '1.000 KM',
+    dealer: 'MPM Motor Jombang',
+    mechanic: 'Andi Saputra',
+    nextService: '03-09-2025 &middot; 5.000 KM',
+    parts: [
+      { name: '90454500000 - WADHER OIL BOLT', qty: '1x' },
+      { name: '94001100005 - NUT,HET 10MM', qty: '1x' }
+    ]
+  },
+  {
+    title: 'BJ113 - GANTI OLI - MATIC - MID',
+    pkbNo: 'PKB/JMB/2025/01/0148',
+    tag: 'KPB 2',
+    tagType: 'kpb',
+    date: '12-01-2025',
+    kilometer: '820 KM',
+    dealer: 'MPM Motor Jombang',
+    mechanic: 'Rizky Pratama',
+    nextService: '12-05-2025 &middot; 4.000 KM',
+    parts: [
+      { name: '90454500000 - WADHER OIL BOLT', qty: '1x' },
+      { name: '94001100005 - NUT,HET 10MM', qty: '1x' }
+    ]
+  },
+  {
+    title: 'BJ210 - SERVIS LENGKAP + GANTI OLI',
+    pkbNo: 'PKB/JMB/2024/09/0987',
+    tag: 'Bayar',
+    tagType: 'paid',
+    date: '05-09-2024',
+    kilometer: '640 KM',
+    dealer: 'MPM Motor Jombang',
+    mechanic: 'Dimas Prakoso',
+    nextService: '05-01-2025 &middot; 3.500 KM',
+    parts: [
+      { name: '15400-KWB-901 - FILTER OIL', qty: '1x' },
+      { name: '08232-M99-K1LN1 - SPX2 OIL 0.8L', qty: '1x' },
+      { name: '90454500000 - WADHER OIL BOLT', qty: '1x' }
+    ]
+  },
+  {
+    title: 'BJ113 - KPB 1 - MATIC',
+    pkbNo: 'PKB/JMB/2024/05/0641',
+    tag: 'KPB 1',
+    tagType: 'kpb',
+    date: '18-05-2024',
+    kilometer: '450 KM',
+    dealer: 'MPM Motor Mojokerto',
+    mechanic: 'Andi Saputra',
+    nextService: '18-09-2024 &middot; 3.000 KM',
+    parts: [
+      { name: '08232-M99-K1LN1 - SPX2 OIL 0.8L', qty: '1x' }
+    ]
+  },
+  {
+    title: 'BJ330 - PENGGANTIAN CVT ASSY',
+    pkbNo: 'PKB/JMB/2024/02/0233',
+    tag: 'Garansi',
+    tagType: 'warranty',
+    date: '02-02-2024',
+    kilometer: '260 KM',
+    dealer: 'MPM Motor Jombang',
+    mechanic: 'Bayu Nugroho',
+    nextService: '02-06-2024 &middot; 2.500 KM',
+    parts: [
+      { name: '23100-K1B-N01 - BELT DRIVE', qty: '1x' },
+      { name: '22110-K1B-N00 - FACE COMP DRIVE', qty: '1x' }
+    ]
+  },
+  {
+    title: 'BJ113 - KPB 0 - PEMERIKSAAN AWAL',
+    pkbNo: 'PKB/JMB/2023/11/0075',
+    tag: 'KPB 0',
+    tagType: 'kpb',
+    date: '21-11-2023',
+    kilometer: '120 KM',
+    dealer: 'MPM Motor Jombang',
+    mechanic: 'Rizky Pratama',
+    nextService: '21-03-2024 &middot; 1.000 KM',
+    parts: [
+      { name: 'Tidak ada penggantian part', qty: '-' }
+    ]
+  }
+];
 
-  btnShowMore.addEventListener('click', () => {
-    showToast('Showing all historical services (2 records displayed)');
-  });
+// Jumlah item riwayat yang tampil penuh sebelum daftar mulai di-scroll
+const HISTORY_VISIBLE_ITEMS = 2;
+
+// History Service - daftar dibatasi tinggi 2 item, sisanya diakses lewat scroll
+function initHistoryService() {
+  const listEl = document.getElementById('historyFilledState');
+  const shellEl = document.getElementById('historyScrollShell');
+  const emptyEl = document.getElementById('historyEmptyState');
+  const countBadgeEl = document.getElementById('historyCountBadge');
+  if (!listEl) return;
+
+  const total = HISTORY_SERVICE_DATA.length;
+
+  const metaIcons = {
+    kilometer: '<path d="M12 2v4" /><path d="M4.93 4.93l2.83 2.83" /><path d="M2 12h4" /><path d="M20 12h2" /><circle cx="12" cy="12" r="6" /><path d="M12 12l2-2" />',
+    dealer: '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle>',
+    mechanic: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" />',
+    next: '<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>'
+  };
+
+  const metaRow = (icon, label, value) => `
+    <div class="meta-item">
+      <span class="meta-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">${icon}</svg>
+        <span>${label}</span>
+      </span>
+      <span class="meta-value">${value}</span>
+    </div>`;
+
+  const partsRows = (parts) => parts.map(part => `
+            <div class="parts-row">
+              <span class="part-name">${part.name}</span>
+              <span class="part-qty">${part.qty}</span>
+            </div>`).join('');
+
+  const itemTemplate = (item, index) => `
+    ${index > 0 ? '<div class="history-divider"></div>' : ''}
+    <div class="history-service-item" data-history-index="${index}">
+      <div class="history-item-head">
+        <div class="history-head-left">
+          <div class="history-item-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <div class="history-head-text">
+            <h4 class="history-service-title">${item.title}</h4>
+            <span class="history-service-sub">${item.pkbNo}</span>
+          </div>
+        </div>
+        <div class="history-head-right">
+          <span class="history-tag tag-${item.tagType}">${item.tag}</span>
+          <span class="history-date-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span>${item.date}</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="history-item-grid">
+        <div class="history-block history-parts-block">
+          <span class="history-block-label">Parts Used</span>
+          <div class="history-parts-list">${partsRows(item.parts)}
+          </div>
+        </div>
+
+        <div class="history-block history-meta-block">
+          <span class="history-block-label">Service Detail</span>
+          <div class="history-meta-grid">
+            ${metaRow(metaIcons.kilometer, 'Kilometer', item.kilometer)}
+            ${metaRow(metaIcons.dealer, 'Dealer', item.dealer)}
+            ${metaRow(metaIcons.mechanic, 'Mechanic', item.mechanic)}
+            ${metaRow(metaIcons.next, 'Next Service', item.nextService)}
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  // Sinkronkan penanda scroll: shell diberi gradient selama daftar belum tergulir ke bawah
+  const syncScrollHint = () => {
+    if (!shellEl) return;
+    const atEnd = listEl.scrollTop + listEl.clientHeight >= listEl.scrollHeight - 1;
+    shellEl.classList.toggle('is-at-end', atEnd);
+  };
+
+  // Batasi tinggi daftar setinggi 2 item pertama; item berikutnya diakses lewat scroll.
+  // Tinggi diukur dari DOM karena tiap item bisa berbeda tinggi (jumlah part tidak sama).
+  let appliedLimit = -1;
+
+  const applyScrollLimit = () => {
+    const items = listEl.querySelectorAll('.history-service-item');
+
+    if (items.length <= HISTORY_VISIBLE_ITEMS) {
+      listEl.style.maxHeight = '';
+      appliedLimit = -1;
+      if (shellEl) shellEl.classList.remove('is-scrollable');
+      return;
+    }
+
+    const first = items[0];
+    const last = items[HISTORY_VISIBLE_ITEMS - 1];
+
+    // Card masih tersembunyi (wizard belum dibuka) — seluruh pengukuran bernilai 0,
+    // jadi batas tinggi ditunda sampai ResizeObserver melaporkan tinggi item sebenarnya
+    if (!last.offsetHeight) return;
+
+    const styles = getComputedStyle(listEl);
+    // max-height dihitung terhadap border-box, jadi padding dan border ikut diperhitungkan
+    // agar 2 item pertama tampil utuh sampai padding bawahnya
+    const frame = parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom)
+      + parseFloat(styles.borderTopWidth) + parseFloat(styles.borderBottomWidth);
+    const limit = Math.round(last.offsetTop + last.offsetHeight - first.offsetTop + frame);
+
+    // Munculnya scrollbar menyempitkan konten dan bisa mengubah tinggi item; toleransi 1px
+    // menahan perhitungan agar tidak berulang tanpa henti
+    if (Math.abs(limit - appliedLimit) <= 1) return;
+
+    appliedLimit = limit;
+    listEl.style.maxHeight = `${limit}px`;
+    if (shellEl) shellEl.classList.add('is-scrollable');
+    syncScrollHint();
+  };
+
+  // Tinggi item baru terukur setelah card benar-benar tampil, dan berubah lagi saat layout
+  // ≤1024px menumpuk kolom — keduanya dipantau lewat ResizeObserver pada item penentu batas
+  const observeItems = () => {
+    if (typeof ResizeObserver !== 'function') return;
+    const observer = new ResizeObserver(applyScrollLimit);
+    Array.from(listEl.querySelectorAll('.history-service-item'))
+      .slice(0, HISTORY_VISIBLE_ITEMS)
+      .forEach(item => observer.observe(item));
+  };
+
+  const render = () => {
+    listEl.innerHTML = HISTORY_SERVICE_DATA.map(itemTemplate).join('');
+
+    if (countBadgeEl) countBadgeEl.textContent = `${total} Riwayat`;
+    if (emptyEl) emptyEl.hidden = total > 0;
+    if (shellEl) shellEl.hidden = total === 0;
+
+    applyScrollLimit();
+    observeItems();
+  };
+
+  listEl.addEventListener('scroll', syncScrollHint);
+  window.addEventListener('resize', applyScrollLimit);
+
+  render();
 }
 
 // Date Helpers (display format DD-MM-YYYY <-> native input YYYY-MM-DD)

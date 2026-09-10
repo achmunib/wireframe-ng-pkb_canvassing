@@ -472,6 +472,23 @@ try {
   await waitFor(`document.getElementById('kilometerError').classList.contains('show')`);
   await shot('list-canvasing-02c-step1-kilometer-invalid', { fullPage: true });
 
+  // 02d — Step 1: History Service digulir ke riwayat paling lama
+  console.log('02d Step 1 — History Service scroll');
+  await openPage();
+  await evaluate(OPEN_FIRST_PKB);
+  await waitFor(`document.getElementById('stepPane1').style.display === 'block'`);
+  await evaluate(SET_FUEL_FULL);
+  await evaluate(`
+    (function () {
+      var l = document.getElementById('historyFilledState');
+      l.scrollTop = l.scrollHeight;
+      l.dispatchEvent(new Event('scroll'));
+      return true;
+    })()
+  `);
+  await sleep(400);
+  await shot('list-canvasing-02d-step1-history-scroll', { fullPage: true });
+
   // 03 — Pop-up Input New Vehicle Data (dibuka dari empty state kendaraan)
   console.log('03 Pop-up Input New Vehicle Data');
   await openPage();

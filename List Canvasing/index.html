@@ -490,7 +490,7 @@
 
             <!-- Card 2: History Service -->
             <div class="content-card">
-              <div class="card-header">
+              <div class="card-header card-header-split">
                 <div class="card-icon-title">
                   <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -500,237 +500,26 @@
                   </svg>
                   <h2 class="card-title">History Service</h2>
                 </div>
+                <span class="history-count-badge" id="historyCountBadge">0 Riwayat</span>
               </div>
 
               <div class="card-body">
-                <!-- History Container Card -->
-                <div class="history-list-container" id="historyFilledState">
-                  <!-- History Item 1 -->
-                  <div class="history-service-item">
-                    <div class="history-item-head">
-                      <div class="history-head-left">
-                        <div class="history-item-icon">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                          </svg>
-                        </div>
-                        <div class="history-head-text">
-                          <h4 class="history-service-title">BJ113 - GANTI OLI - MATIC - MID</h4>
-                          <span class="history-service-sub">PKB/JMB/2025/05/0312</span>
-                        </div>
-                      </div>
-                      <div class="history-head-right">
-                        <span class="history-tag tag-paid">Bayar</span>
-                        <span class="history-date-chip">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                            <line x1="16" y1="2" x2="16" y2="6" />
-                            <line x1="8" y1="2" x2="8" y2="6" />
-                            <line x1="3" y1="10" x2="21" y2="10" />
-                          </svg>
-                          <span>03-05-2025</span>
-                        </span>
-                      </div>
-                    </div>
-
-                    <div class="history-item-grid">
-                      <!-- Left column: parts used -->
-                      <div class="history-block history-parts-block">
-                        <span class="history-block-label">Parts Used</span>
-                        <div class="history-parts-list">
-                          <div class="parts-row">
-                            <span class="part-name">90454500000 - WADHER OIL BOLT</span>
-                            <span class="part-qty">1x</span>
-                          </div>
-                          <div class="parts-row">
-                            <span class="part-name">94001100005 - NUT,HET 10MM</span>
-                            <span class="part-qty">1x</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Right column: service detail -->
-                      <div class="history-block history-meta-block">
-                        <span class="history-block-label">Service Detail</span>
-                        <div class="history-meta-grid">
-                          <div class="meta-item">
-                            <span class="meta-label">
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2v4" />
-                                <path d="M4.93 4.93l2.83 2.83" />
-                                <path d="M2 12h4" />
-                                <path d="M20 12h2" />
-                                <circle cx="12" cy="12" r="6" />
-                                <path d="M12 12l2-2" />
-                              </svg>
-                              <span>Kilometer</span>
-                            </span>
-                            <span class="meta-value">1.000 KM</span>
-                          </div>
-                          <div class="meta-item">
-                            <span class="meta-label">
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                <circle cx="12" cy="10" r="3"></circle>
-                              </svg>
-                              <span>Dealer</span>
-                            </span>
-                            <span class="meta-value">MPM Motor Jombang</span>
-                          </div>
-                          <div class="meta-item">
-                            <span class="meta-label">
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                              </svg>
-                              <span>Mechanic</span>
-                            </span>
-                            <span class="meta-value">Andi Saputra</span>
-                          </div>
-                          <div class="meta-item">
-                            <span class="meta-label">
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                              </svg>
-                              <span>Next Service</span>
-                            </span>
-                            <span class="meta-value">03-09-2025 &middot; 5.000 KM</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="history-divider"></div>
-
-                  <!-- History Item 2 -->
-                  <div class="history-service-item">
-                    <div class="history-item-head">
-                      <div class="history-head-left">
-                        <div class="history-item-icon">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                          </svg>
-                        </div>
-                        <div class="history-head-text">
-                          <h4 class="history-service-title">BJ113 - GANTI OLI - MATIC - MID</h4>
-                          <span class="history-service-sub">PKB/JMB/2025/01/0148</span>
-                        </div>
-                      </div>
-                      <div class="history-head-right">
-                        <span class="history-tag tag-kpb">KPB 2</span>
-                        <span class="history-date-chip">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                            <line x1="16" y1="2" x2="16" y2="6" />
-                            <line x1="8" y1="2" x2="8" y2="6" />
-                            <line x1="3" y1="10" x2="21" y2="10" />
-                          </svg>
-                          <span>03-05-2025</span>
-                        </span>
-                      </div>
-                    </div>
-
-                    <div class="history-item-grid">
-                      <!-- Left column: parts used -->
-                      <div class="history-block history-parts-block">
-                        <span class="history-block-label">Parts Used</span>
-                        <div class="history-parts-list">
-                          <div class="parts-row">
-                            <span class="part-name">90454500000 - WADHER OIL BOLT</span>
-                            <span class="part-qty">1x</span>
-                          </div>
-                          <div class="parts-row">
-                            <span class="part-name">94001100005 - NUT,HET 10MM</span>
-                            <span class="part-qty">1x</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Right column: service detail -->
-                      <div class="history-block history-meta-block">
-                        <span class="history-block-label">Service Detail</span>
-                        <div class="history-meta-grid">
-                          <div class="meta-item">
-                            <span class="meta-label">
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2v4" />
-                                <path d="M4.93 4.93l2.83 2.83" />
-                                <path d="M2 12h4" />
-                                <path d="M20 12h2" />
-                                <circle cx="12" cy="12" r="6" />
-                                <path d="M12 12l2-2" />
-                              </svg>
-                              <span>Kilometer</span>
-                            </span>
-                            <span class="meta-value">1.000 KM</span>
-                          </div>
-                          <div class="meta-item">
-                            <span class="meta-label">
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                <circle cx="12" cy="10" r="3"></circle>
-                              </svg>
-                              <span>Dealer</span>
-                            </span>
-                            <span class="meta-value">MPM Motor Jombang</span>
-                          </div>
-                          <div class="meta-item">
-                            <span class="meta-label">
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                              </svg>
-                              <span>Mechanic</span>
-                            </span>
-                            <span class="meta-value">Rizky Pratama</span>
-                          </div>
-                          <div class="meta-item">
-                            <span class="meta-label">
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                              </svg>
-                              <span>Next Service</span>
-                            </span>
-                            <span class="meta-value">03-09-2025 &middot; 5.000 KM</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <!-- History Container Card - item dirender dari app.js (initHistoryService).
+                     Shell dibutuhkan sebagai anchor gradient penanda area masih bisa di-scroll. -->
+                <div class="history-scroll-shell" id="historyScrollShell">
+                  <div class="history-list-container" id="historyFilledState" tabindex="0" role="group"
+                    aria-label="Daftar riwayat servis"></div>
                 </div>
 
-                <!-- Show More Action Button -->
-                <div class="history-show-more-wrapper">
-                  <button class="btn-show-more" id="btnShowMoreHistory" type="button">
-                    <span>Show More</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                  </button>
+                <!-- Empty State - tampil bila kendaraan belum punya riwayat servis -->
+                <div class="history-empty-state" id="historyEmptyState" hidden>
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <p class="history-empty-title">Belum ada riwayat servis</p>
+                  <p class="history-empty-sub">Riwayat servis akan tampil setelah kendaraan pernah diservis di jaringan AHASS.</p>
                 </div>
               </div>
             </div>

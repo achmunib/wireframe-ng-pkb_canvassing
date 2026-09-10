@@ -1043,6 +1043,12 @@ body {
   color: #1d4ed8;
 }
 
+.history-tag.tag-warranty {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
 .history-date-chip {
   display: inline-flex;
   align-items: center;
@@ -1179,29 +1185,118 @@ body {
   margin: 14px 0;
 }
 
-.history-show-more-wrapper {
+/* Badge jumlah riwayat pada header card */
+.card-header-split {
   display: flex;
-  justify-content: center;
-  margin-top: 14px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.btn-show-more {
+.history-count-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: none;
-  color: #ea580c;
-  font-size: 13px;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 11.5px;
   font-weight: 700;
-  cursor: pointer;
-  padding: 6px 12px;
-  border-radius: 6px;
-  transition: var(--transition);
+  letter-spacing: 0.3px;
+  color: #64748b;
+  flex-shrink: 0;
 }
 
-.btn-show-more:hover {
-  background: var(--primary-light);
+/* Empty state riwayat servis */
+.history-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 34px 24px;
+  border: 1px dashed #e2e8f0;
+  border-radius: 12px;
+  background: #fcfdff;
+  text-align: center;
+  color: #cbd5e1;
+}
+
+.history-empty-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.history-empty-sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  max-width: 340px;
+  line-height: 1.5;
+}
+
+/* Atribut hidden harus mengalahkan display flex di atas */
+.history-empty-state[hidden],
+.history-scroll-shell[hidden] {
+  display: none;
+}
+
+/* Area scroll daftar riwayat.
+   Tinggi maksimum di-set dari app.js setinggi 2 item pertama (HISTORY_VISIBLE_ITEMS);
+   shell hanya dipakai sebagai anchor gradient penanda masih ada item di bawah. */
+.history-scroll-shell {
+  position: relative;
+}
+
+.history-list-container {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.history-list-container:focus-visible {
+  outline: 2px solid #fb923c;
+  outline-offset: 2px;
+}
+
+.history-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.history-list-container::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 12px 0;
+}
+
+.history-list-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+.history-list-container:hover::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+}
+
+/* Gradient penanda daftar masih bisa digulir; hilang saat sudah di dasar daftar */
+.history-scroll-shell.is-scrollable::after {
+  content: '';
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  height: 30px;
+  border-radius: 0 0 11px 11px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff 85%);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.history-scroll-shell.is-scrollable.is-at-end::after {
+  opacity: 0;
 }
 
 /* Pre-Inspection Data */
